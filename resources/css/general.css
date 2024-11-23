@@ -1,0 +1,33 @@
+/*! código general inicio */
+.espacio-boton{
+    margin-top: 500px;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    background-image: linear-gradient(135deg, #00b7d4, #6ab4db, #7cbbdd, #9ecee8, #abd8f0, #bfdff0, #ffffff);
+    background-size: 1000vw 1000vh;
+    /* Ajusta el tamaño para que cubra todo el ancho y alto */
+    background-repeat: no-repeat;
+    animation: fanimado 10s infinite;
+}
+
+@keyframes fanimado {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+
+/*! código general final */
