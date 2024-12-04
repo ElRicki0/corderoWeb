@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../resources/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../resources/css/general.css">
+    <link rel="stylesheet" href="../../resources/css/bootstrap-icons.min.css">
+    <!-- <link rel="stylesheet" href="../../resources/css/bootstrap-icons.min.css"> -->
+
+</head>
+
+<body>
+    <!-- Contenido principal del documento -->
+    <main>
+        <h1 id="mainTitle"></h1>
+
+        <!-- titulo principal -->
+        <div class="container-fluid">
+            <div class="row py-4">
+                <h3 class="fw-bold "> <i class="bi bi-person-vcard-fill me-1"></i> Administrar Empleados</h3>
+                <h6 class="fw-medium text-secondary">Bienvenido a la sección de gestión de empleados. Aquí puedes
+                    manejar todos los trabajadores registrados en tu página web. <br>
+                    La tabla te permite eliminar, dar de baja, editar, ver graficas y
+                    reportes generales de actividad.</h6>
+            </div>
+        </div>
+
+        <!-- Formulario de búsqueda -->
+        <div class="row">
+            <form class="col-sm-12 col-md-12 col-lg-10" id="searchForm">
+                <div class="row">
+                    <div class="col-6">
+                        <input type="search" class="form-control custom-input border-2" id="search" name="search"
+                            placeholder="Nombre o Apellido" required>
+                    </div>
+                    <div class="col-6">
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-search"></i>
+                        </button>
+                        <button type="reset" class="btn btn-secondary" onclick="fillTable()">
+                            <i class="bi bi-arrow-counterclockwise"></i>
+                        </button>
+                        <button type="button" class="btn btn-warning" onclick="openCreate()">
+                            <i class="bi bi-person-fill-add"></i>
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="openReport()">
+                            <i class="bi bi-filetype-pdf"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <p id="rowsFound" class=" fw-bold mt-3"></p>
+
+        <!-- Contenedor para la tabla con scroll -->
+        <div id="ContenedorTable">
+
+            <div id="tableBody" class=" justify-content-center row">
+
+                <!-- color oscuro serán las cards de información de los empleados -->
+                <div class="col-12 card mt-2 text-bg-dark" id="searchForm">
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-12 mt-3 d-flex justify-content-center align-items-center"
+                            style="height: 300px; width: 300px;">
+                            <img src="../../resources/error/images/404Empleado.png" class="card-img-top" alt="..."
+                                onerror="this.onerror=null; this.src='../../resources/img/error/cliente.jpg';"
+                                style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                        </div>
+
+                        <div
+                            class="col-sm-12 col-md-12 col-lg-3 card-body d-flex flex-column align-items-center text-center">
+                            <h5 class="text-white">Nombre empleado</h5>
+                            <p class="card-title text-white">${row.nombre_empleado} ${row.apellido_empleado}</p>
+                            <h5 class="text-white">DUI Empleado</h5>
+                            <p class="card-text text-white">${row.dui_empleado}</p>
+                            <h5 class="text-white">Correo Empleado</h5>
+                            <p class="card-text text-white">${row.correo_empleado}</p>
+                            <h5 class="text-white">Estado empleado</h5>
+                            <p class="card-text text-white">Estado: <i class="${icon} text-white"></i></p>
+                        </div>
+
+                        <div class="col-sm-12 col-md-12 col-lg-3 text-center my-5">
+                            <div class="d-flex flex-column">
+                                <button class="btn btn-outline-light mb-2" onclick="openDelete(${row.id_empleado})">
+                                    <i class="bi bi-trash3-fill"></i> Eliminar
+                                </button>
+                                <button class="btn btn-outline-light mb-2" onclick="openUpdate(${row.id_empleado})">
+                                    <i class="bi bi-pencil-fill"></i>Actualizar
+                                </button>
+                                <button class="btn btn-outline-light mb-2" onclick="openState(${row.id_empleado})">
+                                    <i class="bi bi-exclamation-octagon"></i> Cambiar Estado
+                                </button>
+                                <button type="button" class="btn btn-outline-light mb-2"
+                                    onclick="openChart(${row.id_empleado})">
+                                    <i class="bi bi-bar-chart-line-fill"></i> Ver Gráfico
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- IMPORTACIÓN DE ARCHIVOS JAVASCRIPT -->
+    <!-- Llamada al framework y librería de mensajes -->
+    <script src="../../resources/js/bootstrap.bundle.min.js"></script>
+    <script src="../../resources/js/sweetalert.min.js"></script>
+    <!-- Llamada al controlador general de la aplicación -->
+    <script type="text/javascript" src="../../controllers/utils/components.js"></script>
+    <!-- Llamada al controlador del sitio privado -->
+    <script type="text/javascript" src="../../controllers/utils/admin.js"></script>
+    <!-- Llamada al controlador de la página web -->
+    <script src="../../controllers/admin/empleados.js"></script>
+    <!-- ! cambiar el link js para el controntrolador -->
+</body>
+
+</html>
