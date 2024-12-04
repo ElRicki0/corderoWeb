@@ -2,7 +2,8 @@
 *   CONTROLADOR DE USO GENERAL EN TODAS LAS PÁGINAS WEB.
 */
 // Constante para establecer la ruta base del servidor.
-const SERVER_URL = 'http://localhost/CORDEROWEB/api/';
+const SERVER_URL = 'http://localhost/CORDEROWEB/api/';/*
+*   CONTROLADOR DE USO GENERAL EN TODAS LAS PÁGINAS WEB.
 
 /*
 *   Función para mostrar un mensaje de confirmación.
@@ -110,6 +111,7 @@ const fillSelect = async (filename, action, select, filter = undefined) => {
     // Se agregan las opciones a la etiqueta select mediante el id.
     document.getElementById(select).innerHTML = content;
 }
+
 
 /*
 *   Función para generar un gráfico de barras verticales.

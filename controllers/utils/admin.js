@@ -85,7 +85,7 @@ const loadTemplate = async () => {
         }
     } else {
         // Se comprueba si la página web es la principal, de lo contrario se direcciona a iniciar sesión.
-        if (location.pathname.endsWith('index.html')) {
+        if (location.pathname.endsWith('index.html') || location.pathname.endsWith('signup.html')) {
             // Se agrega el encabezado de la página web antes del contenido principal.
             MAIN.insertAdjacentHTML('beforebegin', `
                 <header>

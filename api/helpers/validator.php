@@ -77,7 +77,7 @@ class Validator
     *   Parámetros: $file (archivo de un formulario) y $dimension (medida mínima para la imagen).
     *   Retorno: booleano (true si el archivo es correcto o false en caso contrario).
     */
-    public static function validateImageFile($file, $dimension)
+    public static function validateImageFile($file)
     {
         if (is_uploaded_file($file['tmp_name'])) {
             // Se obtienen los datos de la imagen.
@@ -85,12 +85,6 @@ class Validator
             // Se comprueba si el archivo tiene un tamaño mayor a 2MB.
             if ($file['size'] > 2097152) {
                 self::$file_error = 'El tamaño de la imagen debe ser menor a 2MB';
-                return false;
-            } elseif ($image[0] < $dimension) {
-                self::$file_error = 'La dimensión de la imagen es menor a ' . $dimension . 'px';
-                return false;
-            } elseif ($image[0] != $image[1]) {
-                self::$file_error = 'La imagen no es cuadrada';
                 return false;
             } elseif ($image['mime'] == 'image/jpeg' || $image['mime'] == 'image/png') {
                 // Se obtiene la extensión del archivo (.jpg o .png) y se convierte a minúsculas.
@@ -285,7 +279,7 @@ class Validator
         if (trim($value) == '') {
             self::$search_error = 'Ingrese un valor para buscar';
             return false;
-        } elseif(str_word_count($value) > 3) {
+        } elseif (str_word_count($value) > 3) {
             self::$search_error = 'La búsqueda contiene más de 3 palabras';
             return false;
         } elseif (self::validateString($value)) {

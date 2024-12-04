@@ -37,7 +37,8 @@ CREATE TABLE
         telefono_administrador VARCHAR(10),
         clave_administrador VARCHAR(500) NOT NULL,
         fecha_clave DATE NOT NULL,
-        codigo_clave VARCHAR(6) NOT NULL
+        codigo_clave VARCHAR(6) NOT NULL,
+        imagen_administrador VARCHAR(300)
     );
 
 CREATE TABLE
