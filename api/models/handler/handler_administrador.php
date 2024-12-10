@@ -91,6 +91,13 @@ class AdministradorHandler
         return Database::getRows($sql);
     }
 
+    public function readAllOne() {
+        $sql = 'SELECT id_administrador, nombre_administrador, apellido_administrador, usuario_administrador, telefono_administrador, correo_administrador, imagen_administrador FROM tb_administradores
+        where id_administrador<>?';
+        $params = array($_SESSION['idAdministrador']);
+        return Database::getRows($sql, $params);
+    }
+
     public function readFilename()
     {
         $sql = 'SELECT tb_administradores

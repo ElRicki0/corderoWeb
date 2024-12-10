@@ -15,7 +15,7 @@ if (isset($_GET['action'])) {
         $result['session'] = 1;
         // Se compara la acción a realizar cuando un administrador ha iniciado sesión.
         switch ($_GET['action']) {
-            case 'getUser';
+            case 'getUser':
                 if (isset($_SESSION['correoAdministrador'])) {
                     $result['status'] = 1;
                     $result['username'] = $_SESSION['correoAdministrador'];
@@ -23,8 +23,19 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'Correo de administrador indefinido';
                 }
                 break;
-
+            case 'readAllOne':
+                // ? lectura de la tabla de administradores 
+                if ($result['dataset'] = $administrador->readAllOne()) {
+                    // ? si hay uno o mas datos se actualiza el estado y el mensaje
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen registros actualmente';
+                }
+                break;
+            case 'createRow':
                 
+                break;
             default:
                 $result['error'] = 'Acción no disponible dentro de la sesión';
         }
