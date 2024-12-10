@@ -19,7 +19,7 @@ class AdministradorHandler
     protected $imagen = null;
 
     // Constante para establecer la ruta de las imágenes.
-    const RUTA_IMAGEN = '../../images/administradores/';
+    const RUTA_IMAGEN = '../../images/admin/';
 
     public function __construct()
     {
@@ -76,6 +76,16 @@ class AdministradorHandler
     }
 
     //* métodos SCRUD (search, create, read, update, and delete) para el manejo de variables 
+
+    public function searchRows(){
+        $value = '%' . Validator::getSearchValue() . '%';
+        $sql = 'SELECT id_administrador, nombre_administrador, apellido_administrador, correo_administrador, usuario_administrador, telefono_administrador
+                FROM tb_administradores
+                WHERE apellido_administrador LIKE ? OR nombre_administrador LIKE ? OR correo_administrador LIKE ? OR usuario_administrador LIKE ? OR telefono_administrador LIKE ? AND id_administrador <> ?
+                ORDER BY id_administrador';
+        $params = array($value, $value, $value, $value, $value, $_SESSION['idAdministrador']);
+        return Database::getRows($sql, $params);
+    }
 
     public function createRow()
     {

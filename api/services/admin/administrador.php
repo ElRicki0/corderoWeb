@@ -34,7 +34,38 @@ if (isset($_GET['action'])) {
                 }
                 break;
             case 'createRow':
-                
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$administrador->setNombre($_POST['nombreAdministrador']) or
+                    !$administrador->setApellido($_POST['apellidoAdministrador']) or
+                    !$administrador->setUsuario($_POST['usuarioAdministrador']) or
+                    !$administrador->setTelefono($_POST['telefonoAdministrador']) or
+                    !$administrador->setCorreo($_POST['correoAdministrador']) or
+                    !$administrador->setClave($_POST['claveAdmin']) or
+                    !$administrador->setImagen($_FILES['imagenAdministrador'])
+                ) {
+                    $result['error'] = $administrador->getDataError();
+                } elseif ($_POST['claveAdmin'] != $_POST['claveAdmin2']) {
+                    $result['error'] = 'Contraseñas diferentes';
+                } elseif ($administrador->createRow()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Administrador registrado correctamente';
+                    // Se asigna el estado del archivo después de insertar.
+                    $result['fileStatus'] = Validator::saveFile($_FILES['imagenAdministrador'], $administrador::RUTA_IMAGEN);
+                } else {
+                    $result['error'] = 'error al registrar al administrador';
+                }
+                break;
+            case 'searchRows':
+                if (!Validator::validateSearch($_POST['search'])) {
+                    $result['error'] = Validator::getSearchError();
+                } elseif ($result['dataset'] = $administrador->searchRows()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' coincidencias';
+                } else {
+                    $result['error'] = 'No hay coincidencias';
+                }
+                break;
                 break;
             default:
                 $result['error'] = 'Acción no disponible dentro de la sesión';

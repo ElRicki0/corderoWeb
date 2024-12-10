@@ -1,4 +1,3 @@
-
 // ? CONSTANTES PARA MOSTRAR IMAGEN SELECCIONADA  PARA EL PERFIL DEL ADMINISTRADOR
 const IMAGEN_MUESTRA = document.getElementById('imagenMuestra'),
     IMAGEN_ADMINISTRADOR = document.getElementById('imagenAdministrador');
@@ -32,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fillTable();
 });
 
+// ?funcion para seleccionar imagen y visualizar imágenes
 IMAGEN_ADMINISTRADOR.addEventListener('change', function (event) {
     // Verifica si hay una imagen seleccionada
     if (event.target.files && event.target.files[0]) {
@@ -78,47 +78,38 @@ const fillTable = async (form = null) => {
             (row.estado_empleado) ? icon = 'bi bi-eye-fill' : icon = 'bi bi-eye-slash-fill';
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
             TABLE_BODY.innerHTML += `
-<div class="col-12 card mt-2 inicioIndex" id="searchForm">
-    <div class="row  ">
-        <div class="col-sm-12 col-md-12 col-lg-3 mt-3 d-flex align-items-center justify-content-center" 
-             style="height: 300px; width: 300px;">
-                <img src="${SERVER_URL}images/empleados/${row.imagen_empleado}" class="card-img-top" alt="..." 
-                 onerror="this.onerror=null; this.src='../../resources/img/error/cliente.jpg';" 
-                 style="max-width: 100%; max-height: 100%; object-fit: contain;">
-        </div>
-
-
-        <div class="col-sm-12 col-md-12 col-lg-3 card-body d-flex flex-column align-items-center text-center">
-            <h5 class="text-white">Nombre empleado</h5>
-            <p class="card-title text-white">${row.nombre_empleado} ${row.apellido_empleado}</p>
-            <h5 class="text-white">DUI Empleado</h5>
-            <p class="card-text text-white">${row.dui_empleado}</p>
-            <h5 class="text-white">Correo Empleado</h5>
-            <p class="card-text text-white">${row.correo_empleado}</p>
-            <h5 class="text-white">Estado empleado</h5>
-            <p class="card-text text-white">Estado: <i class="${icon} text-white"></i></p>
-        </div>3
-        <div class="col-sm-12 col-md-12 col-lg-3 text-center my-5">
-            <div class=" ">
-                <div class="d-flex flex-column">
-                    <button class="btn btn-outline-light mb-2" onclick="openDelete(${row.id_empleado})">
-                        <i class="bi bi-trash3-fill"></i> Eliminar
-                    </button>
-                    <button class="btn btn-outline-light mb-2" onclick="openUpdate(${row.id_empleado})">
-                        <i class="bi bi-pencil-fill"></i>Actualizar
-                    </button>
-                    <button class="btn btn-outline-light mb-2" onclick="openState(${row.id_empleado})">
-                        <i class="bi bi-exclamation-octagon"></i> Cambiar Estado
-                    </button>
-                    <button type="button" class="btn btn-outline-light mb-2" onclick="openChart(${row.id_empleado})">
-                        <i class="bi bi-bar-chart-line-fill"></i> Ver Gráfico
-                    </button>
+<div class="card text-bg-dark mb-5">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
+                            <img src="../../resources/error/images/404Administrador.png" width="200"
+                                class="rounded border border-primary" alt="Imagen de error"
+                                onerror="this.onerror=null; this.src='../../resources/error/images/404Administrador.png';">
+                        </div>
+                        <div class="col-lg-7 col-md-8 col-sm-12 text-center">
+                            <h5 class="text-white">Nombre empleado</h5>
+                            <p class="card-title text-white">${row.nombre_administrador} ${row.apellido_administrador}</p>
+                            <h5 class="text-white">Usuario</h5>
+                            <p class="card-text text-white">${row.usuario_administrador}</p>
+                            <h5 class="text-white">Correo Administrador</h5>
+                            <p class="card-text text-white">${row.correo_administrador}</p>
+                            <h5 class="text-white">Teléfono</h5>
+                            <p class="card-text text-white">${row.telefono_administrador}</p>
+                        </div>
+                        <div class="col-lg-2 col-md-12 col-sm-12 text-center mt-3">
+                            <div class="d-flex flex-column">
+                                <button class="btn btn-outline-light mb-2" onclick="openState(${row.id_administradorw})">
+                                    <i class="bi bi-exclamation-octagon"></i> Cambiar Estado
+                                </button>
+                                <button type="button" class="btn btn-outline-light mb-2"
+                                    onclick="openChart(${row.id_empleado})">
+                                    <i class="bi bi-bar-chart-line-fill"></i> Ver Gráfico
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-        </div>
-    </div>
-</div>
             `;
         });
         // Se muestra un mensaje de acuerdo con el resultado.
@@ -146,3 +137,26 @@ const openCreate = () => {
     // Se prepara el formulario.
     SAVE_FORM.reset();
 }
+
+//? Método del evento para cuando se envía el formulario de guardar.
+SAVE_FORM.addEventListener('submit', async (event) => {
+    // Se evita recargar la página web después de enviar el formulario.
+    event.preventDefault();
+    // Se verifica la acción a realizar.
+    (ID_ADMINISTRADOR.value) ? action = 'updateRow' : action = 'createRow';
+    // Constante tipo objeto con los datos del formulario.
+    const FORM = new FormData(SAVE_FORM);
+    // Petición para guardar los datos del formulario.
+    const DATA = await fetchData(USER_API, action, FORM);
+    // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
+    if (DATA.status) {
+        // Se cierra la caja de diálogo.
+        SAVE_MODAL.hide();
+        // Se muestra un mensaje de éxito.
+        sweetAlert(1, DATA.message, true);
+        // Se carga nuevamente la tabla para visualizar los cambios.
+        fillTable();
+    } else {
+        sweetAlert(2, DATA.error, false);
+    }
+});

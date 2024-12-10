@@ -44,9 +44,6 @@
                         <button type="button" class="btn btn-warning" onclick="openCreate()">
                             <i class="bi bi-person-fill-add"></i>
                         </button>
-                        <button type="button" class="btn btn-primary" onclick="openReport()">
-                            <i class="bi bi-filetype-pdf"></i>
-                        </button>
                     </div>
                 </div>
             </form>
@@ -56,44 +53,7 @@
 
         <!-- Contenedor para la tabla con scroll -->
         <div id="administradores" class="container justify-content-center row">
-            <div class="card text-bg-dark">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-3 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
-                            <img src="../../resources/error/images/404Administrador.png" width="200"
-                                class="rounded border border-primary" alt="Imagen de error"
-                                onerror="this.onerror=null; this.src='../../resources/error/images/404Administrador.png';">
-                        </div>
-                        <div class="col-lg-7 col-md-8 col-sm-12 text-center">
-                            <h5 class="text-white">Nombre empleado</h5>
-                            <p class="card-title text-white">${row.nombre_empleado} ${row.apellido_empleado}</p>
-                            <h5 class="text-white">Usuario</h5>
-                            <p class="card-text text-white">${row.dui_empleado}</p>
-                            <h5 class="text-white">Correo Administrador</h5>
-                            <p class="card-text text-white">${row.correo_empleado}</p>
-                            <h5 class="text-white">Teléfono</h5>
-                            <p class="card-text text-white">${row.correo_empleado}</p>
-                        </div>
-                        <div class="col-lg-2 col-md-12 col-sm-12 text-center mt-3">
-                            <div class="d-flex flex-column">
-                                <button class="btn btn-outline-light mb-2" onclick="openDelete(${row.id_empleado})">
-                                    <i class="bi bi-trash3-fill"></i> Eliminar
-                                </button>
-                                <button class="btn btn-outline-light mb-2" onclick="openUpdate(${row.id_empleado})">
-                                    <i class="bi bi-pencil-fill"></i>Actualizar
-                                </button>
-                                <button class="btn btn-outline-light mb-2" onclick="openState(${row.id_empleado})">
-                                    <i class="bi bi-exclamation-octagon"></i> Cambiar Estado
-                                </button>
-                                <button type="button" class="btn btn-outline-light mb-2"
-                                    onclick="openChart(${row.id_empleado})">
-                                    <i class="bi bi-bar-chart-line-fill"></i> Ver Gráfico
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
         </div>
 
         <!-- Modal agregar Administrador -->
@@ -162,12 +122,22 @@
                                                     class="form-control" autocomplete="off" required
                                                     oninput="formatEmail(this)">
                                             </div>
+                                            <div class="col-lg-6">
+                                                <label for="" class="form-label">Clave</label>
+                                                <input type="password" id="claveAdmin" name="claveAdmin" autocomplete="off"
+                                                    class="form-control" required>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <label for="" class="form-label">Repetir Clave</label>
+                                                <input type="password" id="claveAdmin2" name="claveAdmin2"
+                                                    autocomplete="off" class="form-control" required>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="row mt-3">
+                                <div class="row mb-3">
                                     <div class="col-12 text-end">
                                         <button type="submit" class="btn btn-primary ps-4 pe-4">
                                             <i class="bi bi-person-fill-add me-1"></i> Aceptar
