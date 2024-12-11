@@ -82,7 +82,7 @@ const fillTable = async (form = null) => {
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-3 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
-                            <img src="../../resources/error/images/404Administrador.png" width="200"
+                            <img src="${SERVER_URL}images/admin/${row.imagen_administrador}" width="200"
                                 class="rounded border border-primary" alt="Imagen de error"
                                 onerror="this.onerror=null; this.src='../../resources/error/images/404Administrador.png';">
                         </div>
