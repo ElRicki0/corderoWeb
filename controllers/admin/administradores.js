@@ -133,7 +133,7 @@ const openCreate = () => {
     // Se muestra la caja de diálogo con su título.
     SAVE_MODAL.show();
     MODAL_TITLE.textContent = 'Agregar Administrador';
-    IMAGEN_MUESTRA.src = SERVER_URL.concat('images/administradores/404Administrador.png');
+    IMAGEN_MUESTRA.src = ('../../resources/error/images/404Administrador.png');
     // Se prepara el formulario.
     SAVE_FORM.reset();
 }

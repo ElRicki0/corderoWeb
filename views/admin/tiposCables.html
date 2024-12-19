@@ -4,25 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administradores</title>
+    <title>Tipos cables</title>
     <link rel="stylesheet" href="../../resources/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../resources/css/general.css">
     <link rel="stylesheet" href="../../resources/css/bootstrap-icons.min.css">
 </head>
 
 <body>
-    <!-- ? Contenido principal del documento -->
+    <!-- Contenido principal del documento -->
     <main>
         <h2 id="mainTitle"></h2>
         <!-- ? titulo principal -->
         <div class="container-fluid">
             <div class="row py-4">
-                <h3 class="fw-bold"> <i class="bi bi-shield-lock-fill me-1"></i> Gestionar Administradores
+                <h3 class="fw-bold"> <i class="bi bi-shield-lock-fill me-1"></i> Gestionar Tipos de Cables
                 </h3>
-                <h6 class="fw-medium text-secondary">Bienvenido a la sección de gestión de administradores. Aquí puedes
-                    manejar todas las personas administradoras registrados en tu página web. <br>
-                    La tabla te permite eliminar, dar de baja, editar, ver graficas y
-                    reportes generales de actividad.</h6>
+                <h6 class="fw-medium text-secondary">Bienvenido a la sección de gestión de administración de los tipos
+                    de cables.
+                    En este apartado, podrás gestionar y catalogar de manera eficiente los diferentes tipos de cables
+                    disponibles. Esta herramienta ha sido diseñada para facilitar la organización y clasificación,
+                    asegurando un mejor control de los recursos y una mayor precisión en las operaciones relacionadas
+                    con estos materiales..</h6>
             </div>
         </div>
 
@@ -30,11 +32,11 @@
         <div class="row">
             <form class="col-sm-12 col-md-12 col-lg-10" id="searchForm">
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-lg-6 col-md-12 mb-4">
                         <input type="search" class="form-control custom-input border-2" id="search" name="search"
                             placeholder="Nombre o Apellido" required>
                     </div>
-                    <div class="col-6">
+                    <div class="col-lg-6 col-md-12 mb-4">
                         <div class="btn-group">
                             <button type="submit" class="btn btn-success">
                                 <i class="bi bi-search"></i>
@@ -54,20 +56,18 @@
         <p id="rowsFound" class="text-white fw-bold mt-3"></p>
 
         <!-- Contenedor para la tabla con scroll -->
-        <div id="administradores" class="container justify-content-center row">
-
+        <div id="tiposCables" class="container justify-content-center row">
         </div>
 
         <!-- Modal agregar Administrador -->
         <div class="modal fade" id="saveModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-dialog modal-dialog-centered modal-sm">
                 <div class="modal-content bg-dark text-white">
-
                     <!-- Formulario saveForm -->
                     <form id="saveForm">
 
                         <!-- Campo oculto para asignar el id del registro al momento de modificar -->
-                        <input type="number" class="d-none" id="idAdministrador" name="idAdministrador">
+                        <input type="number" class="d-none" id="idCategoriaCable" name="idCategoriaCable">
                         <form class="needs-validation">
 
                             <!-- Body del modal -->
@@ -83,56 +83,26 @@
                                             <div class="col-12">
                                             </div>
                                             <div class="col-12 text-center">
-                                                <label for="imagenAdministrador">
-                                                    <h3 for="imagenAdministrador" class="form-label">Imagen
-                                                        Administrador</h3>
+                                                <label for="imagenCategoria">
+                                                    <h3 for="imagenCategoria" class="form-label">Imagen
+                                                        cable</h3>
                                                     <img id="imagenMuestra"
                                                         class="rounded  mx-auto d-block img-fluid mt-3 border border-3 border-secondary-subtle rounded-circle imagen_R"
-                                                        src="../../resources/error/images/404Administrador.png"
-                                                        alt="..." width="200px" height="200px">
-                                                    <input id="imagenAdministrador" type="file"
-                                                        name="imagenAdministrador" class="d-none form-control"
-                                                        accept=".png, .jpg">
+                                                        src="../../resources/error/images/404Cable.png" alt="..."
+                                                        width="200px" height="200px">
+                                                    <input id="imagenCategoria" type="file" name="imagenCategoria"
+                                                        class="d-none form-control" accept=".png, .jpg">
                                                 </label>
                                             </div>
-                                            <div class="col-6">
-                                                <label class="form-label">Nombre(s)</label>
-                                                <input id="nombreAdministrador" name="nombreAdministrador"
-                                                    class="form-control" autocomplete="off" required
-                                                    oninput="formatAlphabetic(this)">
+                                            <div class="col-12">
+                                                <label class="form-label">Nombre categoría</label>
+                                                <input id="nombreCategoria" name="nombreCategoria" class="form-control"
+                                                    autocomplete="off" required>
                                             </div>
-                                            <div class="col-6">
-                                                <label class="form-label">Apellido(s)</label>
-                                                <input id="apellidoAdministrador" name="apellidoAdministrador"
-                                                    autocomplete="off" class="form-control" required
-                                                    oninput="formatAlphabetic(this)">
-                                            </div>
-                                            <div class="col-6 mt-3">
-                                                <label class="form-label">Nombre usuario</label>
-                                                <input id="usuarioAdministrador" name="usuarioAdministrador"
-                                                    class="form-control" autocomplete="off" required>
-                                            </div>
-                                            <div class="col-6 mt-3">
-                                                <label class="form-label">Numero telefono</label>
-                                                <input id="telefonoAdministrador" name="telefonoAdministrador"
-                                                    class="form-control" autocomplete="off" required
-                                                    oninput="formatEmail(this)">
-                                            </div>
-                                            <div class="col-12 mt-3">
-                                                <label class="form-label">Correo electronico</label>
-                                                <input id="correoAdministrador" name="correoAdministrador"
-                                                    class="form-control" autocomplete="off" required
-                                                    oninput="formatEmail(this)">
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <label for="" class="form-label">Clave</label>
-                                                <input type="password" id="claveAdmin" name="claveAdmin"
-                                                    autocomplete="off" class="form-control" required>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <label for="" class="form-label">Repetir Clave</label>
-                                                <input type="password" id="claveAdmin2" name="claveAdmin2"
-                                                    autocomplete="off" class="form-control" required>
+                                            <div class="col-12">
+                                                <label class="form-label">Descripción categoría</label>
+                                                <textarea name="apellidoAdministrador" id="descripcionCategoria"
+                                                    autocomplete="off" class="form-control" required></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -152,7 +122,6 @@
                 </div>
             </div>
         </div>
-
     </main>
 
     <!-- IMPORTACIÓN DE ARCHIVOS JAVASCRIPT -->
@@ -164,8 +133,8 @@
     <!-- Llamada al controlador del sitio privado -->
     <script type="text/javascript" src="../../controllers/utils/admin.js"></script>
     <!-- Llamada al controlador de la página web -->
+    <script src="../../controllers/admin/tiposCables.js"></script>
     <!-- ! cambiar el link js para el controntrolador -->
-    <script src="../../controllers/admin/administradores.js"></script>
 
 </body>
 
