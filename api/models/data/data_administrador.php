@@ -106,7 +106,7 @@ class AdministradorData extends AdministradorHandler
             $this->imagen = $filename;
             return true;
         } else {
-            $this->imagen = 'default.png';
+            $this->imagen = '404Administrador.png';
             return true;
         }
     }
@@ -118,6 +118,17 @@ class AdministradorData extends AdministradorHandler
             return true;
         } else {
             $this->data_error = Validator::getPasswordError();
+            return false;
+        }
+    }
+
+    public function setFilename()
+    {
+        if ($data = $this->readFilename()) {
+            $this->filename = $data['imagen_administrador'];
+            return true;
+        } else {
+            $this->data_error = 'Administrador inexistente';
             return false;
         }
     }
