@@ -28,32 +28,33 @@
         <div class="row">
             <form class="col-sm-12 col-md-12 col-lg-10" id="searchForm">
                 <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-12 mt-5">
-                            <input type="search" class="form-control custom-input border-2" id="search" name="search"
-                                placeholder="Nombre o Apellido" required>
+                    <div class="col-lg-6 col-md-6 col-sm-12 mt-5">
+                        <input type="search" class="form-control custom-input border-2" id="search" name="search"
+                            placeholder="Nombre o Apellido" required>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-6 d-flex flex-column align-items-start">
+                        <div class="btn-group mt-5">
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-search"></i>
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="fillTable()">
+                                <i class="bi bi-arrow-counterclockwise"></i>
+                            </button>
+                            <button type="button" class="btn btn-warning" onclick="openCreate()">
+                                <i class="bi bi-clipboard-plus"></i>
+                            </button>
+                            <button type="button" class="btn btn-info" onclick="openCreate()">
+                                <i class="bi bi-sort-numeric-down"></i>
+                            </button>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 d-flex flex-column align-items-start">
-                            <div class="btn-group mt-5">
-                                <button type="submit" class="btn btn-success">
-                                    <i class="bi bi-search"></i>
-                                </button>
-                                <button type="button" class="btn btn-secondary" onclick="fillTable()">
-                                    <i class="bi bi-arrow-counterclockwise"></i>
-                                </button>
-                                <button type="button" class="btn btn-warning" onclick="openCreate()">
-                                    <i class="bi bi-clipboard-plus"></i>
-                                </button>
-                                <button type="button" class="btn btn-info" onclick="openCreate()">
-                                    <i class="bi bi-sort-numeric-down"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6">
-                            <h3 class="mb-3">Administrar tipos de cables</h3>
-                                <button type="reset" class="btn btn-secondary" onclick="window.location.href='../admin/tiposCables.html'">
-                                    <i class="bi bi-bookmark-plus"></i>
-                                </button>
-                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-6">
+                        <h3 class="mb-3">Administrar tipos de cables</h3>
+                        <button type="reset" class="btn btn-secondary"
+                            onclick="window.location.href='../admin/tiposCables.html'">
+                            <i class="bi bi-bookmark-plus"></i>
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -85,54 +86,30 @@
                                 <!-- Inputs -->
                                 <div class="row p-3">
                                     <div class="row">
-                                        <div class="col-12">
-                                        </div>
-                                        <div class="col-12 text-center">
-                                            <label for="imagenCable">
-                                                <h3 for="imagenCable" class="form-label">Imagen
-                                                    Cable</h3>
-                                                <img id="imagenMuestra"
-                                                    class="rounded  mx-auto d-block img-fluid mt-3 border border-3 border-secondary-subtle rounded-circle imagen_R"
-                                                    src="../../resources/error/images/404Cable.png" alt="..."
-                                                    width="200px" height="200px">
-                                                <input id="imagenCable" type="file" name="imagenCable"
-                                                    class="d-none form-control" accept=".png, .jpg">
-                                            </label>
-                                        </div>
                                         <div class="col-6">
-                                            <label class="form-label">Nombre(s)</label>
+                                            <label class="form-label">Nombre cable</label>
                                             <input id="nombreCable" name="nombreCable" class="form-control"
                                                 autocomplete="off" required oninput="formatAlphabetic(this)">
                                         </div>
                                         <div class="col-6">
-                                            <label class="form-label">Apellido(s)</label>
-                                            <input id="apellidoCable" name="apellidoCable" autocomplete="off"
+                                            <label class="form-label">Descripción cable</label>
+                                            <input id="descripcionCable" name="descripcionCable" autocomplete="off"
                                                 class="form-control" required oninput="formatAlphabetic(this)">
                                         </div>
                                         <div class="col-6 mt-3">
-                                            <label class="form-label">Nombre usuario</label>
-                                            <input id="usuarioCable" name="usuarioCable" class="form-control"
+                                            <select id="estadoCable" name="estadoCable" class="form-select"
                                                 autocomplete="off" required>
-                                        </div>
-                                        <div class="col-6 mt-3">
-                                            <label class="form-label">Numero telefono</label>
-                                            <input id="telefonoCable" name="telefonoCable" class="form-control"
-                                                autocomplete="off" required oninput="formatEmail(this)">
+                                                <option selected>Seleccione un estado</option>
+                                                <option value="Nuevo">Nuevo</option>
+                                                <option value="En uso">En uso</option>
+                                                <option value="En ruta">En ruta</option>
+                                            </select>
                                         </div>
                                         <div class="col-12 mt-3">
-                                            <label class="form-label">Correo electronico</label>
-                                            <input id="correoCable" name="correoCable" class="form-control"
-                                                autocomplete="off" required oninput="formatEmail(this)">
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <label for="" class="form-label">Clave</label>
-                                            <input type="password" id="claveAdmin" name="claveAdmin" autocomplete="off"
-                                                class="form-control" required>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <label for="" class="form-label">Repetir Clave</label>
-                                            <input type="password" id="claveAdmin2" name="claveAdmin2"
-                                                autocomplete="off" class="form-control" required>
+                                            <label for="categoriaCable" class="form-label">Tipo de cable</label>
+                                            <select id="categoriaCable" name="categoriaCable" class="form-select"
+                                                required>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
