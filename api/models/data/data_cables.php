@@ -1,18 +1,13 @@
 <?php
-// Se incluye la clase para validar los datos de entrada.
+//? Se incluye la clase para validar los datos de entrada.
 require_once('../../helpers/validator.php');
-// Se incluye la clase padre.
-require_once('../../models/handler/handler_categoria_cable.php');
-
-// ? Clase para manejar el encapsulamiento de los datos de la tabla PRODUCTO.
-
-class CableCategoriaData extends CategoriaCableHandler
+//? Se incluye la clase padre.
+require_once('../../models/handler/handler_cable.php');
+// ? clase para manejar encasamiento de la clase cable
+class CableData extends CablesHandler
 {
-    /*
-     *  Atributos adicionales.
-     */
+    // ? atributos adicionales
     private $data_error = null;
-    private $filename = null;
 
     /*
      *   Métodos para validar y establecer los datos.
@@ -28,7 +23,7 @@ class CableCategoriaData extends CategoriaCableHandler
         }
     }
 
-    public function setNombre($value, $min = 2, $max = 50)
+    public function setNombre($value, $min = 2, $max = 250)
     {
         if (!Validator::validateAlphanumeric($value)) {
             $this->data_error = 'El nombre debe ser un valor alfanumérico';
@@ -56,44 +51,46 @@ class CableCategoriaData extends CategoriaCableHandler
         }
     }
 
-    public function setImagen($file, $filename = null)
+    public function setLongitud($value)
     {
-        if (Validator::validateImageFile($file)) {
-            $this->imagen = Validator::getFileName();
-            return true;
-        } elseif (Validator::getFileError()) {
-            $this->data_error = Validator::getFileError();
-            return false;
-        } elseif ($filename) {
-            $this->imagen = $filename;
+        if (Validator::validateNaturalNumber($value)) {
+            $this->cantidad = $value;
             return true;
         } else {
-            $this->imagen = '404Cable.png';
-            return true;
-        }
-    }
-
-    public function setFilename()
-    {
-        if ($data = $this->readFilename()) {
-            $this->filename = $data['imagen_categoria_cable'];
-            return true;
-        } else {
-            $this->data_error = 'Producto inexistente';
+            $this->data_error = 'La longitud debe ser un número entero positivo';
             return false;
         }
     }
 
-    /*
-     *  Métodos para obtener el valor de los atributos adicionales.
-     */
+    public function setCategoria($value)
+    {
+        if (Validator::validateNaturalNumber($value)) {
+            $this->categoria = $value;
+            return true;
+        } else {
+            $this->data_error = 'El identificador de la categoría es incorrecto';
+            return false;
+        }
+    }
+
+    public function setEstado($value, $min = 2, $max = 250)
+    {
+        if (!Validator::validateAlphanumeric($value)) {
+            $this->estado = $value;
+            return true;
+        } elseif (Validator::validateLength($value, $min, $max)) {
+            $this->estado = $value;
+            return true;
+        } else {
+            $this->data_error = 'Estado incorrecto wawa';
+            return false;
+        }
+    }
+
+    // ? método para tener los datos adicionales del error
+
     public function getDataError()
     {
         return $this->data_error;
-    }
-
-    public function getFilename()
-    {
-        return $this->filename;
     }
 }

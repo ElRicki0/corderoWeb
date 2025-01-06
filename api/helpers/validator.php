@@ -122,7 +122,7 @@ class Validator
     */
     public static function validateBoolean($value)
     {
-        if ($value == 1 || $value == 0) {
+        if ($value == 1 || $value == 0 || $value == 2) {
             return true;
         } else {
             return false;
