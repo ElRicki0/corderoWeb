@@ -66,9 +66,9 @@ class CablesHandler
                 FROM
                     `tb_cables`
                 WHERE
-                    `id_cable` = ? ';
+                    `id_cable` = ?';
         $params = array($this->id);
-        return database::executeRow($sql, $params);
+        return database::getRow($sql, $params);
     }
 
     public function UpdateRow()

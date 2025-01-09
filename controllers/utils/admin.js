@@ -75,7 +75,12 @@ const loadTemplate = async () => {
                         <label for="menuCheckbox" onclick="this.parentNode.click();">Cerrar Sesión</label>
                     </a>
                 </li>
-                <li><a></a></li>
+                <li>
+                    <a href="../../views/admin/perfil.html">
+                        <label for="menuCheckbox" onclick="this.parentNode.click();">Perfil</label>
+                        <i class="bi bi-person-circle"></i>
+                    </a>
+                </li>
                 <li><a></a></li>
                 <li><a></a></li>
                 <li><a></a></li>

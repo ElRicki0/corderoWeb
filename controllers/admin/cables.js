@@ -16,7 +16,7 @@ const SAVE_MODAL = new bootstrap.Modal('#saveModal'),
 // constantes para guardar o editar un registro
 const SAVE_FORM = document.getElementById('saveForm'),
     ID_CABLE = document.getElementById('idCable'),
-    NOMBRE_CABLE = document.getElementById('nombrecable'),
+    NOMBRE_CABLE = document.getElementById('nombreCable'),
     DESCRIPCION_CABLE = document.getElementById('descripcionCable'),
     ESTADO_CABLE = document.getElementById('estadoCable'),
     LONGITUD_CABLE = document.getElementById('longitudCable');
@@ -49,7 +49,7 @@ const fillTable = async (form = null) => {
             // Se establece un icono para el estado del producto.
             let icon;
 
-            switch (parseInt(row.estado_producto)) {
+            switch (parseInt(row.estado_cable)) {
                 case 0:
                     icon = 'bi bi-bookmark-star'; // Estado 0
                     break;
@@ -143,3 +143,61 @@ SAVE_FORM.addEventListener('submit', async (event) => {
         sweetAlert(2, DATA.error, false);
     }
 });
+
+/*
+*   Función asíncrona para preparar el formulario al momento de actualizar un registro.
+*   Parámetros: id (identificador del registro seleccionado).
+*   Retorno: ninguno.
+*/
+const openUpdate = async (id) => {
+    // Se define un objeto con los datos del registro seleccionado.
+    const FORM = new FormData();
+    FORM.append('idCable', id);
+    // Petición para obtener los datos del registro solicitado.
+    const DATA = await fetchData(CABLE_API, 'readOne', FORM);
+    // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
+    if (DATA.status) {
+        // Se muestra la caja de diálogo con su título.
+        SAVE_MODAL.show();
+        MODAL_TITLE.textContent = 'Actualizar información';
+        // Se prepara el formulario.
+        SAVE_FORM.reset();
+        // Se inicializan los campos con los datos.
+        const ROW = DATA.dataset;
+        ID_CABLE.value = ROW.id_cable;
+        NOMBRE_CABLE.value = ROW.nombre_cable;
+        DESCRIPCION_CABLE.value = ROW.descripcion_cable;
+        LONGITUD_CABLE.value = ROW.longitud_cable;
+        ESTADO_CABLE.value = ROW.estado_cable;
+        fillSelect(CATEGORIA_CABLE_API, 'readAll', 'categoriaCable', parseInt(ROW.id_categoria_cable));
+    } else {
+        sweetAlert(2, DATA.error, false);
+    }
+}
+
+/*
+*   Función asíncrona para eliminar un registro.
+*   Parámetros: id (identificador del registro seleccionado).
+*   Retorno: ninguno.
+*/
+const openDelete = async (id) => {
+    // Llamada a la función para mostrar un mensaje de confirmación, capturando la respuesta en una constante.
+    const RESPONSE = await confirmAction('¿Desea eliminar el cable de forma permanente?');
+    // Se verifica la respuesta del mensaje.
+    if (RESPONSE) {
+        // Se define una constante tipo objeto con los datos del registro seleccionado.
+        const FORM = new FormData();
+        FORM.append('idCable', id);
+        // Petición para eliminar el registro seleccionado.
+        const DATA = await fetchData(CABLE_API, 'deleteRow', FORM);
+        // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
+        if (DATA.status) {
+            // Se muestra un mensaje de éxito.
+            await sweetAlert(1, DATA.message, true);
+            // Se carga nuevamente la tabla para visualizar los cambios.
+            fillTable();
+        } else {
+            sweetAlert(2, DATA.error, false);
+        }
+    }
+}

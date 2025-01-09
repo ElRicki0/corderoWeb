@@ -37,7 +37,7 @@ if (isset($_GET['action'])) {
                     $result['error'] = $cable->getDataError();
                 } elseif ($cable->CreateRow()) {
                     $result['status'] = 1;
-                    $result['message'] = 'Producto creado correctamente';
+                    $result['message'] = 'Cable creado correctamente';
                 } else {
                     $result['error'] = 'Ocurrió un problema al crear el cable';
                 }
@@ -55,8 +55,39 @@ if (isset($_GET['action'])) {
                     $result['error'] = $cable->getDataError();
                 } elseif ($result['dataset'] = $cable->readOne()) {
                     $result['status'] = 1;
+                    $result['message'] = 'Existen un dato';
                 } else {
                     $result['error'] = 'Cable inexistente';
+                }
+                break;
+            case 'updateRow':
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$cable->setId($_POST['idCable']) or
+                    !$cable->setNombre($_POST['nombreCable']) or
+                    !$cable->setDescripcion($_POST['descripcionCable']) or
+                    !$cable->setLongitud($_POST['longitudCable']) or
+                    !$cable->setCategoria($_POST['categoriaCable']) or
+                    !$cable->setEstado($_POST['estadoCable'])
+                ) {
+                    $result['error'] = $cable->getDataError();
+                } elseif ($cable->UpdateRow()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Cable editado correctamente';
+                } else {
+                    $result['error'] = 'Error al editar la unidad';
+                }
+                break;
+            case 'deleteRow':
+                if (
+                    !$cable->setId($_POST['idCable'])
+                ) {
+                    $result['error'] = $cable->getDataError();
+                } elseif ($cable->deleteRow()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Cable eliminado correctamente';
+                } else {
+                    $result['error'] = 'Ocurrió un problema al eliminar el cable';
                 }
                 break;
             default:

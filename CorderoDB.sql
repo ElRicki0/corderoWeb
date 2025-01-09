@@ -148,7 +148,7 @@ CREATE TABLE
         nombre_cable VARCHAR(50),
         descripcion_cable VARCHAR(150),
         longitud_cable DECIMAL(10, 2),
-        estado_cable VARCHAR (30) NOT NULL,
+        estado_cable TINYINT not NULL,
         id_categoria_cable INT,
         FOREIGN KEY (id_categoria_cable) REFERENCES tb_categorias_cables (id_categoria_cable) ON DELETE CASCADE,
         id_administrador INT,

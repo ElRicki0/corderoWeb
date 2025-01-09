@@ -53,7 +53,7 @@ class CableData extends CablesHandler
 
     public function setLongitud($value)
     {
-        if (Validator::validateNaturalNumber($value)) {
+        if (Validator::validateString($value)) {
             $this->cantidad = $value;
             return true;
         } else {
@@ -73,19 +73,25 @@ class CableData extends CablesHandler
         }
     }
 
-    public function setEstado($value, $min = 2, $max = 250)
-    {
-        if (!Validator::validateAlphanumeric($value)) {
-            $this->estado = $value;
-            return true;
-        } elseif (Validator::validateLength($value, $min, $max)) {
-            $this->estado = $value;
-            return true;
-        } else {
-            $this->data_error = 'Estado incorrecto wawa';
-            return false;
-        }
+    public function setEstado($value, $min = 0, $max = 250)
+{
+    // Validar que el valor sea alfanumérico
+    if (!Validator::validateAlphanumeric($value)) {
+        $this->data_error = 'Estado no es alfanumérico.';
+        return false;
     }
+
+    // Validar que el valor cumpla con la longitud mínima y máxima
+    if (!Validator::validateLength($value, $min, $max)) {
+        $this->data_error = "Estado no cumple con la longitud permitida ($min-$max caracteres).";
+        return false;
+    }
+
+    // Si ambas validaciones son correctas, asignar el valor y devolver true
+    $this->estado = $value;
+    return true;
+}
+
 
     // ? método para tener los datos adicionales del error
 
