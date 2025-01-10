@@ -4,7 +4,7 @@ require_once('../../helpers/database.php');
 
 // ?clase para manejar el comportamiento de la tabla independiente tb_categorías_cables
 
-class handlerCategoriaCable
+class CategoriaCableHandler
 {
     // ? declaración de variables de la tabla
     protected $id = null;

@@ -96,16 +96,21 @@
                                             <input id="descripcionCable" name="descripcionCable" autocomplete="off"
                                                 class="form-control" required oninput="formatAlphabetic(this)">
                                         </div>
-                                        <div class="col-6 mt-3">
+                                        <div class="col-6">
+                                            <label class="form-label">Estado cable</label>
                                             <select id="estadoCable" name="estadoCable" class="form-select"
                                                 autocomplete="off" required>
                                                 <option selected>Seleccione un estado</option>
-                                                <option value="Nuevo">Nuevo</option>
-                                                <option value="En uso">En uso</option>
-                                                <option value="En ruta">En ruta</option>
+                                                <option value="0">Nuevo</option>
+                                                <option value="1">En uso</option>
+                                                <option value="2">En ruta</option>
                                             </select>
                                         </div>
-                                        <div class="col-12 mt-3">
+                                        <div class="col-6">
+                                            <label class="form-label">Longitud cable</label>
+                                            <input type="number" class="form-control" id="longitudCable" name="longitudCable" placeholder="ingrese la longitud...">
+                                        </div>
+                                        <div class="col-12">
                                             <label for="categoriaCable" class="form-label">Tipo de cable</label>
                                             <select id="categoriaCable" name="categoriaCable" class="form-select"
                                                 required>
