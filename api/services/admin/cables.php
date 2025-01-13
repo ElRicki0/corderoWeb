@@ -60,6 +60,14 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'Cable inexistente';
                 }
                 break;
+                case 'readAllOne':
+                    if ($result['dataset'] = $cable->readAllOne()) {
+                        $result['status'] = 1;
+                        $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                    } else {
+                        $result['error'] = 'No existen cables registrados';
+                    }
+                    break;
             case 'updateRow':
                 $_POST = Validator::validateForm($_POST);
                 if (

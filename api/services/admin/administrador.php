@@ -33,6 +33,13 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'No existen registros actualmente';
                 }
                 break;
+            case 'readProfile':
+                if ($result['dataset'] = $administrador->readProfile()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'Ocurrió un problema al leer el perfil';
+                }
+                break;
             case 'createRow':
                 $_POST = Validator::validateForm($_POST);
                 if (

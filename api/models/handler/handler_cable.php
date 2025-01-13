@@ -53,6 +53,32 @@ class CablesHandler
         return Database::getRows($sql);
     }
 
+    public function readAllOne()
+    {
+        $sql = 'SELECT
+                    `id_cable`,
+                    `nombre_cable`,
+                    `descripcion_cable`,
+                    `longitud_cable`,
+                    `estado_cable`,
+                    cc.nombre_categoria_cable,
+                    a.nombre_administrador,
+                    a.apellido_administrador,
+                    cc.imagen_categoria_cable,
+                    c.id_administrador
+                FROM
+                    tb_cables c
+                INNER JOIN tb_categorias_cables cc ON
+                    c.id_categoria_cable = cc.id_categoria_cable
+                INNER JOIN tb_administradores a ON
+                    c.id_administrador = a.id_administrador
+                WHERE
+                    C.id_administrador = ?
+        ';
+        $params = array($_SESSION['idAdministrador']);
+        return Database::getRows($sql, $params);
+    }
+
     public function ReadOne()
     {
         $sql = 'SELECT

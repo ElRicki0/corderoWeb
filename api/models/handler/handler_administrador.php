@@ -77,7 +77,8 @@ class AdministradorHandler
 
     //* métodos SCRUD (search, create, read, update, and delete) para el manejo de variables 
 
-    public function searchRows(){
+    public function searchRows()
+    {
         $value = '%' . Validator::getSearchValue() . '%';
         $sql = 'SELECT id_administrador, nombre_administrador, apellido_administrador, correo_administrador, usuario_administrador, telefono_administrador
                 FROM tb_administradores
@@ -101,11 +102,30 @@ class AdministradorHandler
         return Database::getRows($sql);
     }
 
-    public function readAllOne() {
+    public function readAllOne()
+    {
         $sql = 'SELECT id_administrador, nombre_administrador, apellido_administrador, usuario_administrador, telefono_administrador, correo_administrador, imagen_administrador FROM tb_administradores
         where id_administrador<>?';
         $params = array($_SESSION['idAdministrador']);
         return Database::getRows($sql, $params);
+    }
+
+    public function readProfile()
+    {
+        $sql = '  SELECT
+                    `id_administrador`,
+                    `nombre_administrador`,
+                    `apellido_administrador`,
+                    `usuario_administrador`,
+                    `correo_administrador`,
+                    `telefono_administrador`,
+                    `imagen_administrador`
+                FROM
+                    `tb_administradores`
+                WHERE
+                    `id_administrador` = ?';
+        $params = array($_SESSION['idAdministrador']);
+        return Database::getRow($sql, $params);
     }
 
     public function readFilename()

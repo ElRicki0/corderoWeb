@@ -2,6 +2,14 @@
 .espacio-boton {
     margin-top: 500px;
 }
+.fondo-celeste{
+    background-color: #026c7c;
+}
+
+.texto-perfil{
+    color: black;
+    font-size: medium;
+}
 
 html {
     height: 100%;
@@ -427,4 +435,4 @@ body {
     }
 }
 /* ! fin de código css de footer */
-    /* jaja hola */
+    /* jaja hola */z
