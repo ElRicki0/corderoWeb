@@ -73,9 +73,43 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'No hay coincidencias';
                 }
                 break;
-                break;
             default:
                 $result['error'] = 'Acción no disponible dentro de la sesión';
+            case 'editProfile':
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$administrador->setNombre($_POST['nombreAdmin']) or
+                    !$administrador->setApellido($_POST['apellidoAdmin']) or
+                    !$administrador->setUsuario($_POST['usuarioAdmin']) or
+                    !$administrador->setTelefono($_POST['telefonoAdmin']) or
+                    !$administrador->setCorreo($_POST['correoAdmin']) or
+                    !$administrador->setImagen($_FILES['imagenAdmin'], $administrador->getFilename())
+                ) {
+                    $result['error'] = $administrador->getDataError();
+                } elseif ($administrador->editProfile()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Administrador editado correctamente';
+                    // Se asigna el estado del archivo después de insertar.
+                    $result['fileStatus'] = Validator::changeFile($_FILES['imagenAdmin'], $administrador::RUTA_IMAGEN, $administrador->getFilename());
+                } else {
+                    $result['error'] = 'error al registrar al administrador';
+                }
+                break;
+            case 'changePassword':
+                $_POST = Validator::validateForm($_POST);
+                if (!$administrador->checkPassword($_POST['claveActual'])) {
+                    $result['error'] = 'Contraseña actual incorrecta';
+                } elseif ($_POST['claveNueva'] != $_POST['confirmarClave']) {
+                    $result['error'] = 'Confirmación de contraseña diferente';
+                } elseif (!$administrador->setClave($_POST['claveNueva'])) {
+                    $result['error'] = $administrador->getDataError();
+                } elseif ($administrador->changePassword()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Contraseña cambiada correctamente';
+                } else {
+                    $result['error'] = 'Ocurrió un problema al cambiar la contraseña';
+                }
+                break;
         }
     } else {
         //? se realiza una acción cuando el administrador no tiene la sesión iniciada

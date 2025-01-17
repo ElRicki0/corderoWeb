@@ -62,13 +62,13 @@ class AdministradorHandler
     // validación para comprobar si la contraseña es correcta
     public function checkPassword($password)
     {
-        $sql = 'SELECT clave_admin
-                FROM tb_admins
-                WHERE id_admins = ?';
-        $params = array($_SESSION['idAdmin']);
+        $sql = 'SELECT clave_administrador
+                FROM tb_administradores
+                WHERE id_administrador = ?';
+        $params = array($_SESSION['idAdministrador']);
         if (!($data = Database::getRow($sql, $params))) {
             return false;
-        } elseif (password_verify($password, $data['clave_admin'])) {
+        } elseif (password_verify($password, $data['clave_administrador'])) {
             return true;
         } else {
             return false;
@@ -127,6 +127,38 @@ class AdministradorHandler
         $params = array($_SESSION['idAdministrador']);
         return Database::getRow($sql, $params);
     }
+
+    public function editProfile()
+    {
+        $sql = 'UPDATE
+                    `tb_administradores`
+                SET
+                    `nombre_administrador` = ?,
+                    `apellido_administrador` = ?,
+                    `usuario_administrador` = ?,
+                    `correo_administrador` = ?,
+                    `telefono_administrador` = ?,
+                    `imagen_administrador` = ?
+                WHERE
+                    `id_administrador` = ?';
+        $params = array($this->nombre, $this->apellido, $this->usuario, $this->correo, $this->telefono, $this->imagen, $_SESSION['idAdministrador']);
+        return Database::executeRow($sql, $params);
+    }
+
+    public function changePassword()
+    {
+        $sql = 'UPDATE
+                    `tb_administradores`
+                SET
+                    `clave_administrador` = ?,
+                    `fecha_clave` = ?,
+                    `codigo_clave` = ?
+                WHERE
+                    `id_administrador`=?';
+        $params = array($this->clave, $this->fecha_clave, $this->codigo,  $_SESSION['idAdministrador']);
+        return Database::executeRow($sql, $params);
+    }
+
 
     public function readFilename()
     {
