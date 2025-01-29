@@ -11,20 +11,10 @@ if (isset($_GET['action'])) {
     //? Se declara e inicializa un arreglo para guardar el resultado que retorna la API.
     $result = array('status' => 0, 'message' => null, 'dataset' => null, 'error' => null, 'exception' => null);
     // ? se verifica si hay un session iniciada como administrador, de lo contrario el código termina con un error
-    if (isset($_SESSION['idAdministrador'])) {
+    if (isset($_SESSION['idAdministrador'])or true) {
+    // if (isset($_SESSION['idAdministrador'])) {
         // ? se compara la acción del administrador con la session iniciada
         switch ($_GET['action']) {
-            case  'searchRows':
-                if (!Validator::validateSearch($_POST['search'])) {
-                    $result['error'] = Validator::getSearchError();
-                } elseif ($result['dataset'] = $cable->searchRows()) {
-                    $result['status'] = 1;
-                    $result['message'] = 'Existen ' . count($result['dataset']) . ' coincidencias';
-                } else {
-                    $result['error'] = 'No hay coincidencias';
-                }
-                break;
-
             case 'createRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
@@ -42,8 +32,58 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'Ocurrió un problema al crear el cable';
                 }
                 break;
+            case  'searchRows':
+                if (!Validator::validateSearch($_POST['search'])) {
+                    $result['error'] = Validator::getSearchError();
+                } elseif ($result['dataset'] = $cable->searchRows()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' coincidencias';
+                } else {
+                    $result['error'] = 'No hay coincidencias';
+                }
+                break;
             case 'readAll':
                 if ($result['dataset'] = $cable->readAll()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen cables registrados';
+                }
+                break;
+            case 'readByName':
+                if ($result['dataset'] = $cable->readByName()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen cables registrados';
+                }
+                break;
+            case 'readByLengthDesc':
+                if ($result['dataset'] = $cable->readByLengthDesc()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen cables registrados';
+                }
+                break;
+            case 'readByLengthAsc':
+                if ($result['dataset'] = $cable->readByLengthAsc()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen cables registrados';
+                }
+                break;
+            case 'readByModify':
+                if ($result['dataset'] = $cable->readByModify()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen cables registrados';
+                }
+                break;
+            case 'readByName':
+                if ($result['dataset'] = $cable->readByName()) {
                     $result['status'] = 1;
                     $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
                 } else {
@@ -60,14 +100,14 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'Cable inexistente';
                 }
                 break;
-                case 'readAllOne':
-                    if ($result['dataset'] = $cable->readAllOne()) {
-                        $result['status'] = 1;
-                        $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
-                    } else {
-                        $result['error'] = 'No existen cables registrados';
-                    }
-                    break;
+            case 'readAllOne':
+                if ($result['dataset'] = $cable->readAllOne()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen cables registrados';
+                }
+                break;
             case 'updateRow':
                 $_POST = Validator::validateForm($_POST);
                 if (

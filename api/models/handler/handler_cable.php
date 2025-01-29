@@ -12,26 +12,54 @@ class CablesHandler
     protected $estado = null;
     protected $categoria = null;
     protected $administrador = null;
+    protected $fecha = null;
+
+    public function __construct()
+    {
+        $this->fecha = date('Y-m-d'); // Formato año-mes-día
+    }
+
+    public function getFecha()
+    {
+        return $this->fecha;
+    }
 
     // ? Métodos para realizar las operaciones SCRUD (search, create, read, update, and delete).
 
     public function searchRows()
     {
         $value = '%' . Validator::getSearchValue() . '%';
-        $sql = 'SELECT `id_cable`, `nombre_cable`, `descripcion_cable`, `longitud_cable`, `estado_cable`, `id_categoria_cable`, `id_administrador` FROM `tb_cables` WHERE nombre_cable LIKE ? OR descripcion_cable LIKE ? OR estado_cable LIKE ? OR id_categoria_cable LIKE ? 
-                ORDER BY nombre_cable';
+        $sql = 'SELECT
+                    `id_cable`,
+                    `nombre_cable`,
+                    `descripcion_cable`,
+                    `longitud_cable`,
+                    `estado_cable`,
+                    cc.nombre_categoria_cable,
+                    a.nombre_administrador,
+                    a.apellido_administrador,
+                    cc.imagen_categoria_cable
+                FROM
+                    tb_cables c
+                INNER JOIN tb_categorias_cables cc ON
+                    c.id_categoria_cable = cc.id_categoria_cable
+                INNER JOIN tb_administradores a ON
+                    c.id_administrador = a.id_administrador
+                WHERE
+                    c.nombre_cable LIKE ? OR c.descripcion_cable LIKE ? OR c.estado_cable LIKE ? OR c.id_categoria_cable LIKE ?               ';
         $params = array($value, $value, $value, $value);
         return Database::getRows($sql, $params);
     }
 
     public function createRow()
     {
-        $sql = 'INSERT INTO `tb_cables`(`nombre_cable`, `descripcion_cable`, `longitud_cable`, `estado_cable`, `id_categoria_cable`, `id_administrador`) 
+        $sql = 'INSERT INTO `tb_cables`(`nombre_cable`, `descripcion_cable`, `longitud_cable`, `estado_cable`, `id_categoria_cable`, `fecha_creacion_cable`, `id_administrador`) 
         VALUES (?, ?, ?, ?, ?, ?)';
-        $params = array($this->nombre, $this->descripcion, $this->cantidad, $this->estado, $this->categoria,  $_SESSION['idAdministrador']);
+        $params = array($this->nombre, $this->descripcion, $this->cantidad, $this->estado, $this->categoria, $this->fecha,  $_SESSION['idAdministrador']);
         return Database::executeRow($sql, $params);
     }
 
+    // ? métodos para mostrar todos los datos
     public function readAll()
     {
         $sql = 'SELECT
@@ -50,6 +78,103 @@ class CablesHandler
                     c.id_categoria_cable = cc.id_categoria_cable
                 INNER JOIN tb_administradores a ON
                     c.id_administrador = a.id_administrador';
+        return Database::getRows($sql);
+    }
+
+    // ? métodos para todos mostrar los datos ordenados por: 'nombre'
+    public function readByName()
+    {
+        $sql = 'SELECT
+                    `id_cable`,
+                    `nombre_cable`,
+                    `descripcion_cable`,
+                    `longitud_cable`,
+                    `estado_cable`,
+                    cc.nombre_categoria_cable,
+                    a.nombre_administrador,
+                    a.apellido_administrador,
+                    cc.imagen_categoria_cable
+                FROM
+                    tb_cables c
+                INNER JOIN tb_categorias_cables cc ON
+                    c.id_categoria_cable = cc.id_categoria_cable
+                INNER JOIN tb_administradores a ON
+                    c.id_administrador = a.id_administrador
+                ORDER BY
+                    c.nombre_cable ASC';
+        return Database::getRows($sql);
+    }
+
+    // ? métodos para todos mostrar los datos ordenados por: 'longitud cable (menor a mayor)'
+    public function readByLengthDesc()
+    {
+        $sql = 'SELECT
+                    `id_cable`,
+                    `nombre_cable`,
+                    `descripcion_cable`,
+                    `longitud_cable`,
+                    `estado_cable`,
+                    cc.nombre_categoria_cable,
+                    a.nombre_administrador,
+                    a.apellido_administrador,
+                    cc.imagen_categoria_cable
+                FROM
+                    tb_cables c
+                INNER JOIN tb_categorias_cables cc ON
+                    c.id_categoria_cable = cc.id_categoria_cable
+                INNER JOIN tb_administradores a ON
+                    c.id_administrador = a.id_administrador
+                ORDER BY
+                    c.longitud_cable desc';
+        return Database::getRows($sql);
+    }
+
+    // ? métodos para todos mostrar los datos ordenados por: 'longitud cable (mayor a menor)'
+    public function readByLengthAsc()
+    {
+        $sql = 'SELECT
+                    `id_cable`,
+                    `nombre_cable`,
+                    `descripcion_cable`,
+                    `longitud_cable`,
+                    `estado_cable`,
+                    cc.nombre_categoria_cable,
+                    a.nombre_administrador,
+                    a.apellido_administrador,
+                    cc.imagen_categoria_cable
+                FROM
+                    tb_cables c
+                INNER JOIN tb_categorias_cables cc ON
+                    c.id_categoria_cable = cc.id_categoria_cable
+                INNER JOIN tb_administradores a ON
+                    c.id_administrador = a.id_administrador
+                ORDER BY
+                    c.longitud_cable asc';
+        return Database::getRows($sql);
+    }
+
+    // ? métodos para todos mostrar los datos ordenados por: 'Agregados o alterados recientemente'
+    public function readByModify()
+    {
+        $sql = 'SELECT
+                    `id_cable`,
+                    `nombre_cable`,
+                    `descripcion_cable`,
+                    `longitud_cable`,
+                    `estado_cable`,
+                    cc.nombre_categoria_cable,
+                    a.nombre_administrador,
+                    a.apellido_administrador,
+                    cc.imagen_categoria_cable,
+                    c.fecha_creacion_cable 
+                FROM
+                    tb_cables c
+                INNER JOIN tb_categorias_cables cc ON
+                    c.id_categoria_cable = cc.id_categoria_cable
+                INNER JOIN tb_administradores a ON
+                    c.id_administrador = a.id_administrador
+                ORDER BY
+                    c.fecha_creacion_cable asc';
         return Database::getRows($sql);
     }
 
@@ -106,10 +231,11 @@ class CablesHandler
                     `descripcion_cable` = ?,
                     `longitud_cable` = ?,
                     `estado_cable` = ?,
-                    `id_categoria_cable` = ?
+                    `id_categoria_cable` = ?,
+                    `fecha_creacion_cable` =?
                 WHERE
                     `id_cable` = ?';
-        $params = array($this->nombre, $this->descripcion, $this->cantidad, $this->estado, $this->categoria, $this->id);
+        $params = array($this->nombre, $this->descripcion, $this->cantidad, $this->estado, $this->categoria, $this->categoria, $this->id);
         return database::executeRow($sql, $params);
     }
 
@@ -119,6 +245,4 @@ class CablesHandler
         $params = array($this->id);
         return Database::executeRow($sql, $params);
     }
-
-
 }

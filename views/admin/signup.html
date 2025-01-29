@@ -28,8 +28,8 @@
                                             <label for="imagenAdmin" style="cursor: pointer;">
                                                 <img id="imagenMuestra"
                                                     class="rounded mx-auto d-block img-fluid mt-3 border border-3 border-secondary-subtle rounded-circle imagen_R"
-                                                    src="../../resources/error/images/404Administrador.png" alt="..." width="200px"
-                                                    height="200px">
+                                                    src="../../resources/error/images/404Administrador.png" alt="..."
+                                                    width="200px" height="200px">
                                             </label>
                                             <input id="imagenAdmin" type="file" name="imagenAdmin"
                                                 class="form-control d-none" accept=".png, .jpg">
@@ -37,7 +37,7 @@
                                         <div class="col-lg-6 col-md-12 col-sm-12">
                                             <label class="form-label">Nombre(s)</label>
                                             <input type="text" id="nombreAdmin" name="nombreAdmin" autocomplete="off"
-                                                class="form-control" required>
+                                                class="form-control" required oninput="formatAlphabetic(this)">
                                         </div>
                                         <div class="col-lg-6 col-md-12 col-sm-12">
                                             <label class="form-label">Apellido</label>
@@ -47,7 +47,7 @@
                                         <div class="col-lg-6 col-md-12 col-sm-12">
                                             <label class="form-label">Usuario</label>
                                             <input type="text" id="usuarioAdmin" name="usuarioAdmin" autocomplete="off"
-                                                class="form-control" required>
+                                                class="form-control" required oninput="formatAlphabetic(this)">
                                         </div>
                                         <div class="col-lg-6 col-md-12 col-sm-12">
                                             <label class="form-label">Teléfono</label>
@@ -57,7 +57,7 @@
                                         <div class="col-lg-6 col-md-12 col-sm-12">
                                             <label class="form-label">Correo Electrónico</label>
                                             <input type="email" id="correoAdmin" name="correoAdmin" autocomplete="off"
-                                                class="form-control" required>
+                                                class="form-control" required oninput="formatEmail(this)">
                                         </div>
                                     </div>
                                     <div class="row mt-5">
@@ -96,6 +96,8 @@
     <script src="../../controllers/utils/admin.js"></script>
     <!-- llama al controlador de la pagina web -->
     <script src="../../controllers/admin/signup.js"></script>
+    <!-- llama al validador de datos registrados -->
+    <script src="../../controllers/utils/inputValidator.js"></script>
 </body>
 
 </html>
