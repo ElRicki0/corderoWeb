@@ -66,7 +66,7 @@ const openCreate = () => {
     // Se muestra la caja de diálogo con su título.
     SAVE_MODAL.show();
     MODAL_TITLE.textContent = 'Agregar Categoría cable';
-    IMAGEN_MUESTRA.src = ('../../resources/error/images/404Cable.png');
+    IMAGEN_MUESTRA.src = ('../../resources/images/error/404Cable.png');
     // Se prepara el formulario.
     SAVE_FORM.reset();
 }
@@ -121,7 +121,7 @@ const fillTable = async (form = null) => {
                         <div class="col-lg-3 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
                             <img src="${SERVER_URL}images/cables/${row.imagen_categoria_cable}" width="200"
                                 class="rounded border border-primary" alt="Imagen de error"
-                                onerror="this.onerror=null; this.src='../../resources/error/images/404Administrador.png';">
+                                onerror="this.onerror=null; this.src='../../resources/images/error/404Cable.png ';">
                         </div>
                         <div class="col-lg-7 col-md-8 col-sm-12 text-center">
                             <h5 class="text-white">Tipo de cable</h5>
@@ -148,6 +148,11 @@ const fillTable = async (form = null) => {
         ROWS_FOUND.textContent = DATA.message;
     } else {
         sweetAlert(4, DATA.error, true);
+        TABLE_BODY.innerHTML+=`
+        <div class="col-5 justify-content-center align-items-center">
+                <img src="../../resources/images/error/404iNFORMACION.png" class="card-img-top" alt="ERROR CARGAR IMAGEN">
+            </div>
+        `
     }
 }
 

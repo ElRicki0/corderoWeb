@@ -48,7 +48,9 @@ SIGNUP_FORM.addEventListener('submit', async (event) => {
     // Se evita recargar la página web después de enviar el formulario.
     event.preventDefault();
     // Constante tipo objeto con los datos del formulario.
-    const FORM = new FormData(SIGNUP_FORM);
+    const FORM = new FormData(SIGNUP_FORM); 
+    // IMAGEN_MUESTRA.src = ('../../resources/images/error/404Administrador.png');
+
     // Petición para registrar el primer usuario del sitio privado.
     const DATA = await fetchData(USER_API, 'signUp', FORM);
     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.

@@ -45,7 +45,6 @@ if (isset($_GET['action'])) {
                 if (
                     !$administrador->setNombre($_POST['nombreAdministrador']) or
                     !$administrador->setApellido($_POST['apellidoAdministrador']) or
-                    !$administrador->setUsuario($_POST['usuarioAdministrador']) or
                     !$administrador->setTelefono($_POST['telefonoAdministrador']) or
                     !$administrador->setCorreo($_POST['correoAdministrador']) or
                     !$administrador->setClave($_POST['claveAdmin']) or
@@ -80,7 +79,6 @@ if (isset($_GET['action'])) {
                 if (
                     !$administrador->setNombre($_POST['nombreAdmin']) or
                     !$administrador->setApellido($_POST['apellidoAdmin']) or
-                    !$administrador->setUsuario($_POST['usuarioAdmin']) or
                     !$administrador->setTelefono($_POST['telefonoAdmin']) or
                     !$administrador->setCorreo($_POST['correoAdmin']) or
                     !$administrador->setImagen($_FILES['imagenAdmin'], $administrador->getFilename())
@@ -127,7 +125,6 @@ if (isset($_GET['action'])) {
                 if (
                     !$administrador->setNombre($_POST['nombreAdmin']) or
                     !$administrador->setApellido($_POST['apellidoAdmin']) or
-                    !$administrador->setUsuario($_POST['usuarioAdmin']) or
                     !$administrador->setTelefono($_POST['telefonoAdmin']) or
                     !$administrador->setCorreo($_POST['correoAdmin']) or
                     !$administrador->setClave($_POST['claveAdmin']) or

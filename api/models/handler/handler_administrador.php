@@ -10,7 +10,6 @@ class AdministradorHandler
     protected $id = null;
     protected $nombre = null;
     protected $apellido = null;
-    protected $usuario = null;
     protected $correo = null;
     protected $telefono = null;
     protected $clave = null;
@@ -80,9 +79,9 @@ class AdministradorHandler
     public function searchRows()
     {
         $value = '%' . Validator::getSearchValue() . '%';
-        $sql = 'SELECT id_administrador, nombre_administrador, apellido_administrador, correo_administrador, usuario_administrador, telefono_administrador
+        $sql = 'SELECT id_administrador, nombre_administrador, apellido_administrador, correo_administrador, telefono_administrador
                 FROM tb_administradores
-                WHERE apellido_administrador LIKE ? OR nombre_administrador LIKE ? OR correo_administrador LIKE ? OR usuario_administrador LIKE ? OR telefono_administrador LIKE ? AND id_administrador <> ?
+                WHERE apellido_administrador LIKE ? OR nombre_administrador LIKE ? OR correo_administrador LIKE ? OR telefono_administrador LIKE ? AND id_administrador <> ?
                 ORDER BY id_administrador';
         $params = array($value, $value, $value, $value, $value, $_SESSION['idAdministrador']);
         return Database::getRows($sql, $params);
@@ -90,9 +89,9 @@ class AdministradorHandler
 
     public function createRow()
     {
-        $sql = 'INSERT INTO tb_administradores(nombre_administrador, apellido_administrador, usuario_administrador, telefono_administrador, correo_administrador, clave_administrador, fecha_clave, codigo_clave, imagen_administrador)
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)';
-        $params = array($this->nombre, $this->apellido, $this->usuario, $this->telefono, $this->correo,  $this->clave, $this->fecha_clave, $this->codigo, $this->imagen);
+        $sql = 'INSERT INTO tb_administradores(nombre_administrador, apellido_administrador, telefono_administrador, correo_administrador, clave_administrador, fecha_clave, codigo_clave, imagen_administrador)
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?)';
+        $params = array($this->nombre, $this->apellido,  $this->telefono, $this->correo,  $this->clave, $this->fecha_clave, $this->codigo, $this->imagen);
         return Database::executeRow($sql, $params);
     }
 
@@ -104,7 +103,7 @@ class AdministradorHandler
 
     public function readAllOne()
     {
-        $sql = 'SELECT id_administrador, nombre_administrador, apellido_administrador, usuario_administrador, telefono_administrador, correo_administrador, imagen_administrador FROM tb_administradores
+        $sql = 'SELECT id_administrador, nombre_administrador, apellido_administrador, telefono_administrador, correo_administrador, imagen_administrador FROM tb_administradores
         where id_administrador<>?';
         $params = array($_SESSION['idAdministrador']);
         return Database::getRows($sql, $params);
@@ -116,7 +115,6 @@ class AdministradorHandler
                     `id_administrador`,
                     `nombre_administrador`,
                     `apellido_administrador`,
-                    `usuario_administrador`,
                     `correo_administrador`,
                     `telefono_administrador`,
                     `imagen_administrador`
@@ -135,13 +133,12 @@ class AdministradorHandler
                 SET
                     `nombre_administrador` = ?,
                     `apellido_administrador` = ?,
-                    `usuario_administrador` = ?,
                     `correo_administrador` = ?,
                     `telefono_administrador` = ?,
                     `imagen_administrador` = ?
                 WHERE
                     `id_administrador` = ?';
-        $params = array($this->nombre, $this->apellido, $this->usuario, $this->correo, $this->telefono, $this->imagen, $_SESSION['idAdministrador']);
+        $params = array($this->nombre, $this->apellido, $this->correo, $this->telefono, $this->imagen, $_SESSION['idAdministrador']);
         return Database::executeRow($sql, $params);
     }
 

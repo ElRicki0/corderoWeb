@@ -89,8 +89,6 @@ const fillTable = async (form = null) => {
                         <div class="col-lg-7 col-md-8 col-sm-12 text-center">
                             <h5 class="text-white">Nombre empleado</h5>
                             <p class="card-title text-white">${row.nombre_administrador} ${row.apellido_administrador}</p>
-                            <h5 class="text-white">Usuario</h5>
-                            <p class="card-text text-white">${row.usuario_administrador}</p>
                             <h5 class="text-white">Correo Administrador</h5>
                             <p class="card-text text-white">${row.correo_administrador}</p>
                             <h5 class="text-white">Teléfono</h5>

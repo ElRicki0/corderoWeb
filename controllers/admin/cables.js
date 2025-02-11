@@ -114,6 +114,11 @@ const fillTable = async (form = null) => {
         ROWS_FOUND.textContent = DATA.message;
     } else {
         sweetAlert(4, DATA.error, true);
+        TABLE_BODY.innerHTML+=`
+        <div class="col-5 justify-content-center align-items-center">
+                <img src="../../resources/images/error/404iNFORMACION.png" class="card-img-top" alt="ERROR CARGAR IMAGEN">
+            </div>
+        `
     }
 }
 

@@ -49,13 +49,58 @@ function formatPassword(input) {
 
 // Codigo de validacion de campo alfabetico
 function formatAlphabetic(input) {
+    // Remover caracteres no permitidos en tiempo real
+    input.value = input.value.replace(/[^a-zA-ZñÑáÁéÉíÍóÓúÚ\s]/g, '');
+    
+    // Verificar si el campo contiene solo letras y espacios
+    let textPattern = /^[a-zA-ZñÑáÁéÉíÍóÓúÚ\s]*$/;
+
+    if (!textPattern.test(input.value)) {
+        input.classList.add("is-invalid");  // Agrega clase de error si hay caracteres inválidos
+    } else {
+        input.setCustomValidity("");
+        input.classList.remove("is-invalid");  // Elimina la clase de error si es válido
+    }
+}
+
+// Codigo de validacion campo telefonico
+function formatPhoneNumber(input) {
+    // Remover cualquier carácter que no sea número o guion
+    input.value = input.value.replace(/[^0-9-]/g, '');
+
+    // Obtener el valor actual sin guiones
+    let phoneNumber = input.value.replace(/-/g, '');
+
+    // Limitar a 8 dígitos numéricos
+    if (phoneNumber.length > 8) {
+        phoneNumber = phoneNumber.slice(0, 8);
+    }
+
+    // Agregar el guion después del cuarto dígito automáticamente
+    if (phoneNumber.length > 4) {
+        phoneNumber = phoneNumber.slice(0, 4) + '-' + phoneNumber.slice(4);
+    }
+
+    // Establecer el valor formateado en el campo de entrada
+    input.value = phoneNumber;
+
+    // Validar el formato XXXX-XXXX
+    let phoneNumberPattern = /^[0-9]{4}-[0-9]{4}$/;
+    if (!phoneNumberPattern.test(input.value)) {
+        input.classList.add("is-invalid"); // Agregar clase de error si no cumple el formato
+    } else {
+        input.classList.remove("is-invalid"); // Eliminar clase de error si es válido
+    }
+}
+
+// Codigo de validacion de campo de contraseña
+function formatPassword(input) {
 
     // Obtener el valor actual del campo de entrada
-    let Text = input.value;
+    let Contraseña = input.value;
 
-    // Establecer el formato del texto
-    let TextPattern = /^[a-zA-ZñÑáÁéÉíÍóÓúÚ\s]+$/;
-    if (!TextPattern.test(Text)) {
+    // Validar longitud mínima de contraseña
+    if (Contraseña.length < 8) {
 
         // Mostrar mensaje de error
         input.classList.add("is-invalid");
@@ -68,5 +113,5 @@ function formatAlphabetic(input) {
     }
 
     // Establecer el valor formateado en el campo de entrada
-    input.value = Text;
+    input.value = Contraseña;
 }

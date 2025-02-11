@@ -32,7 +32,6 @@ CREATE TABLE
         id_administrador INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
         nombre_administrador VARCHAR(50) NOt NULL,
         apellido_administrador VARCHAR(50) NOT NULL,
-        usuario_administrador VARCHAR(30) NOT NULL,
         correo_administrador VARCHAR(60) NOT NULL,
         telefono_administrador VARCHAR(10),
         clave_administrador VARCHAR(500) NOT NULL,

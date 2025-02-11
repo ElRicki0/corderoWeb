@@ -123,7 +123,6 @@ const openUpdate = async (id) => {
         NOMBRE_ADMINISTRADOR.value = ROW.nombre_administrador;
         APELLIDO_ADMINISTRADOR.value = ROW.apellido_administrador;
         TELEFONO_ADMINISTRADOR.value = ROW.telefono_administrador;
-        USUARIO_ADMINISTRADOR.value = ROW.usuario_administrador;
         CORREO_ADMINISTRADOR.value = ROW.correo_administrador;
         IMAGEN_VADMINISTRADOR.src = SERVER_URL.concat('images/admin/', ROW.imagen_administrador);
 
@@ -233,7 +232,6 @@ const showProfile = async () => {
         NOMBRE_ADMINISTRADOR_INFO.textContent = ROW.nombre_administrador;
         APELLIDO_ADMINISTRADOR_INFO.textContent = ROW.apellido_administrador;
         TELEFONO_ADMINISTRADOR_INFO.textContent = ROW.telefono_administrador;
-        USUARIO_ADMINISTRADOR_INFO.textContent = ROW.usuario_administrador;
         IMAGEN_ADMINISTRADOR_INFO.src = SERVER_URL.concat('images/admin/', ROW.imagen_administrador);
         CORREO_ADMINISTRADOR_INFO.textContent = ROW.correo_administrador;
     } else {

@@ -45,9 +45,6 @@
                     <h2 for="">Numero de teléfono</h2>
                     <p id="telefonoAdministradorInfo"></p>
 
-                    <h2 for="">usuario</h2>
-                    <p id="usuarioAdministradorInfo"></p>
-
                     <h2 for="">Correo electrónico</h2>
                     <p id="correoAdministradorInfo"></p>
                 </div>
@@ -221,27 +218,22 @@
                                 <div class="col-lg-6 col-md-12 col-sm-12">
                                     <label class="form-label">Nombre(s)</label>
                                     <input type="text" id="nombreAdmin" name="nombreAdmin" autocomplete="off"
-                                        class="form-control" required>
+                                        class="form-control" required oninput="formatAlphabetic(this)">
                                 </div>
                                 <div class="col-lg-6 col-md-12 col-sm-12">
                                     <label class="form-label">Apellido</label>
                                     <input type="text" id="apellidoAdmin" name="apellidoAdmin" autocomplete="off"
-                                        class="form-control" required>
-                                </div>
-                                <div class="col-lg-6 col-md-12 col-sm-12">
-                                    <label class="form-label">Usuario</label>
-                                    <input type="text" id="usuarioAdmin" name="usuarioAdmin" autocomplete="off"
-                                        class="form-control" required>
+                                        class="form-control" required oninput="formatAlphabetic(this)">
                                 </div>
                                 <div class="col-lg-6 col-md-12 col-sm-12">
                                     <label class="form-label">Teléfono</label>
                                     <input type="tel" id="telefonoAdmin" name="telefonoAdmin" autocomplete="off"
-                                        class="form-control" required>
+                                        class="form-control" required oninput="formatPhoneNumber(this)">
                                 </div>
                                 <div class="col-lg-6 col-md-12 col-sm-12">
                                     <label class="form-label">Correo Electrónico</label>
                                     <input type="email" id="correoAdmin" name="correoAdmin" autocomplete="off"
-                                        class="form-control" required>
+                                        class="form-control" required oninput="formatEmail(this)">
                                 </div>
                             </div>
                             <div class="justify-content-center text-center mt-3">
@@ -307,6 +299,8 @@
     <!-- Llamada al controlador de la página web -->
     <!-- ! cambiar el link js para el controntrolador -->
     <script src="../../controllers/admin/perfil.js"></script>
+    <!-- ? vakidar inputs de entrada del usuario/cleinte -->
+    <script src="../../controllers/utils/inputValidator.js"></script>
 
 </body>
 
