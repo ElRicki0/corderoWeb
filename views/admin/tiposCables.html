@@ -32,11 +32,11 @@
         <div class="row">
             <form class="col-sm-12 col-md-12 col-lg-10" id="searchForm">
                 <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-12 mt-5">
+                    <div class="col-lg-4 col-md-6 col-sm-12 mt-5">
                         <input type="search" class="form-control custom-input border-2" id="search" name="search"
                             placeholder="Nombre o Apellido" required>
                     </div>
-                    <div class="col-lg-3 col-md-3 col-sm-6 d-flex flex-column align-items-start">
+                    <div class="col-lg-5 col-md-9 col-sm-6 d-flex flex-row align-items-center gap-2 mt-5">
                         <div class="btn-group mt-5">
                             <button type="submit" class="btn btn-success">
                                 <i class="bi bi-search"></i>
@@ -47,16 +47,27 @@
                             <button type="button" class="btn btn-warning" onclick="openCreate()">
                                 <i class="bi bi-clipboard-plus"></i>
                             </button>
-                            <button type="button" class="btn btn-info" onclick="openCreate()">
-                                <i class="bi bi-sort-numeric-down"></i>
+                        </div>
+
+                        <!-- Dropdown -->
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                ordenar registros
                             </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" onclick="orderByName()">Alfabético</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="readByModify()">Actualizado
+                                        recientemente</a></li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-3 col-sm-6">
-                        <h3 class="mb-3">Administrar cantidades de cables</h3>
-                            <button type="reset" class="btn btn-secondary" onclick="window.location.href='../admin/cables.html'">
-                                <i class="bi bi-bookmark-plus"></i>
-                            </button>
+                    <div class="col-lg-3 col-md-3 col-sm-3">
+                        <h3 class="mb-3">Administrar cables</h3>
+                        <button type="reset" class="btn btn-secondary"
+                            onclick="window.location.href='../admin/cables.html'">
+                            <i class="bi bi-bookmark-plus"></i>
+                        </button>
                     </div>
                 </div>
             </form>

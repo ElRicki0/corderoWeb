@@ -82,14 +82,6 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'No existen cables registrados';
                 }
                 break;
-            case 'readByName':
-                if ($result['dataset'] = $cable->readByName()) {
-                    $result['status'] = 1;
-                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
-                } else {
-                    $result['error'] = 'No existen cables registrados';
-                }
-                break;
             case 'readOne':
                 if (!$cable->setId($_POST['idCable'])) {
                     $result['error'] = $cable->getDataError();

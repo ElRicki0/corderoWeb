@@ -49,6 +49,22 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'No existen categorías registradas';
                 }
                 break;
+            case 'readByName':
+                if ($result['dataset'] = $categoria_cable->readByName()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen categorías registradas';
+                }
+                break;
+            case 'readByModify':
+                if ($result['dataset'] = $categoria_cable->readByModify()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen categorías registradas';
+                }
+                break;
             case 'readOne':
                 if (!$categoria_cable->setId($_POST['idCategoriaCable'])) {
                     $result['error'] = $categoria_cable->getDataError();
@@ -101,9 +117,9 @@ if (isset($_GET['action'])) {
         header('Content-type: application/json; charset=utf-8');
         // Se imprime el resultado en formato JSON y se retorna al controlador.
         print(json_encode($result));
-    }else {
+    } else {
         print(json_encode('Acceso denegado'));
     }
-}else {
+} else {
     print(json_encode('Recurso no disponible'));
 }

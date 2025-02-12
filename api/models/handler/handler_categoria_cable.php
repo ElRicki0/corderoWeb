@@ -11,6 +11,17 @@ class CategoriaCableHandler
     protected $nombre = null;
     protected $descripcion = null;
     protected $imagen = null;
+    protected $fecha = null;
+
+    public function __construct()
+    {
+        $this->fecha = date('Y-m-d'); // Formato año-mes-día
+    }
+
+    public function getFecha()
+    {
+        return $this->fecha;
+    }
 
     // ? constante de ruta de las imágenes
     const RUTA_IMAGEN = ('../../images/cables/');
@@ -32,9 +43,9 @@ class CategoriaCableHandler
     // *método para crear nuevo registro
     public function createRow()
     {
-        $sql = 'INSERT INTO tb_categorias_cables(nombre_categoria_cable, descripcion_categoria_cable, imagen_categoria_cable)
-                VALUES(?, ?, ?)';
-        $params = array($this->nombre, $this->descripcion, $this->imagen);
+        $sql = 'INSERT INTO tb_categorias_cables(nombre_categoria_cable, descripcion_categoria_cable, imagen_categoria_cable, fecha_categoria_cable)
+                VALUES(?, ?, ?, ?)';
+        $params = array($this->nombre, $this->descripcion, $this->imagen, $this->fecha);
         return Database::executeRow($sql, $params);
     }
 
@@ -42,6 +53,20 @@ class CategoriaCableHandler
     public function readAll()
     {
         $sql = 'SELECT * FROM tb_categorias_cables';
+        return Database::getRows($sql);
+    }
+
+    // ?metodo para mostrar por nombre
+    public function readByName()
+    {
+        $sql = 'SELECT * FROM `tb_categorias_cables` ORDER BY `nombre_categoria_cable`';
+        return Database::getRows($sql);
+    }
+
+    // ?metodo para mostrar por nombre
+    public function readByModify()
+    {
+        $sql = 'SELECT * FROM `tb_categorias_cables` ORDER BY `fecha_categoria_cable` desc';
         return Database::getRows($sql);
     }
 
@@ -67,9 +92,9 @@ class CategoriaCableHandler
     public function updateRow()
     {
         $sql = 'UPDATE tb_categorias_cables
-                SET imagen_categoria_cable = ?, nombre_categoria_cable = ?, descripcion_categoria_cable = ?
+                SET imagen_categoria_cable = ?, nombre_categoria_cable = ?, descripcion_categoria_cable = ?, fecha_categoria_cable =?
                 WHERE id_categoria_cable = ?';
-        $params = array($this->imagen, $this->nombre, $this->descripcion, $this->id);
+        $params = array($this->imagen, $this->nombre, $this->descripcion, $this->fecha, $this->id);
         return Database::executeRow($sql, $params);
     }
 

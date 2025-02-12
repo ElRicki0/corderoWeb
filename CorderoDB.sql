@@ -138,7 +138,8 @@ CREATE TABLE
         id_categoria_cable INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
         nombre_categoria_cable VARCHAR(30) NOT NULL,
         descripcion_categoria_cable VARCHAR(500) NOT NULL,
-        imagen_categoria_cable VARCHAR(150)
+        imagen_categoria_cable VARCHAR(150),
+        fecha_categoria_cable date
     );
 
 CREATE TABLE
