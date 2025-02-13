@@ -71,8 +71,8 @@ const loadTemplate = async () => {
                 <li><a></a></li>
                 <li><a></a></li>
                 <li>
-                    <a href="../../views/admin/cables.html">
-                        <label for="menuCheckbox" onclick="this.parentNode.click();">Cerrar Sesión</label>
+                    <a href="#">
+                        <label for="menuCheckbox" onclick="logOut()">Cerrar Sesión</label>
                     </a>
                 </li>
                 <li>

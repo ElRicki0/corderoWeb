@@ -72,16 +72,22 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'No hay coincidencias';
                 }
                 break;
-            default:
-                $result['error'] = 'Acción no disponible dentro de la sesión';
+            case 'logOut':
+                if (session_destroy()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Sesión eliminada correctamente';
+                } else {
+                    $result['error'] = 'Ocurrió un problema al cerrar la sesión';
+                }
+                break;
             case 'editProfile':
                 $_POST = Validator::validateForm($_POST);
                 if (
-                    !$administrador->setNombre($_POST['nombreAdmin']) or
-                    !$administrador->setApellido($_POST['apellidoAdmin']) or
-                    !$administrador->setTelefono($_POST['telefonoAdmin']) or
-                    !$administrador->setCorreo($_POST['correoAdmin']) or
-                    !$administrador->setImagen($_FILES['imagenAdmin'], $administrador->getFilename())
+                    !$administrador->setNombre($_POST['nombreAdministrador']) or
+                    !$administrador->setApellido($_POST['apellidoAdministrador']) or
+                    !$administrador->setTelefono($_POST['telefonoAdministrador']) or
+                    !$administrador->setCorreo($_POST['correoAdministrador']) or
+                    !$administrador->setImagen($_FILES['imagenAdministrador'], $administrador->getFilename())
                 ) {
                     $result['error'] = $administrador->getDataError();
                 } elseif ($administrador->editProfile()) {

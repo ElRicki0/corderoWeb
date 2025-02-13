@@ -90,6 +90,8 @@ const fillTable = async (form = null) => {
                             <p class="card-text text-white">${row.descripcion_cable}</p>
                             <h5 class="text-white">Longitud cable</h5>
                             <p class="card-text text-white">${row.longitud_cable} Metros MT.</p>
+                            <h5 class="text-white">Longitud minima del cable</h5>
+                            <p class="card-text text-white">${row.longitud_minima_cable} Metros MT.</p>
                             <h5 class="text-white">Estado del cable</h5>
                             <p class="card-text text-white"><i class="${icon}"></i></p>
                             <h5 class="text-white">Registro alterado por:</h5>

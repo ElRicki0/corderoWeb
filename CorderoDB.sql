@@ -147,6 +147,7 @@ CREATE TABLE
         id_cable INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
         nombre_cable VARCHAR(50),
         descripcion_cable VARCHAR(150),
+        longitud_minima_cable DECIMAL(20,2),
         longitud_cable DECIMAL(10, 2),
         estado_cable TINYINT not NULL,
         fecha_creacion_cable DATE,

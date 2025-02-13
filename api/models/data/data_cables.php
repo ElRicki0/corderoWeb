@@ -62,6 +62,17 @@ class CableData extends CablesHandler
         }
     }
 
+    public function setMinimo($value)
+    {
+        if (Validator::validateNaturalNumber($value)) {
+            $this->minima = $value;
+            return true;
+        } else {
+            $this->data_error = 'La longitud minima debe ser un número entero positivo';
+            return false;
+        }
+    }
+
     public function setCategoria($value)
     {
         if (Validator::validateNaturalNumber($value)) {

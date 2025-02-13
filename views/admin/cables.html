@@ -53,14 +53,13 @@
                                 ordenar registros
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#"
-                                        onclick="orderByName()">Alfabético</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="orderByName()">Alfabético</a></li>
                                 <li><a class="dropdown-item" href="#" onclick="readByLengthDesc()">Mayor
                                         cantidad</a></li>
                                 <li><a class="dropdown-item" href="#" onclick="readByLengthAsc()">Menor
                                         cantidad</a></li>
-                                <li><a class="dropdown-item" href="#"
-                                        onclick="readByLengthAsc()">Actualizado recientemente</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="readByLengthAsc()">Actualizado
+                                        recientemente</a></li>
                             </ul>
                         </div>
                     </div>
@@ -106,12 +105,12 @@
                                         <div class="col-6">
                                             <label class="form-label">Nombre cable</label>
                                             <input id="nombreCable" name="nombreCable" class="form-control"
-                                                autocomplete="off" required oninput="formatAlphabetic(this)">
+                                                autocomplete="off" required >
                                         </div>
                                         <div class="col-6">
                                             <label class="form-label">Descripción cable</label>
                                             <input id="descripcionCable" name="descripcionCable" autocomplete="off"
-                                                class="form-control" required oninput="formatAlphabetic(this)">
+                                                class="form-control" required >
                                         </div>
                                         <div class="col-6">
                                             <label class="form-label">Estado cable</label>
@@ -124,15 +123,20 @@
                                             </select>
                                         </div>
                                         <div class="col-6">
-                                            <label class="form-label">Longitud cable</label>
-                                            <input type="number" class="form-control" id="longitudCable"
-                                                name="longitudCable" placeholder="ingrese la longitud...">
-                                        </div>
-                                        <div class="col-12">
                                             <label for="categoriaCable" class="form-label">Tipo de cable</label>
                                             <select id="categoriaCable" name="categoriaCable" class="form-select"
                                                 required>
                                             </select>
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label">Longitud cable (metros)</label>
+                                            <input type="number" class="form-control" id="longitudCable"
+                                                name="longitudCable" placeholder="ingrese la longitud...">
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label">Longitud minima cable (metros)</label>
+                                            <input type="number" class="form-control" id="longitudMinimaCable"
+                                                name="longitudMinimaCable" placeholder="ingrese la longitud limite...">
                                         </div>
                                     </div>
                                 </div>
@@ -161,6 +165,7 @@
     <script type="text/javascript" src="../../controllers/utils/admin.js"></script>
     <!-- Llamada al controlador de la página web -->
     <script src="../../controllers/admin/cables.js"></script>
+    <!--  -->
     <!-- ! cambiar el link js para el controntrolador -->
 
 </body>

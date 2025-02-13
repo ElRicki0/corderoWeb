@@ -9,6 +9,7 @@ class CablesHandler
     protected $nombre = null;
     protected $descripcion = null;
     protected $cantidad = null;
+    protected $minima = null;
     protected $estado = null;
     protected $categoria = null;
     protected $administrador = null;
@@ -53,9 +54,9 @@ class CablesHandler
 
     public function createRow()
     {
-        $sql = 'INSERT INTO `tb_cables`(`nombre_cable`, `descripcion_cable`, `longitud_cable`, `estado_cable`, `id_categoria_cable`, `fecha_creacion_cable`, `id_administrador`) 
-        VALUES (?, ?, ?, ?, ?, ?)';
-        $params = array($this->nombre, $this->descripcion, $this->cantidad, $this->estado, $this->categoria, $this->fecha,  $_SESSION['idAdministrador']);
+        $sql = 'INSERT INTO `tb_cables`(`nombre_cable`, `descripcion_cable`, `longitud_minima_cable`, `longitud_cable`, `estado_cable`, `id_categoria_cable`, `fecha_creacion_cable`, `id_administrador`) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+        $params = array($this->nombre, $this->descripcion, $this->minima, $this->cantidad, $this->estado, $this->categoria, $this->fecha,  $_SESSION['idAdministrador']);
         return Database::executeRow($sql, $params);
     }
 
@@ -65,6 +66,7 @@ class CablesHandler
         $sql = 'SELECT
                     `id_cable`,
                     `nombre_cable`,
+                    `longitud_minima_cable`,
                     `descripcion_cable`,
                     `longitud_cable`,
                     `estado_cable`,
@@ -88,6 +90,7 @@ class CablesHandler
                     `id_cable`,
                     `nombre_cable`,
                     `descripcion_cable`,
+                    `longitud_minima_cable`,
                     `longitud_cable`,
                     `estado_cable`,
                     cc.nombre_categoria_cable,
@@ -112,6 +115,7 @@ class CablesHandler
                     `id_cable`,
                     `nombre_cable`,
                     `descripcion_cable`,
+                    `longitud_minima_cable`,
                     `longitud_cable`,
                     `estado_cable`,
                     cc.nombre_categoria_cable,
@@ -135,6 +139,7 @@ class CablesHandler
         $sql = 'SELECT
                     `id_cable`,
                     `nombre_cable`,
+                    `longitud_minima_cable`,
                     `descripcion_cable`,
                     `longitud_cable`,
                     `estado_cable`,
@@ -159,6 +164,7 @@ class CablesHandler
         $sql = 'SELECT
                     `id_cable`,
                     `nombre_cable`,
+                    `longitud_minima_cable`,
                     `descripcion_cable`,
                     `longitud_cable`,
                     `estado_cable`,
@@ -183,6 +189,7 @@ class CablesHandler
         $sql = 'SELECT
                     `id_cable`,
                     `nombre_cable`,
+                    `longitud_minima_cable`,
                     `descripcion_cable`,
                     `longitud_cable`,
                     `estado_cable`,
@@ -209,6 +216,7 @@ class CablesHandler
         $sql = 'SELECT
                     `id_cable`,
                     `nombre_cable`,
+                    `longitud_minima_cable`,
                     `descripcion_cable`,
                     `longitud_cable`,
                     `estado_cable`,
@@ -229,13 +237,14 @@ class CablesHandler
                 SET
                     `nombre_cable` = ?,
                     `descripcion_cable` = ?,
+                    `longitud_minima_cable` = ?,
                     `longitud_cable` = ?,
                     `estado_cable` = ?,
                     `id_categoria_cable` = ?,
                     `fecha_creacion_cable` =?
                 WHERE
                     `id_cable` = ?';
-        $params = array($this->nombre, $this->descripcion, $this->cantidad, $this->estado, $this->categoria, $this->categoria, $this->id);
+        $params = array($this->nombre, $this->descripcion, $this->minima, $this->cantidad, $this->estado, $this->categoria, $this->categoria, $this->id);
         return database::executeRow($sql, $params);
     }
 
