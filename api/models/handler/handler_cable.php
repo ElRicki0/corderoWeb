@@ -254,4 +254,51 @@ class CablesHandler
         $params = array($this->id);
         return Database::executeRow($sql, $params);
     }
+
+    // ? funciones para gráficas}
+
+    public function cantidadRollosCategoria()
+    {
+        $sql = 'SELECT
+                c.nombre_categoria_cable,
+                COUNT(cb.id_cable) AS total_rollos
+            FROM
+                tb_categorias_cables c
+            LEFT JOIN tb_cables cb ON
+                c.id_categoria_cable = cb.id_categoria_cable
+            GROUP BY
+                c.nombre_categoria_cable';
+        return Database::getRows($sql);
+    }
+
+    public function estadoCantidadesCables()
+    {
+        $sql = 'SELECT 
+                    "Cantidad mayores" AS estado_cables, 
+                    COUNT(*) AS cantidad
+                FROM tb_cables
+                WHERE longitud_cable >= longitud_minima_cable
+
+                UNION ALL
+
+                SELECT 
+                    "Cantidad menores" AS estado_cables, 
+                    COUNT(*) AS cantidad
+                FROM tb_cables
+                WHERE longitud_cable < longitud_minima_cable';
+        return Database::getRows($sql);
+    }
+
+    public function estadoRolloscables()
+    {
+        $sql = "SELECT CASE WHEN
+                    estado_cable = 0 THEN 'Nuevo' WHEN estado_cable = 1 THEN 'En uso' WHEN estado_cable = 2 THEN 'En ruta' ELSE 'Desconocido'
+                END AS estado,
+                COUNT(*) AS cantidad
+                FROM
+                    tb_cables
+                GROUP BY
+                estado_cable";
+        return database::getRows($sql);
+    }
 }

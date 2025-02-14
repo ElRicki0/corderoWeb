@@ -11,8 +11,8 @@ if (isset($_GET['action'])) {
     //? Se declara e inicializa un arreglo para guardar el resultado que retorna la API.
     $result = array('status' => 0, 'message' => null, 'dataset' => null, 'error' => null, 'exception' => null);
     // ? se verifica si hay un session iniciada como administrador, de lo contrario el código termina con un error
-    if (isset($_SESSION['idAdministrador'])or true) {
-    // if (isset($_SESSION['idAdministrador'])) {
+    if (isset($_SESSION['idAdministrador'])) {
+        // if (isset($_SESSION['idAdministrador'])) {
         // ? se compara la acción del administrador con la session iniciada
         switch ($_GET['action']) {
             case 'createRow':
@@ -99,6 +99,27 @@ if (isset($_GET['action'])) {
                     $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
                 } else {
                     $result['error'] = 'No existen cables registrados';
+                }
+                break;
+            case 'cantidadRollosCategoria':
+                if ($result['dataset'] = $cable->cantidadRollosCategoria()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'No hay datos disponibles';
+                }
+                break;
+            case 'estadoCantidadesCables':
+                if ($result['dataset'] = $cable->estadoCantidadesCables()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'No hay datos disponibles';
+                }
+                break;
+            case 'estadoRolloscables':
+                if ($result['dataset'] = $cable->estadoRolloscables()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'No hay datos disponibles';
                 }
                 break;
             case 'updateRow':
