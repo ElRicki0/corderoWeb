@@ -32,23 +32,90 @@
         <div class="row">
             <form class="col-sm-12 col-md-12 col-lg-10" id="searchForm">
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-lg-4 col-md-6 col-sm-12 mt-5">
                         <input type="search" class="form-control custom-input border-2" id="search" name="search"
                             placeholder="Nombre o Apellido" required>
                     </div>
-                    <div class="col-6">
-                        <button type="submit" class="btn btn-success">
-                            <i class="bi bi-search"></i>
-                        </button>
-                        <button type="reset" class="btn btn-secondary" onclick="fillTable()">
-                            <i class="bi bi-arrow-counterclockwise"></i>
-                        </button>
-                        <button type="button" class="btn btn-warning" onclick="openCreate()">
-                            <i class="bi bi-person-fill-add"></i>
-                        </button>
-                        <button type="button" class="btn btn-primary" onclick="openReport()">
-                            <i class="bi bi-filetype-pdf"></i>
-                        </button>
+                    <div class="col-lg-5 col-md-9 col-sm-9 d-flex flex-row align-items-center gap-2 mt-5">
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-search"></i>
+                            </button>
+                            <button type="reset" class="btn btn-secondary" onclick="fillTable()">
+                                <i class="bi bi-arrow-counterclockwise"></i>
+                            </button>
+                            <button type="button" class="btn btn-warning" onclick="openCreate()">
+                                <i class="bi bi-person-fill-add"></i>
+                            </button>
+                        </div>
+
+                        <!-- Dropdown -->
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                ordenar registros
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 1)">Nombre</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Inactivo</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- filtro por estado -->
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Filtrar por estado
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 1)">Activo</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Correo
+                                        electrónico</a></li>
+                            </ul>
+                        </div>
+                        <!-- Dropdown -->
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Filtrar por departamento
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Ahuachapán</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Santa Ana</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Sonsonate</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Chalatenango</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">La
+                                        Libertad</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">San
+                                        Salvador</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Cuscatlán</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">La Paz</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Cabañas</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">San
+                                        Vicente</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Usulután</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">San Miguel</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Morazán</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">La Unión</a>
+                                </li>
+
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -58,7 +125,7 @@
         <!-- Contenedor para la tabla con scroll -->
         <div id="ContenedorTable">
 
-            <div id="tableBody" class=" justify-content-center row">
+            <div id="empleados" class=" justify-content-center row">
 
                 <!-- color oscuro serán las cards de información de los empleados -->
                 <!-- <div class="col-12 card mt-2 text-bg-dark" id="searchForm">
@@ -70,16 +137,28 @@
                                 style="max-width: 100%; max-height: 100%; object-fit: contain;">
                         </div>
 
-                        <div
-                            class="col-sm-12 col-md-12 col-lg-3 card-body d-flex flex-column align-items-center text-center">
-                            <h5 class="text-white">Nombre empleado</h5>
-                            <p class="card-title text-white">${row.nombre_empleado} ${row.apellido_empleado}</p>
-                            <h5 class="text-white">DUI Empleado</h5>
-                            <p class="card-text text-white">${row.dui_empleado}</p>
-                            <h5 class="text-white">Correo Empleado</h5>
-                            <p class="card-text text-white">${row.correo_empleado}</p>
-                            <h5 class="text-white">Estado empleado</h5>
-                            <p class="card-text text-white">Estado: <i class="${icon} text-white"></i></p>
+                        <div class=" col-md-12 col-lg-3 card-body d-flex flex-column align-items-center text-center">
+                            <div class="row">
+
+                                <div class="col-lg-4 col-md-12 col-sm-12">
+                                    <h5 class="text-white">Nombre empleado</h5>
+                                    <p class="card-title text-white">${row.nombre_empleado} ${row.apellido_empleado}</p>
+                                    <h5 class="text-white">DUI Empleado</h5>
+                                    <p class="card-text text-white">${row.dui_empleado}</p>
+                                    <h5 class="text-white">Correo Empleado</h5>
+                                    <p class="card-text text-white">${row.correo_empleado}</p>
+                                </div>
+                                <div class="col-lg-4 col-md-12 col-sm-12">
+                                    <h5 class="text-white">Teléfono empleado</h5>
+                                    <p class="card-title text-white">${row.nombre_empleado}
+                                    <h5 class="text-white">Departamento Empleado</h5>
+                                    <p class="card-text text-white">${row.dui_empleado}</p>
+                                    <h5 class="text-white">Municipio Empleado</h5>
+                                    <p class="card-text text-white">${row.correo_empleado}</p>
+                                    <h5 class="text-white">Estado empleado</h5>
+                                    <p class="card-text text-white">Estado: <i class="${icon} text-white"></i></p>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="col-sm-12 col-md-12 col-lg-3 text-center my-5">
@@ -106,7 +185,97 @@
 
             </div>
         </div>
+        <!-- Modal Alterar registro (agregar o editar) -->
+        <div class="modal fade" id="saveModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content bg-dark text-white">
 
+                    <!-- Formulario saveForm -->
+                    <form id="saveForm">
+
+                        <!-- Campo oculto para asignar el id del registro al momento de modificar -->
+                        <input type="number" class="d-none" id="idAdministrador" name="idAdministrador">
+                        <form class="needs-validation">
+
+                            <!-- Body del modal -->
+                            <div class="modal-body">
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                    aria-label="Close"></button> <!-- Cambiar color del botón de cerrar -->
+                                <h1 class="fs-4 fw-bold text-center mb-4" id="modalTitle"> </h1>
+
+                                <!-- Inputs -->
+                                <div class="row p-3">
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <div class="col-12">
+                                            </div>
+                                            <div class="col-12 text-center">
+                                                <label for="imagenEmpleado">
+                                                    <h3 for="imagenEmpleado" class="form-label">Imagen
+                                                        Administrador</h3>
+                                                    <img id="imagenMuestra"
+                                                        class="rounded  mx-auto d-block img-fluid mt-3 border border-3 border-secondary-subtle rounded-circle imagen_R"
+                                                        src="../../resources/images/error/404Administrador.png"
+                                                        alt="..." width="200px" height="200px">
+                                                    <input id="imagenEmpleado" type="file"
+                                                        name="imagenEmpleado" class="d-none form-control"
+                                                        accept=".png, .jpg">
+                                                </label>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="form-label">Nombre(s)</label>
+                                                <input id="nombreAdministrador" name="nombreAdministrador"
+                                                    class="form-control" autocomplete="off" required
+                                                    oninput="formatAlphabetic(this)">
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="form-label">Apellido(s)</label>
+                                                <input id="apellidoAdministrador" name="apellidoAdministrador"
+                                                    autocomplete="off" class="form-control" required
+                                                    oninput="formatAlphabetic(this)">
+                                            </div>
+                                            <div class="col-6 mt-3">
+                                                <label class="form-label">Numero telefono</label>
+                                                <input id="telefonoAdministrador" name="telefonoAdministrador"
+                                                    class="form-control" autocomplete="off" required
+                                                    oninput="formatPhoneNumber(this)">
+                                            </div>
+                                            <div class="col-6 mt-3">
+                                                <label class="form-label">Correo electronico</label>
+                                                <input id="correoAdministrador" name="correoAdministrador"
+                                                    class="form-control" autocomplete="off" required
+                                                    oninput="formatEmail(this)">
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <label for="" class="form-label">Clave</label>
+                                                <input type="password" id="claveAdmin" name="claveAdmin"
+                                                    autocomplete="off" class="form-control" required
+                                                    oninput="formatPassword(this)">
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <label for="" class="form-label">Repetir Clave</label>
+                                                <input type="password" id="claveAdmin2" name="claveAdmin2"
+                                                    autocomplete="off" class="form-control" required
+                                                    oninput="formatPassword(this)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="row mb-3">
+                                    <div class="col-12 text-end">
+                                        <button type="submit" class="btn btn-primary ps-4 pe-4">
+                                            <i class="bi bi-person-fill-add me-1"></i> Aceptar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </form>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- IMPORTACIÓN DE ARCHIVOS JAVASCRIPT -->
@@ -117,11 +286,11 @@
     <script type="text/javascript" src="../../controllers/utils/components.js"></script>
     <!-- Llamada al controlador del sitio privado -->
     <script type="text/javascript" src="../../controllers/utils/admin.js"></script>
-    <!-- Llamada al controlador de la página web -->
-    <script src="../../controllers/admin/empleados.js"></script>
     <!-- ? Llama al validador de textos -->
     <script src="../../controllers/utils/inputValidator.js"></script>
+    <!-- Llamada al controlador de la página web -->
     <!-- ! cambiar el link js para el controntrolador -->
+    <script src="../../controllers/admin/empleados.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,142 @@
+<?php
+// Se incluye la clase para trabajar con la base de datos.
+require_once('../../helpers/database.php');
+/*
+ *  Clase para manejar el comportamiento de los datos de la tabla administrador.
+ */
+class EmpleadoHandler
+{
+    // ? declaración de variables de la base ded datos
+    protected $id = null;
+    protected $nombre = null;
+    protected $apellido = null;
+    protected $dui = null;
+    protected $telefono = null;
+    protected $correo = null;
+    protected $clave = null;
+    protected $departamento = null;
+    protected $municipio = null;
+    protected $estado = null;
+    protected $imagen = null;
+
+    const RUTA_IMAGEN = '../../images/empleados/';
+
+
+    /*
+     *  Métodos para gestionar la cuenta del empleado.
+     */
+    public function checkUser($username, $password)
+    {
+        $sql = 'SELECT `id_empleado`, `correo_empleado`,`clave_empleado` FROM `tb_empleados` WHERE `correo_empleado` =?';
+        $params = array($username);
+        if (!($data = Database::getRow($sql, $params))) {
+            return false;
+        } elseif (password_verify($password, $data['clave_empleado'])) {
+            $_SESSION['idEmpleado'] = $data['id_empleado'];
+            $_SESSION['correoEmpleado'] = $data['correo_empleado'];
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // validación para comprobar si la contraseña es correcta
+    public function checkPassword($password)
+    {
+        $sql = 'SELECT clave_empleado
+                FROM tb_empleados
+                WHERE id_empleado = ?';
+        $params = array($_SESSION['idEmpleado']);
+        if (!($data = Database::getRow($sql, $params))) {
+            return false;
+        } elseif (password_verify($password, $data['clave_empleado'])) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //* métodos SCRUD (search, create, read, update, and delete) para el manejo de variables 
+
+    public function searchRows()
+    {
+        $value = '%' . Validator::getSearchValue() . '%';
+        $sql = 'SELECT
+                    `id_empleado`,
+                    `nombre_empelado`,
+                    `apellido_empleado`,
+                    `DUI_empleado`,
+                    `telefono_empleado`,
+                    `correo_empleado`,
+                    `departamento_empleado`,
+                    `municipio_empleado`,
+                    `estado_empleado`
+                FROM
+                    `tb_empleados`
+                WHERE
+                    `nombre_empelado` LIKE ? OR 
+                    `apellido_empleado` LIKE ? OR 
+                    `DUI_empleado` LIKE ? OR 
+                    `telefono_empleado` LIKE ? OR 
+                    `correo_empleado` LIKE ? OR 
+                    `departamento_empleado` LIKE ? OR 
+                    `municipio_empleado` LIKE ? OR 
+                    `estado_empleado` LIKE ?
+        ';
+        $params = array($value, $value, $value, $value, $value, $value, $value, $value);
+        return Database::getRows($sql, $params);
+    }
+
+    public function createRow()
+    {
+        $sql = 'INSERT INTO `tb_empleados`(
+                            `nombre_empelado`,
+                            `apellido_empleado`,
+                            `DUI_empleado`,
+                            `telefono_empleado`,
+                            `correo_empleado`,
+                            `departamento_empleado`,
+                            `municipio_empleado`
+            )
+            VALUES(
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?)';
+        $params = array($this->nombre, $this->apellido, $this->dui, $this->telefono, $this->correo, $this->departamento, $this->municipio);
+        return Database::executeRow($sql, $params);
+    }
+
+    public function readAll()
+    {
+        $sql = '  SELECT
+                    `id_empleado`,
+                    `nombre_empelado`,
+                    `apellido_empleado`,
+                    `DUI_empleado`,
+                    `telefono_empleado`,
+                    `correo_empleado`,
+                    `departamento_empleado`,
+                    `municipio_empleado`,
+                    `estado_empleado`,
+                    `imagen_empleado`
+                FROM
+                    `tb_empleados`';
+        return Database::getRow($sql);
+    }
+
+    public function readFilename()
+    {
+        $sql = 'SELECT
+                    `imagen_empleado`
+                FROM
+                    `tb_empleados`
+                WHERE
+                    `id_empleado` = ?';
+        $params = array($this->id);
+        return Database::getRow($sql, $params);
+    }
+}

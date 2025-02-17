@@ -12,8 +12,11 @@ CREATE TABLE
         DUI_empleado VARCHAR(15) NOT NULL,
         telefono_empleado varchar(10) NOT NULL,
         correo_empleado VARCHAR(100) UNIQUE,
+        clave_empleado VARCHAR(500),
         departamento_empleado VARCHAR(100),
         municipio_empleado VARCHAR(100),
+        estado_empleado TINYINT (1) not null NULL,
+        imagen_empleado VARCHAR(500)
     );
 
 CREATE TABLE
