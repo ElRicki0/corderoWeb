@@ -33,6 +33,26 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'No existen registros actualmente';
                 }
                 break;
+            case 'readByName':
+                // ? lectura de la tabla de administradores 
+                if ($result['dataset'] = $administrador->readByName()) {
+                    // ? si hay uno o mas datos se actualiza el estado y el mensaje
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen registros actualmente';
+                }
+                break;
+            case 'readByEmail':
+                // ? lectura de la tabla de administradores 
+                if ($result['dataset'] = $administrador->readByEmail()) {
+                    // ? si hay uno o mas datos se actualiza el estado y el mensaje
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen registros actualmente';
+                }
+                break;
             case 'readProfile':
                 if ($result['dataset'] = $administrador->readProfile()) {
                     $result['status'] = 1;

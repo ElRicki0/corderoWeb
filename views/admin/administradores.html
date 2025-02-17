@@ -30,11 +30,11 @@
         <div class="row">
             <form class="col-sm-12 col-md-12 col-lg-10" id="searchForm">
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-lg-4 col-md-6 col-sm-12 mt-5">
                         <input type="search" class="form-control custom-input border-2" id="search" name="search"
                             placeholder="Nombre o Apellido" required>
                     </div>
-                    <div class="col-6">
+                    <div class="col-lg-5 col-md-9 col-sm-9 d-flex flex-row align-items-center gap-2 mt-5">
                         <div class="btn-group">
                             <button type="submit" class="btn btn-success">
                                 <i class="bi bi-search"></i>
@@ -45,6 +45,51 @@
                             <button type="button" class="btn btn-warning" onclick="openCreate()">
                                 <i class="bi bi-person-fill-add"></i>
                             </button>
+                        </div>
+
+                        <!-- Dropdown -->
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                ordenar registros
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 1)">Alfabético</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Correo
+                                        electrónico</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- Dropdown -->
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Filtrar por departamento
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Ahuachapán</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Santa Ana</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Sonsonate</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Chalatenango</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">La Libertad</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">San Salvador</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Cuscatlán</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">La Paz</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Cabañas</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">San Vicente</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Usulután</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">San Miguel</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Morazán</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">La Unión</a></li>
+
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -88,7 +133,7 @@
                                                         Administrador</h3>
                                                     <img id="imagenMuestra"
                                                         class="rounded  mx-auto d-block img-fluid mt-3 border border-3 border-secondary-subtle rounded-circle imagen_R"
-                                                        src="../../resources/error/images/404Administrador.png"
+                                                        src="../../resources/images/error/404Administrador.png"
                                                         alt="..." width="200px" height="200px">
                                                     <input id="imagenAdministrador" type="file"
                                                         name="imagenAdministrador" class="d-none form-control"
@@ -108,17 +153,12 @@
                                                     oninput="formatAlphabetic(this)">
                                             </div>
                                             <div class="col-6 mt-3">
-                                                <label class="form-label">Nombre usuario</label>
-                                                <input id="usuarioAdministrador" name="usuarioAdministrador"
-                                                    class="form-control" autocomplete="off" required>
-                                            </div>
-                                            <div class="col-6 mt-3">
                                                 <label class="form-label">Numero telefono</label>
                                                 <input id="telefonoAdministrador" name="telefonoAdministrador"
                                                     class="form-control" autocomplete="off" required
-                                                    oninput="formatEmail(this)">
+                                                    oninput="formatPhoneNumber(this)">
                                             </div>
-                                            <div class="col-12 mt-3">
+                                            <div class="col-6 mt-3">
                                                 <label class="form-label">Correo electronico</label>
                                                 <input id="correoAdministrador" name="correoAdministrador"
                                                     class="form-control" autocomplete="off" required
@@ -127,12 +167,14 @@
                                             <div class="col-lg-6">
                                                 <label for="" class="form-label">Clave</label>
                                                 <input type="password" id="claveAdmin" name="claveAdmin"
-                                                    autocomplete="off" class="form-control" required>
+                                                    autocomplete="off" class="form-control" required
+                                                    oninput="formatPassword(this)">
                                             </div>
                                             <div class="col-lg-6">
                                                 <label for="" class="form-label">Repetir Clave</label>
                                                 <input type="password" id="claveAdmin2" name="claveAdmin2"
-                                                    autocomplete="off" class="form-control" required>
+                                                    autocomplete="off" class="form-control" required
+                                                    oninput="formatPassword(this)">
                                             </div>
                                         </div>
                                     </div>
@@ -166,6 +208,8 @@
     <!-- Llamada al controlador de la página web -->
     <!-- ! cambiar el link js para el controntrolador -->
     <script src="../../controllers/admin/administradores.js"></script>
+    <!-- ? llamada al validaron de textos -->
+    <script src="../../controllers/utils/inputValidator.js"></script>
 
 </body>
 

@@ -83,7 +83,7 @@ class AdministradorHandler
                 FROM tb_administradores
                 WHERE apellido_administrador LIKE ? OR nombre_administrador LIKE ? OR correo_administrador LIKE ? OR telefono_administrador LIKE ? AND id_administrador <> ?
                 ORDER BY id_administrador';
-        $params = array($value, $value, $value, $value, $value, $_SESSION['idAdministrador']);
+        $params = array($value, $value, $value, $value, $_SESSION['idAdministrador']);
         return Database::getRows($sql, $params);
     }
 
@@ -105,6 +105,22 @@ class AdministradorHandler
     {
         $sql = 'SELECT id_administrador, nombre_administrador, apellido_administrador, telefono_administrador, correo_administrador, imagen_administrador FROM tb_administradores
         where id_administrador<>?';
+        $params = array($_SESSION['idAdministrador']);
+        return Database::getRows($sql, $params);
+    }
+
+    public function readByName()
+    {
+        $sql = 'SELECT id_administrador, nombre_administrador, apellido_administrador, telefono_administrador, correo_administrador, imagen_administrador FROM tb_administradores
+        where id_administrador<>? ORDER BY nombre_administrador';
+        $params = array($_SESSION['idAdministrador']);
+        return Database::getRows($sql, $params);
+    }
+
+    public function readByEmail()
+    {
+        $sql = 'SELECT id_administrador, nombre_administrador, apellido_administrador, telefono_administrador, correo_administrador, imagen_administrador FROM tb_administradores
+        where id_administrador<>? ORDER BY correo_administrador';
         $params = array($_SESSION['idAdministrador']);
         return Database::getRows($sql, $params);
     }

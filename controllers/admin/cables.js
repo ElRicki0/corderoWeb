@@ -234,11 +234,7 @@ const readAllTable = async (form = null, buscador) => {
         case 2:
             action = 'readByLengthDesc';
             break;
-        case 3:
-            action = 'readByLengthAsc';
-            break;
-        case 4:
-            action = 'readByModify';
+        
             break;
         default:
     }
