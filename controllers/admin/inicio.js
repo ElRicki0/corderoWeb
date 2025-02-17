@@ -3,7 +3,7 @@ const CABLES_API = 'services/admin/cables.php'
 // Método del evento para cuando el documento ha cargado.
 document.addEventListener('DOMContentLoaded', async () => {
     MAIN_TITLE.textContent = 'Pagina principal';
-    // Llamada a la función para mostrar el encabezado y pie del documento.
+    // Llamada a la función para mostrar el encabezado y bar del documento.
     loadTemplate();
     graficoBarrasCategorias();
     graficoPastelCategorias();
@@ -58,7 +58,7 @@ const graficoPastelestadosRollos = async () => {
             cantidad.push(row.cantidad);
         });
         // Llamada a la función para generar y mostrar un gráfico de pastel. Se encuentra en el archivo components.js
-        pieGraph('grafica3', estados, cantidad, 'Estados por cables');
+        barGraph('grafica3', estados, cantidad, 'Estados por cables');
     } else {
         document.getElementById('ContanidoCable2').remove();
         console.log(DATA.error);
@@ -86,7 +86,7 @@ const graficoPastelCategorias = async () => {
             Porcentajes.push(row.cantidad);
         });
         // Llamada a la función para generar y mostrar un gráfico de pastel. Se encuentra en el archivo components.js
-        pieGraph('grafica2', Estados, Porcentajes, 'Porcentaje de longitudes por cable');
+        barGraph('grafica2', Estados, Porcentajes, 'Porcentaje de longitudes por cable');
     } else {
         document.getElementById('ContanidoCable3').remove();
         console.log(DATA.error);

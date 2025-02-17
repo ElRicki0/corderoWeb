@@ -129,6 +129,7 @@ if (isset($_GET['action'])) {
                     !$cable->setNombre($_POST['nombreCable']) or
                     !$cable->setDescripcion($_POST['descripcionCable']) or
                     !$cable->setLongitud($_POST['longitudCable']) or
+                    !$cable->setMinimo($_POST['longitudMinimaCable']) or
                     !$cable->setCategoria($_POST['categoriaCable']) or
                     !$cable->setEstado($_POST['estadoCable'])
                 ) {

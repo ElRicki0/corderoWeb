@@ -19,7 +19,8 @@ const SAVE_FORM = document.getElementById('saveForm'),
     NOMBRE_CABLE = document.getElementById('nombreCable'),
     DESCRIPCION_CABLE = document.getElementById('descripcionCable'),
     ESTADO_CABLE = document.getElementById('estadoCable'),
-    LONGITUD_CABLE = document.getElementById('longitudCable');
+    LONGITUD_CABLE = document.getElementById('longitudCable'),
+    LONGITUD_MINIMA_CABLE = document.getElementById('longitudMinimaCable');
 
 // ? método cuando el documento ha cargado con éxito 
 document.addEventListener('DOMContentLoaded', () => {
@@ -44,7 +45,7 @@ SEARCH_FORM.addEventListener('submit', (event) => {
 *   Parámetros: form (objeto opcional con los datos de búsqueda).
 *   Retorno: ninguno.
 */
-const fillTable = async (form = null) => {
+const fillTable = async (form = null, buscador) => {
     // Se inicializa el contenido de la tabla.
     ROWS_FOUND.textContent = '';
     TABLE_BODY.innerHTML = '';
@@ -81,7 +82,7 @@ const fillTable = async (form = null) => {
                         <div class="col-lg-3 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
                             <img src="${SERVER_URL}images/cables/${row.imagen_categoria_cable}" width="200"
                                 class="rounded border border-primary" alt="Imagen de error"
-                                onerror="this.onerror=null; this.src='../../resources/error/images/404Administrador.png';">
+                                onerror="this.onerror=null; this.src='../../resources/images/error/404Cable.png';">
                         </div>
                         <div class="col-lg-7 col-md-8 col-sm-12 text-center">
                             <h5 class="text-white">Nombre del cable</h5>
@@ -116,7 +117,7 @@ const fillTable = async (form = null) => {
         ROWS_FOUND.textContent = DATA.message;
     } else {
         sweetAlert(4, DATA.error, true);
-        TABLE_BODY.innerHTML+=`
+        TABLE_BODY.innerHTML += `
         <div class="col-5 justify-content-center align-items-center">
                 <img src="../../resources/images/error/404iNFORMACION.png" class="card-img-top" alt="ERROR CARGAR IMAGEN">
             </div>
@@ -185,6 +186,7 @@ const openUpdate = async (id) => {
         NOMBRE_CABLE.value = ROW.nombre_cable;
         DESCRIPCION_CABLE.value = ROW.descripcion_cable;
         LONGITUD_CABLE.value = ROW.longitud_cable;
+        LONGITUD_MINIMA_CABLE.value = ROW.longitud_minima_cable;
         ESTADO_CABLE.value = ROW.estado_cable;
         fillSelect(CATEGORIA_CABLE_API, 'readAll', 'categoriaCable', parseInt(ROW.id_categoria_cable));
     } else {
@@ -220,14 +222,30 @@ const openDelete = async (id) => {
 }
 
 // ? función asíncrona para ordenar los registros de diferentes formas que el  usuario  requiera
-// *alfabéticamente
-const orderByName = async (form = null) => {
+
+const readAllTable = async (form = null, buscador) => {
     // Se inicializa el contenido de la tabla.
     ROWS_FOUND.textContent = '';
     TABLE_BODY.innerHTML = '';
+    switch (buscador) {
+        case 1:
+            action = 'readByName';
+            break;
+        case 2:
+            action = 'readByLengthDesc';
+            break;
+        case 3:
+            action = 'readByLengthAsc';
+            break;
+        case 4:
+            action = 'readByModify';
+            break;
+        default:
+    }
     // Petición para obtener los registros disponibles.
-    const DATA = await fetchData(CABLE_API, 'readByName', form);
-    // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
+    const DATA = await fetchData(CABLE_API, action, form);
+
+
     if (DATA.status) {
         // Se recorre el conjunto de registros (dataset) fila por fila a través del objeto row.
         DATA.dataset.forEach(row => {
@@ -247,42 +265,44 @@ const orderByName = async (form = null) => {
                 default:
                     icon = 'bi bi-question-circle-fill'; // Para estados no contemplados
             }
-
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
             TABLE_BODY.innerHTML += `
-                <div class="card text-bg-dark mb-5">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-3 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
-                            <img src="${SERVER_URL}images/cables/${row.imagen_categoria_cable}" width="200"
-                                class="rounded border border-primary" alt="Imagen de error"
-                                onerror="this.onerror=null; this.src='../../resources/error/images/404Administrador.png';">
-                        </div>
-                        <div class="col-lg-7 col-md-8 col-sm-12 text-center">
-                            <h5 class="text-white">Nombre del cable</h5>
-                            <p class="card-title text-white">${row.nombre_cable}</p>
-                            <h5 class="text-white">Descripción del cable</h5>
-                            <p class="card-text text-white">${row.descripcion_cable}</p>
-                            <h5 class="text-white">Longitud cable</h5>
-                            <p class="card-text text-white">${row.longitud_cable} Metros MT.</p>
-                            <h5 class="text-white">Estado del cable</h5>
-                            <p class="card-text text-white"><i class="${icon}"></i></p>
-                            <h5 class="text-white">Registro alterado por:</h5>
-                            <p class="card-text text-white">${row.nombre_administrador} ${row.apellido_administrador}</p>
-                        </div>
-                        <div class="col-lg-2 col-md-12 col-sm-12 text-center mt-3">
-                            <div class="d-flex flex-column">
-                                <button class="btn btn-outline-light mb-2" onclick="openUpdate(${row.id_cable})">
-                                    <i class="bi bi-pencil-square"></i> Editar Registro
-                                </button>
-                                <button class="btn btn-outline-light mb-2" onclick="openDelete(${row.id_cable})">
-                                    <i class="bi bi-trash"></i> Eliminar Registro
-                                </button>
-                            </div>
-                        </div>
+<div class="card text-bg-dark mb-5">
+    <div class="card-body">
+        <div class="row">
+                <div class="col-lg-3 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
+                    <img src="${SERVER_URL}images/cables/${row.imagen_categoria_cable}" width="200"
+                        class="rounded border border-primary" alt="Imagen de error"
+                        onerror="this.onerror=null; this.src='../../resources/images/error/404Cable.png';">
+                </div>
+                <div class="col-lg-7 col-md-8 col-sm-12 text-center">
+                    <h5 class="text-white">Nombre del cable</h5>
+                    <p class="card-title text-white">${row.nombre_cable}</p>
+                    <h5 class="text-white">Descripción del cable</h5>
+                    <p class="card-text text-white">${row.descripcion_cable}</p>
+                    <h5 class="text-white">Longitud cable</h5>
+                    <p class="card-text text-white">${row.longitud_cable} Metros MT.</p>
+                    <h5 class="text-white">Longitud minima del cable</h5>
+                    <p class="card-text text-white">${row.longitud_minima_cable} Metros MT.</p>
+                    <h5 class="text-white">Estado del cable</h5>
+                    <p class="card-text text-white"><i class="${icon}"></i></p>
+                    <h5 class="text-white">Registro alterado por:</h5>
+                    <p class="card-text text-white">${row.nombre_administrador} ${row.apellido_administrador}</p>
+                </div>
+                <div class="col-lg-2 col-md-12 col-sm-12 text-center mt-3">
+                    <div class="d-flex flex-column">
+                        <button class="btn btn-outline-light mb-2" onclick="openUpdate(${row.id_cable})">
+                            <i class="bi bi-pencil-square"></i> Editar Registro
+                        </button>
+                        <button class="btn btn-outline-light mb-2" onclick="openDelete(${row.id_cable})">
+                            <i class="bi bi-trash"></i> Eliminar Registro
+                        </button>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
             `;
         });
         // Se muestra un mensaje de acuerdo con el resultado.
@@ -290,220 +310,4 @@ const orderByName = async (form = null) => {
     } else {
         sweetAlert(4, DATA.error, true);
     }
-}
-
-// *mayor a menor
-const readByLengthDesc = async (form = null) => {
-    // Se inicializa el contenido de la tabla.
-    ROWS_FOUND.textContent = '';
-    TABLE_BODY.innerHTML = '';
-    // Petición para obtener los registros disponibles.
-    const DATA = await fetchData(CABLE_API, 'readByLengthDesc', form);
-    // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
-    if (DATA.status) {
-        // Se recorre el conjunto de registros (dataset) fila por fila a través del objeto row.
-        DATA.dataset.forEach(row => {
-            // Se establece un icono para el estado del producto.
-            let icon;
-
-            switch (parseInt(row.estado_cable)) {
-                case 0:
-                    icon = 'bi bi-bookmark-star'; // Estado 0
-                    break;
-                case 1:
-                    icon = 'bi bi-bookmark-star-fill'; // Estado 1
-                    break;
-                case 2:
-                    icon = 'bi bi-truck'; // Estado 2
-                    break;
-                default:
-                    icon = 'bi bi-question-circle-fill'; // Para estados no contemplados
-            }
-
-            // Se crean y concatenan las filas de la tabla con los datos de cada registro.
-            TABLE_BODY.innerHTML += `
-                <div class="card text-bg-dark mb-5">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-3 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
-                            <img src="${SERVER_URL}images/cables/${row.imagen_categoria_cable}" width="200"
-                                class="rounded border border-primary" alt="Imagen de error"
-                                onerror="this.onerror=null; this.src='../../resources/error/images/404Administrador.png';">
-                        </div>
-                        <div class="col-lg-7 col-md-8 col-sm-12 text-center">
-                            <h5 class="text-white">Nombre del cable</h5>
-                            <p class="card-title text-white">${row.nombre_cable}</p>
-                            <h5 class="text-white">Descripción del cable</h5>
-                            <p class="card-text text-white">${row.descripcion_cable}</p>
-                            <h5 class="text-white">Longitud cable</h5>
-                            <p class="card-text text-white">${row.longitud_cable} Metros MT.</p>
-                            <h5 class="text-white">Estado del cable</h5>
-                            <p class="card-text text-white"><i class="${icon}"></i></p>
-                            <h5 class="text-white">Registro alterado por:</h5>
-                            <p class="card-text text-white">${row.nombre_administrador} ${row.apellido_administrador}</p>
-                        </div>
-                        <div class="col-lg-2 col-md-12 col-sm-12 text-center mt-3">
-                            <div class="d-flex flex-column">
-                                <button class="btn btn-outline-light mb-2" onclick="openUpdate(${row.id_cable})">
-                                    <i class="bi bi-pencil-square"></i> Editar Registro
-                                </button>
-                                <button class="btn btn-outline-light mb-2" onclick="openDelete(${row.id_cable})">
-                                    <i class="bi bi-trash"></i> Eliminar Registro
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            `;
-        });
-        // Se muestra un mensaje de acuerdo con el resultado.
-        ROWS_FOUND.textContent = DATA.message;
-    } else {
-        sweetAlert(4, DATA.error, true);
-    }
-}
-
-// *mayor a menor
-const readByLengthAsc = async (form = null) => {
-    // Se inicializa el contenido de la tabla.
-    ROWS_FOUND.textContent = '';
-    TABLE_BODY.innerHTML = '';
-    // Petición para obtener los registros disponibles.
-    const DATA = await fetchData(CABLE_API, 'readByLengthAsc', form);
-    // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
-    if (DATA.status) {
-        // Se recorre el conjunto de registros (dataset) fila por fila a través del objeto row.
-        DATA.dataset.forEach(row => {
-            // Se establece un icono para el estado del producto.
-            let icon;
-
-            switch (parseInt(row.estado_cable)) {
-                case 0:
-                    icon = 'bi bi-bookmark-star'; // Estado 0
-                    break;
-                case 1:
-                    icon = 'bi bi-bookmark-star-fill'; // Estado 1
-                    break;
-                case 2:
-                    icon = 'bi bi-truck'; // Estado 2
-                    break;
-                default:
-                    icon = 'bi bi-question-circle-fill'; // Para estados no contemplados
-            }
-
-            // Se crean y concatenan las filas de la tabla con los datos de cada registro.
-            TABLE_BODY.innerHTML += `
-                <div class="card text-bg-dark mb-5">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-3 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
-                            <img src="${SERVER_URL}images/cables/${row.imagen_categoria_cable}" width="200"
-                                class="rounded border border-primary" alt="Imagen de error"
-                                onerror="this.onerror=null; this.src='../../resources/error/images/404Administrador.png';">
-                        </div>
-                        <div class="col-lg-7 col-md-8 col-sm-12 text-center">
-                            <h5 class="text-white">Nombre del cable</h5>
-                            <p class="card-title text-white">${row.nombre_cable}</p>
-                            <h5 class="text-white">Descripción del cable</h5>
-                            <p class="card-text text-white">${row.descripcion_cable}</p>
-                            <h5 class="text-white">Longitud cable</h5>
-                            <p class="card-text text-white">${row.longitud_cable} Metros MT.</p>
-                            <h5 class="text-white">Estado del cable</h5>
-                            <p class="card-text text-white"><i class="${icon}"></i></p>
-                            <h5 class="text-white">Registro alterado por:</h5>
-                            <p class="card-text text-white">${row.nombre_administrador} ${row.apellido_administrador}</p>
-                        </div>
-                        <div class="col-lg-2 col-md-12 col-sm-12 text-center mt-3">
-                            <div class="d-flex flex-column">
-                                <button class="btn btn-outline-light mb-2" onclick="openUpdate(${row.id_cable})">
-                                    <i class="bi bi-pencil-square"></i> Editar Registro
-                                </button>
-                                <button class="btn btn-outline-light mb-2" onclick="openDelete(${row.id_cable})">
-                                    <i class="bi bi-trash"></i> Eliminar Registro
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            `;
-        });
-        // Se muestra un mensaje de acuerdo con el resultado.
-        ROWS_FOUND.textContent = DATA.message;
-    } else {
-        sweetAlert(4, DATA.error, true);
-    }
-}
-
-// *mayor a menor
-const readByModify = async (form = null) => {
-    // Se inicializa el contenido de la tabla.
-    ROWS_FOUND.textContent = '';
-    TABLE_BODY.innerHTML = '';
-    // Petición para obtener los registros disponibles.
-    const DATA = await fetchData(CABLE_API, 'readByModify', form);
-    // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
-    if (DATA.status) {
-        // Se recorre el conjunto de registros (dataset) fila por fila a través del objeto row.
-        DATA.dataset.forEach(row => {
-            // Se establece un icono para el estado del producto.
-            let icon;
-
-            switch (parseInt(row.estado_cable)) {
-                case 0:
-                    icon = 'bi bi-bookmark-star'; // Estado 0
-                    break;
-                case 1:
-                    icon = 'bi bi-bookmark-star-fill'; // Estado 1
-                    break;
-                case 2:
-                    icon = 'bi bi-truck'; // Estado 2
-                    break;
-                default:
-                    icon = 'bi bi-question-circle-fill'; // Para estados no contemplados
-            }
-
-            // Se crean y concatenan las filas de la tabla con los datos de cada registro.
-            TABLE_BODY.innerHTML += `
-                <div class="card text-bg-dark mb-5">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-3 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
-                            <img src="${SERVER_URL}images/cables/${row.imagen_categoria_cable}" width="200"
-                                class="rounded border border-primary" alt="Imagen de error"
-                                onerror="this.onerror=null; this.src='../../resources/error/images/404Administrador.png';">
-                        </div>
-                        <div class="col-lg-7 col-md-8 col-sm-12 text-center">
-                            <h5 class="text-white">Nombre del cable</h5>
-                            <p class="card-title text-white">${row.nombre_cable}</p>
-                            <h5 class="text-white">Descripción del cable</h5>
-                            <p class="card-text text-white">${row.descripcion_cable}</p>
-                            <h5 class="text-white">Longitud cable</h5>
-                            <p class="card-text text-white">${row.longitud_cable} Metros MT.</p>
-                            <h5 class="text-white">Estado del cable</h5>
-                            <p class="card-text text-white"><i class="${icon}"></i></p>
-                            <h5 class="text-white">Registro alterado por:</h5>
-                            <p class="card-text text-white">${row.nombre_administrador} ${row.apellido_administrador}</p>
-                        </div>
-                        <div class="col-lg-2 col-md-12 col-sm-12 text-center mt-3">
-                            <div class="d-flex flex-column">
-                                <button class="btn btn-outline-light mb-2" onclick="openUpdate(${row.id_cable})">
-                                    <i class="bi bi-pencil-square"></i> Editar Registro
-                                </button>
-                                <button class="btn btn-outline-light mb-2" onclick="openDelete(${row.id_cable})">
-                                    <i class="bi bi-trash"></i> Eliminar Registro
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            `;
-        });
-        // Se muestra un mensaje de acuerdo con el resultado.
-        ROWS_FOUND.textContent = DATA.message;
-    } else {
-        sweetAlert(4, DATA.error, true);
-    }
-}
+} 
