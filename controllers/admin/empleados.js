@@ -174,6 +174,33 @@ const fillTable = async (form = null) => {
 }
 
 /*
+* Función asíncrona para preparar un modal de confirmacion para una funcion de estado
+* Parámetros: id (identificador del registro seleccionado).
+* Retorno: ninguno.
+*/
+const openState = async (id) => {
+    // Se muestra un mensaje de confirmación y se captura la respuesta en una constante.
+    const RESPONSE = await confirmAction('¿Está seguro de cambiar el estado del empleado?');
+    // Se verifica la respuesta del mensaje.
+    if (RESPONSE) {
+        // Se define un objeto con los datos del registro seleccionado.
+        const FORM = new FormData();
+        FORM.append('idEmpleado', id);
+
+        // Petición para cambiar el estado del cliente
+        const DATA = await fetchData(EMPLADO_API, 'updateRowEstado', FORM);
+
+        // Se comprueba si la respuesta es satisfactoria
+        if (DATA.status) {
+            sweetAlert(1, DATA.message, true); // Mensaje de éxito
+            fillTable(); // Recargar la tabla para visualizar los cambios
+        } else {
+            sweetAlert(2, DATA.error, false); // Mensaje de error
+        }
+    }
+}
+
+/*
 *   Función para preparar el formulario al momento de insertar un registro.
 *   Parámetros: ninguno.
 *   Retorno: ninguno.
@@ -184,6 +211,20 @@ const openCreate = () => {
     MODAL_TITLE.textContent = 'Agregar Empleado';
     // Se prepara el formulario.
     SAVE_FORM.reset();
+    CLAVE_EMPLEADO.innerHTML=`
+    <div class="col-lg-6">
+        <label for="" class="form-label">Clave</label>
+        <input type="password" id="claveEmpleado" name="claveEmpleado"
+            autocomplete="off" class="form-control" required
+            oninput="formatPassword(this)">
+    </div>
+    <div class="col-lg-6">
+        <label for="" class="form-label">Repetir Clave</label>
+        <input type="password" id="claveEmpleado2" name="claveEmpleado2"
+            autocomplete="off" class="form-control" required
+            oninput="formatPassword(this)">
+    </div>
+    `;
 }
 
 /*

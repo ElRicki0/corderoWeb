@@ -84,14 +84,27 @@ if (isset($_GET['action'])) {
                     !$empleado->setEstado(isset($_POST['estadoEmpleado'])) or
                     !$empleado->setImagen($_FILES['imagenEmpleado'], $empleado->getFilename())
                 ) {
-                    $result['error'] =$empleado->getDataError();
+                    $result['error'] = $empleado->getDataError();
                 } elseif ($empleado->updateRow()) {
                     $result['status'] = 1;
                     $result['message'] = 'Empleado modificado correctamente';
                     // Se asigna el estado del archivo después de actualizar.
-                    $result['fileStatus'] = Validator::changeFile($_FILES['imagenEmpleado'],$empleado::RUTA_IMAGEN,$empleado->getFilename());
+                    $result['fileStatus'] = Validator::changeFile($_FILES['imagenEmpleado'], $empleado::RUTA_IMAGEN, $empleado->getFilename());
                 }
-
+                break;
+            case 'updateRowEstado':
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$empleado->setId($_POST['idEmpleado'])
+                ) {
+                    $result['error'] = $empleado->getDataError();
+                } elseif ($empleado->updateRowEstado()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Estado modificado correctamente';
+                } else {
+                    $result['error'] = 'Ocurrió un problema al modificar el estado';
+                }
+                break;
                 break;
             default:
                 $result['error'] = 'Acción no disponible dentro de la sesión';
