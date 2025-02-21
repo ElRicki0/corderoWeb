@@ -227,6 +227,7 @@ const readAllTable = async (form = null, buscador) => {
     // Se inicializa el contenido de la tabla.
     ROWS_FOUND.textContent = '';
     TABLE_BODY.innerHTML = '';
+    
     switch (buscador) {
         case 1:
             action = 'readByName';
@@ -234,7 +235,11 @@ const readAllTable = async (form = null, buscador) => {
         case 2:
             action = 'readByLengthDesc';
             break;
-        
+        case 3:
+            action = 'readByLengthAsc';
+            break;
+        case 4:
+            action = 'readByModify';
             break;
         default:
     }

@@ -179,9 +179,7 @@
                             </div>
                         </div>
                     </div>
-
                 </div> -->
-
 
             </div>
         </div>
@@ -194,7 +192,7 @@
                     <form id="saveForm">
 
                         <!-- Campo oculto para asignar el id del registro al momento de modificar -->
-                        <input type="number" class="d-none" id="idAdministrador" name="idAdministrador">
+                        <input type="number" class="d-none" id="idEmpleado" name="idEmpleado">
                         <form class="needs-validation">
 
                             <!-- Body del modal -->
@@ -204,72 +202,101 @@
                                 <h1 class="fs-4 fw-bold text-center mb-4" id="modalTitle"> </h1>
 
                                 <!-- Inputs -->
-                                <div class="row p-3">
-                                    <div class="col-12">
-                                        <div class="row">
-                                            <div class="col-12">
-                                            </div>
-                                            <div class="col-12 text-center">
-                                                <label for="imagenEmpleado">
-                                                    <h3 for="imagenEmpleado" class="form-label">Imagen
-                                                        Administrador</h3>
-                                                    <img id="imagenMuestra"
-                                                        class="rounded  mx-auto d-block img-fluid mt-3 border border-3 border-secondary-subtle rounded-circle imagen_R"
-                                                        src="../../resources/images/error/404Administrador.png"
-                                                        alt="..." width="200px" height="200px">
-                                                    <input id="imagenEmpleado" type="file"
-                                                        name="imagenEmpleado" class="d-none form-control"
-                                                        accept=".png, .jpg">
-                                                </label>
-                                            </div>
-                                            <div class="col-6">
-                                                <label class="form-label">Nombre(s)</label>
-                                                <input id="nombreAdministrador" name="nombreAdministrador"
-                                                    class="form-control" autocomplete="off" required
-                                                    oninput="formatAlphabetic(this)">
-                                            </div>
-                                            <div class="col-6">
-                                                <label class="form-label">Apellido(s)</label>
-                                                <input id="apellidoAdministrador" name="apellidoAdministrador"
-                                                    autocomplete="off" class="form-control" required
-                                                    oninput="formatAlphabetic(this)">
-                                            </div>
-                                            <div class="col-6 mt-3">
-                                                <label class="form-label">Numero telefono</label>
-                                                <input id="telefonoAdministrador" name="telefonoAdministrador"
-                                                    class="form-control" autocomplete="off" required
-                                                    oninput="formatPhoneNumber(this)">
-                                            </div>
-                                            <div class="col-6 mt-3">
-                                                <label class="form-label">Correo electronico</label>
-                                                <input id="correoAdministrador" name="correoAdministrador"
-                                                    class="form-control" autocomplete="off" required
-                                                    oninput="formatEmail(this)">
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <label for="" class="form-label">Clave</label>
-                                                <input type="password" id="claveAdmin" name="claveAdmin"
-                                                    autocomplete="off" class="form-control" required
-                                                    oninput="formatPassword(this)">
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <label for="" class="form-label">Repetir Clave</label>
-                                                <input type="password" id="claveAdmin2" name="claveAdmin2"
-                                                    autocomplete="off" class="form-control" required
-                                                    oninput="formatPassword(this)">
-                                            </div>
+                                <div class="row d-flex justify-content-center align-items-center">
+                                    <div class="col-12 text-center">
+                                        <label for="imagenEmpleado">
+                                            <h3 for="imagenEmpleado" class="form-label">Imagen
+                                                Empleado</h3>
+                                            <img id="imagenMuestra"
+                                                class="rounded  mx-auto d-block img-fluid mt-3 border border-3 border-secondary-subtle rounded-circle imagen_R"
+                                                src="../../resources/images/error/404Empleado.png" alt="..."
+                                                width="200px" height="200px">
+                                            <input id="imagenEmpleado" type="file" name="imagenEmpleado"
+                                                class="d-none form-control" accept=".png, .jpg">
+                                        </label>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Nombre(s)</label>
+                                        <input id="nombreEmpleado" name="nombreEmpleado" class="form-control"
+                                            autocomplete="off" required oninput="formatAlphabetic(this)">
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Apellido(s)</label>
+                                        <input id="apellidoEmpleado" name="apellidoEmpleado" autocomplete="off"
+                                            class="form-control" required oninput="formatAlphabetic(this)">
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">DUI</label>
+                                        <input id="duiEmpleado" name="duiEmpleado" class="form-control"
+                                            autocomplete="off" type="text" required oninput="formatDui(this)">
+                                    </div>
+                                    <div class="col-6 ">
+                                        <label class="form-label">Numero teléfono</label>
+                                        <input id="telefonoEmpleado" name="telefonoEmpleado" class="form-control"
+                                            autocomplete="off" required oninput="formatPhoneNumber(this)">
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Departamento</label>
+                                        <select id="departamentoEmpleado" name="departamentoEmpleado"
+                                            class="form-control" autocomplete="off">
+                                            <option value="">Seleccionar Departamento</option>
+                                            <option value="Ahuachapan">Ahuachapán</option>
+                                            <option value="Cabañas">Cabañas</option>
+                                            <option value="Chalatenango">Chalatenango</option>
+                                            <option value="La Libertad">La Libertad</option>
+                                            <option value="La Paz">La Paz</option>
+                                            <option value="San Salvador">San Salvador</option>
+                                            <option value="San Vicente">San Vicente</option>
+                                            <option value="Santa Ana">Santa Ana</option>
+                                            <option value="Sonsonate">Sonsonate</option>
+                                            <option value="Usulután">Usulután</option>
+                                            <option value="Morazán">Morazán</option>
+                                            <option value="La Unión">La Unión</option>
+                                            <option value="San Miguel">San Miguel</option>
+                                            <option value="Tecapa">Tecapa</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Municipio</label>
+                                        <input id="municipioEmpleado" name="municipioEmpleado" class="form-control"
+                                            autocomplete="off" required oninput="formatAlphabetic(this)">
+                                    </div>
+                                    <div class="col-12 ">
+                                        <label class="form-label">Correo electrónico</label>
+                                        <input id="correoEmpleado" name="correoEmpleado" class="form-control"
+                                            autocomplete="off" required oninput="formatEmail(this)">
+                                    </div>
+                                    <div id="clavesEmpleado" class="row mt-3">
+                                        <div class="col-lg-6">
+                                            <label for="" class="form-label">Clave</label>
+                                            <input type="password" id="claveEmpleado" name="claveEmpleado"
+                                                autocomplete="off" class="form-control" required
+                                                oninput="formatPassword(this)">
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label for="" class="form-label">Repetir Clave</label>
+                                            <input type="password" id="claveEmpleado2" name="claveEmpleado2"
+                                                autocomplete="off" class="form-control" required
+                                                oninput="formatPassword(this)">
+                                        </div>
+                                    </div>
+                                    <h3 class=" mt-5 text-center form-label">Estado
+                                        Empleado</h3>
+                                    <div class="col-lg-12 d-flex justify-content-center">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="estadoEmpleado"
+                                                name="estadoEmpleado" checked>
+                                            <label class="form-check-label" for="estadoEmpleado">Estado</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="row mb-3">
-                                    <div class="col-12 text-end">
-                                        <button type="submit" class="btn btn-primary ps-4 pe-4">
-                                            <i class="bi bi-person-fill-add me-1"></i> Aceptar
-                                        </button>
-                                    </div>
-                                </div>
+                            <div class="row mb-3">
+                                <div class="col-12 text-end">
+                                    <button type="submit" class="btn btn-primary ps-4 pe-4">
+                                        <i class="bi bi-person-fill-add me-1"></i> Aceptar
+                                    </button>
+                                </div>  
                             </div>
                         </form>
                     </form>

@@ -1,22 +1,36 @@
 // ?constante para trabajar con la API
-const EMPLADO_API ='services/admin/empleado.php';
+const EMPLADO_API = 'services/admin/empleado.php';
+
+// ? Constantes del registro empleado
+const SAVE_FORM = document.getElementById('saveForm'),
+    NOMBRE_EMPLEADO = document.getElementById('nombreEmpleado'),
+    APELLIDO_EMPLEADO = document.getElementById('apellidoEmpleado'),
+    DUI_EMPLEADO = document.getElementById('duiEmpleado'),
+    TELEFONO_EMPLEADO = document.getElementById('telefonoEmpleado'),
+    DEPARTAMENTO_EMPLEADO = document.getElementById('departamentoEmpleado'),
+    MUNICIPIO_EMPLEADO = document.getElementById('municipioEmpleado'),
+    CORREO_EMPLEADO = document.getElementById('correoEmpleado'),
+    CLAVE_EMPLEADO = document.getElementById('clavesEmpleado'),
+    ESTADO_EMPLEADO = document.getElementById('estadoEmpleado'),
+    ID_EMPLEADO = document.getElementById('idEmpleado');
+
 
 // Constantes para establecer los elementos del componente Modal.
 const SAVE_MODAL = new bootstrap.Modal('#saveModal'),
     MODAL_TITLE = document.getElementById('modalTitle');
 
-// ? CONSTANTES PARA MOSTRAR IMAGEN SELECCIONADA  PARA EL PERFIL DEL ADMINISTRADOR
+// ? CONSTANTES PARA MOSTRAR IMAGEN SELECCIONADA  PARA EL EMPLEADO
 const IMAGEN_MUESTRA = document.getElementById('imagenMuestra'),
     IMAGEN_EMPLEADO = document.getElementById('imagenEmpleado');
 
 // ? Constante para establecer el formulario de buscar.
 const SEARCH_FORM = document.getElementById('searchForm');
 
-// Constantes para establecer los elementos de la tabla.
+// ? Constantes para establecer los elementos de la tabla.
 const TABLE_BODY = document.getElementById('empleados'),
     ROWS_FOUND = document.getElementById('rowsFound');
 
-// Método del evento para cuando el documento ha cargado.
+// ? Método del evento para cuando el documento ha cargado.
 document.addEventListener('DOMContentLoaded', async () => {
     // Llamada a la función para mostrar el encabezado y pie del documento.
     loadTemplate();
@@ -24,14 +38,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     fillTable();
 });
 
-// ?funcion para seleccionar imagen y visualizar imágenes
+// ? función para seleccionar imagen y visualizar imágenes
 IMAGEN_EMPLEADO.addEventListener('change', function (event) {
     // Verifica si hay una imagen seleccionada
     if (event.target.files && event.target.files[0]) {
         // con el objeto Filereader lee el archivo seleccionado
         const reader = new FileReader();
-        // Luego de haber leido la imagen selecionada se nos devuelve un objeto de tipo blob
-        // Con el metodo createObjectUrl de fileReader crea una url temporal para la imagen
+        // Luego de haber leído la imagen seleccionada se nos devuelve un objeto de tipo blob
+        // Con el método createObjectUrl de fileReader crea una url temporal para la imagen
         reader.onload = function (event) {
             // finalmente la url creada se le asigna el atributo de la etiqueta img
             IMAGEN_MUESTRA.src = event.target.result;
@@ -48,6 +62,29 @@ SEARCH_FORM.addEventListener('submit', (event) => {
     const FORM = new FormData(SEARCH_FORM);
     // Llamada a la función para llenar la tabla con los resultados de la búsqueda.
     fillTable(FORM);
+});
+
+// Método del evento para cuando se envía el formulario de guardar.
+SAVE_FORM.addEventListener('submit', async (event) => {
+    // Se evita recargar la página web después de enviar el formulario.
+    event.preventDefault();
+    // Se verifica la acción a realizar.
+    (ID_EMPLEADO.value) ? action = 'updateRow' : action = 'createRow';
+    // Constante tipo objeto con los datos del formulario.
+    const FORM = new FormData(SAVE_FORM);
+    // Petición para guardar los datos del formulario.
+    const DATA = await fetchData(EMPLADO_API, action, FORM);
+    // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
+    if (DATA.status) {
+        // Se cierra la caja de diálogo.
+        SAVE_MODAL.hide();
+        // Se muestra un mensaje de éxito.
+        sweetAlert(1, DATA.message, true);
+        // Se carga nuevamente la tabla para visualizar los cambios.
+        fillTable();
+    } else {
+        sweetAlert(2, DATA.error, false);
+    }
 });
 
 /*
@@ -68,13 +105,14 @@ const fillTable = async (form = null) => {
         // Se recorre el conjunto de registros fila por fila.
         DATA.dataset.forEach(row => {
             // Se establece un icono para el estado del empleado.
-            (row.estado_empleado) ? icon = 'bi bi-eye-fill' : icon = 'bi bi-eye-slash-fill';
+            (row.estado_empleado) ? icon = 'bi bi-pause-circle-fill' : icon = 'bi bi-check-circle-fill';
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
             TABLE_BODY.innerHTML += `
+                <div class="col-12 card mt-2 text-bg-dark" id="searchForm">
                     <div class="row justify-content-center align-items-center">
                         <div class="col-12 mt-3 d-flex justify-content-center align-items-center"
                             style="height: 300px; width: 300px;">
-                            <img src="${SERVER_URL}images/empleados/${row.imagen_empleado}" class="card-img-top" alt="..."
+                            <img src="${SERVER_URL}images/empleados/${row.imagen_empleado}" class="rounded border border-primary" alt="..."
                                 onerror="this.onerror=null; this.src='../../resources/images/error/404Empleado.png';"
                                 style="max-width: 100%; max-height: 100%; object-fit: contain;">
                         </div>
@@ -82,7 +120,7 @@ const fillTable = async (form = null) => {
                         <div class=" col-md-12 col-lg-3 card-body d-flex flex-column align-items-center text-center">
                             <div class="row">
 
-                                <div class="col-lg-4 col-md-12 col-sm-12">
+                                <div class="col-lg-6 col-md-12 col-sm-12">
                                     <h5 class="text-white">Nombre empleado</h5>
                                     <p class="card-title text-white">${row.nombre_empleado} ${row.apellido_empleado}</p>
                                     <h5 class="text-white">DUI Empleado</h5>
@@ -90,15 +128,15 @@ const fillTable = async (form = null) => {
                                     <h5 class="text-white">Correo Empleado</h5>
                                     <p class="card-text text-white">${row.correo_empleado}</p>
                                 </div>
-                                <div class="col-lg-4 col-md-12 col-sm-12">
+                                <div class="col-lg-6 col-md-12 col-sm-12">
                                     <h5 class="text-white">Teléfono empleado</h5>
-                                    <p class="card-title text-white">${row.telefono_empleado}
+                                    <p class="card-title text-white">${row.telefono_personal_empleado}
                                     <h5 class="text-white">Departamento Empleado</h5>
                                     <p class="card-text text-white">${row.departamento_empleado}</p>
                                     <h5 class="text-white">Municipio Empleado</h5>
                                     <p class="card-text text-white">${row.municipio_empleado}</p>
                                     <h5 class="text-white">Estado empleado</h5>
-                                    <p class="card-text text-white">Estado: <i class="${icon} text-white"></i></p>
+                                    <p class="card-text text-white">Estado: <i class="${icon} text-white h1"></i></p>
                                 </div>
                             </div>
                         </div>
@@ -120,7 +158,8 @@ const fillTable = async (form = null) => {
                                 </button>
                             </div>
                         </div>
-                    </div>          `;
+                    </div>
+                </div>          `;
         });
         // Se muestra un mensaje de acuerdo con el resultado.
         ROWS_FOUND.textContent = DATA.message;
@@ -131,5 +170,80 @@ const fillTable = async (form = null) => {
             </div>
         `
         sweetAlert(4, DATA.error, true);
+    }
+}
+
+/*
+*   Función para preparar el formulario al momento de insertar un registro.
+*   Parámetros: ninguno.
+*   Retorno: ninguno.
+*/
+const openCreate = () => {
+    // Se muestra la caja de diálogo con su título.
+    SAVE_MODAL.show();
+    MODAL_TITLE.textContent = 'Agregar Empleado';
+    // Se prepara el formulario.
+    SAVE_FORM.reset();
+}
+
+/*
+*   Función asíncrona para eliminar un registro.
+*   Parámetros: id (identificador del registro seleccionado).
+*   Retorno: ninguno.
+*/
+const openDelete = async (id) => {
+    // Llamada a la función para mostrar un mensaje de confirmación, capturando la respuesta en una constante.
+    const RESPONSE = await confirmAction('¿Desea eliminar el Empleado de forma permanente?');
+    // Se verifica la respuesta del mensaje.
+    if (RESPONSE) {
+        // Se define una constante tipo objeto con los datos del registro seleccionado.
+        const FORM = new FormData();
+        FORM.append('idEmpleado', id);
+        // Petición para eliminar el registro seleccionado.
+        const DATA = await fetchData(EMPLADO_API, 'deleteRow', FORM);
+        // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
+        if (DATA.status) {
+            // Se muestra un mensaje de éxito.
+            await sweetAlert(1, DATA.message, true);
+            // Se carga nuevamente la tabla para visualizar los cambios.
+            fillTable();
+        } else {
+            sweetAlert(2, DATA.error, false);
+        }
+    }
+}
+
+/*
+*   Función asíncrona para preparar el formulario al momento de actualizar un registro.
+*   Parámetros: id (identificador del registro seleccionado).
+*   Retorno: ninguno.
+*/
+const openUpdate = async (id) => {
+    // Se define un objeto con los datos del registro seleccionado.
+    const FORM = new FormData();
+    FORM.append('idEmpleado', id);
+    // Petición para obtener los datos del registro solicitado.
+    const DATA = await fetchData(EMPLADO_API, 'readOne', FORM);
+    // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
+    if (DATA.status) {
+        // Se muestra la caja de diálogo con su título.
+        SAVE_MODAL.show();
+        MODAL_TITLE.textContent = 'Actualizar empleado';
+        // Se prepara el formulario.
+        SAVE_FORM.reset();
+        // Se inicializan los campos con los datos.
+        const ROW = DATA.dataset;
+        ID_EMPLEADO.value = ROW.id_empleado;
+        NOMBRE_EMPLEADO.value = ROW.nombre_empleado;
+        APELLIDO_EMPLEADO.value = ROW.apellido_empleado;
+        DUI_EMPLEADO.value = ROW.DUI_empleado;
+        TELEFONO_EMPLEADO.value = ROW.telefono_personal_empleado;
+        DEPARTAMENTO_EMPLEADO.value = ROW.departamento_empleado;
+        MUNICIPIO_EMPLEADO.value = ROW.municipio_empleado;
+        CORREO_EMPLEADO.value = ROW.correo_empleado;
+        ESTADO_EMPLEADO.checked = ROW.estado_producto;
+        CLAVE_EMPLEADO.innerHTML='';
+    } else {
+        sweetAlert(2, DATA.error, false);
     }
 }

@@ -7,16 +7,27 @@ USE CorderoDB;
 CREATE TABLE
     tb_empleados (
         id_empleado INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-        nombre_empelado VARCHAR(50) NOT NULL,
+        nombre_empleado VARCHAR(50) NOT NULL,
         apellido_empleado VARCHAR(50),
-        DUI_empleado VARCHAR(15) NOT NULL,
-        telefono_empleado varchar(10) NOT NULL,
+        DUI_empleado VARCHAR(15) NOT NULL UNIQUE,
+        telefono_personal_empleado varchar(10) NOT NULL,
         correo_empleado VARCHAR(100) UNIQUE,
         clave_empleado VARCHAR(500),
         departamento_empleado VARCHAR(100),
         municipio_empleado VARCHAR(100),
-        estado_empleado TINYINT (1) not null NULL,
+        estado_empleado TINYINT (1) not NULL,
         imagen_empleado VARCHAR(500)
+    );
+
+CREATE TABLE
+    tb_duplas (
+        id_dupla INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        nombre_dupla VARCHAR(100) NOT NULL,
+        telefono_empresa_dupla varchar(10) NOT NULL,
+        id_empleado1 INT NULL,
+        id_empleado2 INT NULL,
+        FOREIGN KEY (id_empleado1) REFERENCES tb_empleados (id_empleado) ON DELETE CASCADE,
+        FOREIGN KEY (id_empleado2) REFERENCES tb_empleados (id_empleado) ON DELETE CASCADE
     );
 
 CREATE TABLE
@@ -152,7 +163,7 @@ CREATE TABLE
         id_cable INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
         nombre_cable VARCHAR(50),
         descripcion_cable VARCHAR(150),
-        longitud_minima_cable DECIMAL(20,2),
+        longitud_minima_cable DECIMAL(20, 2),
         longitud_cable DECIMAL(10, 2),
         estado_cable TINYINT not NULL,
         fecha_creacion_cable DATE,

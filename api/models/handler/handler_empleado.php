@@ -63,7 +63,7 @@ class EmpleadoHandler
         $value = '%' . Validator::getSearchValue() . '%';
         $sql = 'SELECT
                     `id_empleado`,
-                    `nombre_empelado`,
+                    `nombre_empleado`,
                     `apellido_empleado`,
                     `DUI_empleado`,
                     `telefono_empleado`,
@@ -74,7 +74,7 @@ class EmpleadoHandler
                 FROM
                     `tb_empleados`
                 WHERE
-                    `nombre_empelado` LIKE ? OR 
+                    `nombre_empleado` LIKE ? OR 
                     `apellido_empleado` LIKE ? OR 
                     `DUI_empleado` LIKE ? OR 
                     `telefono_empleado` LIKE ? OR 
@@ -90,34 +90,40 @@ class EmpleadoHandler
     public function createRow()
     {
         $sql = 'INSERT INTO `tb_empleados`(
-                            `nombre_empelado`,
-                            `apellido_empleado`,
-                            `DUI_empleado`,
-                            `telefono_empleado`,
-                            `correo_empleado`,
-                            `departamento_empleado`,
-                            `municipio_empleado`
-            )
-            VALUES(
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?)';
-        $params = array($this->nombre, $this->apellido, $this->dui, $this->telefono, $this->correo, $this->departamento, $this->municipio);
+                    `nombre_empleado`,
+                    `apellido_empleado`,
+                    `DUI_empleado`,
+                    `telefono_personal_empleado`,
+                    `correo_empleado`,
+                    `clave_empleado`,
+                    `departamento_empleado`,
+                    `municipio_empleado`,
+                    `estado_empleado`,
+                    `imagen_empleado`
+                )
+                VALUES(
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,  
+                    ?)';
+        $params = array($this->nombre, $this->apellido, $this->dui, $this->telefono, $this->correo,  $this->clave, $this->departamento, $this->municipio, $this->estado, $this->imagen);
         return Database::executeRow($sql, $params);
     }
 
     public function readAll()
     {
-        $sql = '  SELECT
+        $sql = 'SELECT
                     `id_empleado`,
-                    `nombre_empelado`,
+                    `nombre_empleado`,
                     `apellido_empleado`,
                     `DUI_empleado`,
-                    `telefono_empleado`,
+                    `telefono_personal_empleado`,
                     `correo_empleado`,
                     `departamento_empleado`,
                     `municipio_empleado`,
@@ -125,7 +131,7 @@ class EmpleadoHandler
                     `imagen_empleado`
                 FROM
                     `tb_empleados`';
-        return Database::getRow($sql);
+        return Database::getRows($sql);
     }
 
     public function readFilename()
@@ -138,5 +144,53 @@ class EmpleadoHandler
                     `id_empleado` = ?';
         $params = array($this->id);
         return Database::getRow($sql, $params);
+    }
+
+    public function readOne()
+    {
+        $sql = 'SELECT
+                `id_empleado`,
+                `nombre_empleado`,
+                `apellido_empleado`,
+                `DUI_empleado`,
+                `telefono_personal_empleado`,
+                `correo_empleado`,
+                `departamento_empleado`,
+                `municipio_empleado`,
+                `estado_empleado`,
+                `imagen_empleado`
+            FROM
+                `tb_empleados`
+            WHERE `id_empleado` = ?';
+        $params = array($this->id);
+        return Database::getRow($sql, $params);
+    }
+
+    public function updateRow()
+    {
+        $sql = '  UPDATE
+                `tb_empleados`
+            SET
+                `nombre_empleado` = ?,
+                `apellido_empleado` = ?,
+                `DUI_empleado` = ?,
+                `telefono_personal_empleado` = ?,
+                `correo_empleado` = ?,
+                `departamento_empleado` = ?,
+                `municipio_empleado` = ?,
+                `estado_empleado` = ?,
+                `imagen_empleado` = ?
+            WHERE
+                `id_empleado` = ?';
+        $params = array($this->nombre, $this->apellido, $this->dui, $this->telefono, $this->correo, $this->departamento, $this->municipio, $this->estado, $this->imagen, $this->id);
+        return Database::executeRow($sql, $params);
+    }
+
+    public function deleteRow()
+    {
+        $sql = '  DELETE FROM `tb_empleados` 
+                WHERE `id_empleado` = ?';
+        $params = array($this->id);
+        return Database::executeRow($sql, $params);
     }
 }
