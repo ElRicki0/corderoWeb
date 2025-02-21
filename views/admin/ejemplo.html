@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combobox dependientes</title>
+</head>
+<body>
+
+    <label for="combo1">Selecciona una categoría:</label>
+    <select id="combo1" onchange="actualizarOpciones()">
+        <option value="">-- Selecciona --</option>
+        <option value="frutas">Frutas</option>
+        <option value="verduras">Verduras</option>
+    </select>
+
+    <label for="combo2">Selecciona una opción:</label>
+    <select id="combo2">
+        <option value="">-- Selecciona primero una categoría --</option>
+    </select>
+
+    <script>
+        function actualizarOpciones() {
+            let combo1 = document.getElementById("combo1");
+            let combo2 = document.getElementById("combo2");
+
+            // Limpiar opciones previas
+            combo2.innerHTML = "";
+
+            // Definir las opciones disponibles para cada categoría
+            let opciones = {
+                frutas: ["Manzana", "Banana", "Naranja"],
+                verduras: ["Zanahoria", "Lechuga", "Tomate"]
+            };
+
+            let seleccion = combo1.value;
+
+            if (seleccion && opciones[seleccion]) {
+                opciones[seleccion].forEach(opcion => {
+                    let nuevaOpcion = document.createElement("option");
+                    nuevaOpcion.value = opcion.toLowerCase();
+                    nuevaOpcion.textContent = opcion;
+                    combo2.appendChild(nuevaOpcion);
+                });
+            } else {
+                let defaultOption = document.createElement("option");
+                defaultOption.textContent = "-- Selecciona primero una categoría --";
+                combo2.appendChild(defaultOption);
+            }
+        }
+    </script>
+
+</body>
+</html>

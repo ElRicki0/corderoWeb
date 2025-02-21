@@ -152,10 +152,6 @@ const fillTable = async (form = null) => {
                                 <button class="btn btn-outline-light mb-2" onclick="openState(${row.id_empleado})">
                                     <i class="bi bi-exclamation-octagon"></i> Cambiar Estado
                                 </button>
-                                <button type="button" class="btn btn-outline-light mb-2"
-                                    onclick="openChart(${row.id_empleado})">
-                                    <i class="bi bi-bar-chart-line-fill"></i> Ver Gráfico
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -170,6 +166,42 @@ const fillTable = async (form = null) => {
             </div>
         `
         sweetAlert(4, DATA.error, true);
+    }
+}
+
+function actualizarMunicipios() {
+    let departamento = document.getElementById("departamentoEmpleado").value;
+    let municipioSelect = document.getElementById("municipioEmpleado");
+
+    // Limpiar opciones previas
+    municipioSelect.innerHTML = '<option value="">Seleccione un municipio</option>';
+
+    // Definir los municipios por departamento
+    let municipios = {
+        "Ahuachapan": ["Ahuachapán", "Apaneca", "Atiquizaya", "Concepción de Ataco", "El Refugio"],
+        "Cabañas": ["Sensuntepeque", "Victoria", "Guacotecti", "Dolores", "Cinquera"],
+        "Chalatenango": ["Chalatenango", "La Palma", "San Ignacio", "Nueva Concepción", "Tejutla"],
+        "La Libertad": ["Santa Tecla", "Antiguo Cuscatlán", "Colón", "San Juan Opico", "Quezaltepeque"],
+        "La Paz": ["Zacatecoluca", "San Juan Nonualco", "San Pedro Masahuat", "San Rafael Obrajuelo"],
+        "San Salvador": ["San Salvador", "Soyapango", "Mejicanos", "Apopa", "Ilopango"],
+        "San Vicente": ["San Vicente", "Tecoluca", "Apastepeque", "San Ildefonso", "San Esteban Catarina"],
+        "Santa Ana": ["Santa Ana", "Metapán", "Chalchuapa", "Coatepeque", "Candelaria de la Frontera"],
+        "Sonsonate": ["Sonsonate", "Izalco", "Nahuizalco", "Juayúa", "Sonzacate"],
+        "Usulután": ["Usulután", "Jiquilisco", "Santa María", "Puerto El Triunfo", "Jucuapa"],
+        "Morazán": ["San Francisco Gotera", "Cacaopera", "Joateca", "Perquín", "Sociedad"],
+        "La Unión": ["La Unión", "Conchagua", "El Carmen", "Santa Rosa de Lima", "Intipucá"],
+        "San Miguel": ["San Miguel", "Chinameca", "Quelepa", "Moncagua", "Nuevo Edén de San Juan"],
+        "Tecapa": ["Tecapa 1", "Tecapa 2", "Tecapa 3"] // Agrega municipios si es un departamento válido
+    };
+
+    // Agregar opciones según el departamento seleccionado
+    if (departamento && municipios[departamento]) {
+        municipios[departamento].forEach(municipio => {
+            let opcion = document.createElement("option");
+            opcion.value = municipio;
+            opcion.textContent = municipio;
+            municipioSelect.appendChild(opcion);
+        });
     }
 }
 
@@ -211,7 +243,7 @@ const openCreate = () => {
     MODAL_TITLE.textContent = 'Agregar Empleado';
     // Se prepara el formulario.
     SAVE_FORM.reset();
-    CLAVE_EMPLEADO.innerHTML=`
+    CLAVE_EMPLEADO.innerHTML = `
     <div class="col-lg-6">
         <label for="" class="form-label">Clave</label>
         <input type="password" id="claveEmpleado" name="claveEmpleado"
@@ -283,7 +315,7 @@ const openUpdate = async (id) => {
         MUNICIPIO_EMPLEADO.value = ROW.municipio_empleado;
         CORREO_EMPLEADO.value = ROW.correo_empleado;
         ESTADO_EMPLEADO.checked = ROW.estado_producto;
-        CLAVE_EMPLEADO.innerHTML='';
+        CLAVE_EMPLEADO.innerHTML = '';
     } else {
         sweetAlert(2, DATA.error, false);
     }

@@ -238,7 +238,7 @@
                                     <div class="col-6">
                                         <label class="form-label">Departamento</label>
                                         <select id="departamentoEmpleado" name="departamentoEmpleado"
-                                            class="form-control" autocomplete="off">
+                                            class="form-control" autocomplete="off" onchange="actualizarMunicipios()">
                                             <option value="">Seleccionar Departamento</option>
                                             <option value="Ahuachapan">Ahuachapán</option>
                                             <option value="Cabañas">Cabañas</option>
@@ -258,8 +258,10 @@
                                     </div>
                                     <div class="col-6">
                                         <label class="form-label">Municipio</label>
-                                        <input id="municipioEmpleado" name="municipioEmpleado" class="form-control"
-                                            autocomplete="off" required oninput="formatAlphabetic(this)">
+                                        <select id="municipioEmpleado" name="municipioEmpleado" class="form-control"
+                                            autocomplete="off">
+                                            <option value="">Primero seleccione un departamento</option>
+                                        </select>
                                     </div>
                                     <div class="col-12 ">
                                         <label class="form-label">Correo electrónico</label>
@@ -296,7 +298,7 @@
                                     <button type="submit" class="btn btn-primary ps-4 pe-4">
                                         <i class="bi bi-person-fill-add me-1"></i> Aceptar
                                     </button>
-                                </div>  
+                                </div>
                             </div>
                         </form>
                     </form>
