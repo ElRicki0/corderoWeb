@@ -16,7 +16,8 @@ CREATE TABLE
         departamento_empleado VARCHAR(100),
         municipio_empleado VARCHAR(100),
         estado_empleado TINYINT (1) not NULL,
-        imagen_empleado VARCHAR(500)
+        imagen_empleado VARCHAR(500),
+        fecha_actualizacion_empleado DATETIME
     );
 
 CREATE TABLE

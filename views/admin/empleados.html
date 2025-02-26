@@ -56,9 +56,12 @@
                                 ordenar registros
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 1)">Nombre</a>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 1)">Nombre (A-Z)</a>
                                 </li>
-                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Inactivo</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Nombre descendente
+                                        (Z-A)</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 3)">Actualizado
+                                        recientemente</a></li>
                             </ul>
                         </div>
 
@@ -69,53 +72,49 @@
                                 Filtrar por estado
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 1)">Activo</a>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 4)">Activo</a>
                                 </li>
-                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Correo
-                                        electrónico</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 5)">Inactivo</a></li>
                             </ul>
                         </div>
-                        <!-- Dropdown -->
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        <!-- Dropdown de buscar por departamento -->
+                        <!-- <div class="dropdown" id="buscadorDepartamento">
+                            <button class="btn btn-secondary dropdown-toggle" type="submit" data-bs-toggle="dropdown"
                                 aria-expanded="false">
                                 Filtrar por departamento
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Ahuachapán</a>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Ahuachapán" href="">Ahuachapán</a>
                                 </li>
-                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Santa Ana</a>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Santa Ana" href="">Santa Ana</a>
                                 </li>
-                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Sonsonate</a>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Sonsonate" href="">Sonsonate</a>
                                 </li>
-                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Chalatenango</a>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Chalatenango" href="">Chalatenango</a>
                                 </li>
-                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">La
-                                        Libertad</a>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="La Libertad" href="">La Libertad</a>
                                 </li>
-                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">San
-                                        Salvador</a>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="San Salvador" href="">San Salvador</a>
                                 </li>
-                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Cuscatlán</a>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Cuscatlán" href="">Cuscatlán</a>
                                 </li>
-                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">La Paz</a>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="La Paz" href="">La Paz</a>
                                 </li>
-                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Cabañas</a>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Cabañas" href="">Cabañas</a>
                                 </li>
-                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">San
-                                        Vicente</a>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="San Vicente" href="">San Vicente</a>
                                 </li>
-                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Usulután</a>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Usulután" href="">Usulután</a>
                                 </li>
-                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">San Miguel</a>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="San Miguel" href="">San Miguel</a>
                                 </li>
-                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Morazán</a>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Morazán" href="">Morazán</a>
                                 </li>
-                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">La Unión</a>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="La Unión" href="">La Unión</a>
                                 </li>
 
                             </ul>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </form>
@@ -282,13 +281,15 @@
                                                 oninput="formatPassword(this)">
                                         </div>
                                     </div>
-                                    <h3 class=" mt-5 text-center form-label">Estado
-                                        Empleado</h3>
-                                    <div class="col-lg-12 d-flex justify-content-center">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="estadoEmpleado"
-                                                name="estadoEmpleado" checked>
-                                            <label class="form-check-label" for="estadoEmpleado">Estado</label>
+                                    <div id="estadoContenido">
+                                        <h3 class=" mt-5 text-center form-label">Estado
+                                            Empleado</h3>
+                                        <div class="col-lg-12 d-flex justify-content-center">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="estadoEmpleado"
+                                                    name="estadoEmpleado" checked>
+                                                <label class="form-check-label" for="estadoEmpleado">Estado</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

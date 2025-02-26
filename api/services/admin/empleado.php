@@ -23,6 +23,54 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'No existen empleados registrados';
                 }
                 break;
+            case 'readByNameAsc':
+                if ($result['dataset'] = $empleado->readByName()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen empleados registrados';
+                }
+                break;
+            case 'readByNameDesc':
+                if ($result['dataset'] = $empleado->readByNameDesc()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen empleados registrados';
+                }
+                break;
+            case 'readByModify':
+                if ($result['dataset'] = $empleado->readByModify()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen empleados registrados';
+                }
+                break;
+            case 'readByActive':
+                if ($result['dataset'] = $empleado->readByActive()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen empleados registrados';
+                }
+                break;
+            case 'readByInactive':
+                if ($result['dataset'] = $empleado->readByInactive()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen empleados registrados';
+                }
+                break;
+            case 'readByDepartamento':
+                if ($result['dataset'] = $empleado->readByDepartamento($_POST['departamentoEmpleado'])) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen empleados registrados';
+                }
+                break;
             case 'readOne':
                 if (!$empleado->setId($_POST['idEmpleado'])) {
                     $result['error'] = $empleado->getDataError();
