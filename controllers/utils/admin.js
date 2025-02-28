@@ -61,6 +61,11 @@ const loadTemplate = async () => {
                         <label for="menuCheckbox" onclick="this.parentNode.click();">Empleados</label>
                     </a>
                 </li>
+                <li>
+                    <a href="../../views/admin/duplas.html">
+                        <label for="menuCheckbox" onclick="this.parentNode.click();">Duplas</label>
+                    </a>
+                </li>
                 <li><a></a></li>
                 <li><a></a></li>
                 <li><a></a></li>
@@ -69,11 +74,7 @@ const loadTemplate = async () => {
                 <li><a></a></li>
                 <li><a></a></li>
                 <li><a></a></li>
-                <li><a></a></li>
-                <li><a></a></li>
-                <li><a></a></li>
-                <li><a></a></li>
-                <li><a></a></li>
+                <li><a></a></li>    
                 <li><a></a></li>
                 <li>
                     <a href="#">
@@ -86,9 +87,6 @@ const loadTemplate = async () => {
                         <i class="bi bi-person-circle"></i>
                     </a>
                 </li>
-                <li><a></a></li>
-                <li><a></a></li>
-                <li><a></a></li>
             </ul>
         </div>
     </nav>

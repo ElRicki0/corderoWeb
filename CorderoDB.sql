@@ -28,7 +28,8 @@ CREATE TABLE
         id_empleado1 INT NULL,
         id_empleado2 INT NULL,
         FOREIGN KEY (id_empleado1) REFERENCES tb_empleados (id_empleado) ON DELETE CASCADE,
-        FOREIGN KEY (id_empleado2) REFERENCES tb_empleados (id_empleado) ON DELETE CASCADE
+        FOREIGN KEY (id_empleado2) REFERENCES tb_empleados (id_empleado) ON DELETE CASCADE,
+        actualizacion DATETIME
     );
 
 CREATE TABLE
