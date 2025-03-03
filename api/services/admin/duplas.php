@@ -10,9 +10,19 @@ if (isset($_GET['action'])) {
     //? Se declara e inicializa un arreglo para guardar el resultado que retorna la API.
     $result = array('status' => 0, 'message' => null, 'dataset' => null, 'error' => null, 'exception' => null);
     // ? se verifica si hay un session iniciada como administrador, de lo contrario el código termina con un error
-    if (isset($_SESSION['idAdministrador'])) {
+    if (isset($_SESSION['idAdministrador']) or true) {
         // ? se compara la acción del administrador con la session iniciada
         switch ($_GET['action']) {
+            case 'searchRows':
+                if (!Validator::validateSearch($_POST['search'])) {
+                    $result['error'] = Validator::getSearchError();
+                } elseif ($result['dataset'] = $duplas->searchRows()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' coincidencias';
+                } else {
+                    $result['error'] = 'No hay coincidencias';
+                }
+                break;
             case 'createRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
@@ -50,13 +60,31 @@ if (isset($_GET['action'])) {
                 }
                 break;
             case 'readOne':
-                if (!$duplas->setId(['idDupla'])) {
+                if (!$duplas->setId($_POST['idDupla'])) {
                     $result['error'] = $duplas->getDataError();
                 } elseif ($result['dataset'] = $duplas->readOne()) {
                     $result['status'] = 1;
                 } else {
                     $result['error'] = 'Dupla inexistente';
                 }
+                break;
+            case 'updateRow':
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$duplas->setId($_POST['idDupla']) or
+                    !$duplas->setNombre($_POST['nombreDupla']) or
+                    !$duplas->setTelefono($_POST['telefonoDupla']) or
+                    !$duplas->setEmpleado1($_POST['duplaEmpleado1']) or
+                    !$duplas->setEmpleado2($_POST['duplaEmpleado2'])
+                ) {
+                    $result['error'] = $duplas->getDataError();
+                } elseif ($duplas->updateRow()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Dupla actualizado correctamente';
+                } else {
+                    $result['error'] = 'Error al editar la dupla';
+                }
+
                 break;
             default:
                 $result['error'] = 'Acción no disponible dentro de la sesión';

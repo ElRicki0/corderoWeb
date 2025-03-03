@@ -15,6 +15,16 @@ if (isset($_GET['action'])) {
     if (isset($_SESSION['idAdministrador'])) {
         //? se realiza una acción cuando el administrador tiene la sesión iniciada
         switch ($_GET['action']) {
+            case 'searchRows':
+                if (!Validator::validateSearch($_POST['search'])) {
+                    $result['error'] = Validator::getSearchError();
+                } elseif ($result['dataset'] = $empleado->searchRows()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' coincidencias';
+                } else {
+                    $result['error'] = 'No hay coincidencias';
+                }
+                break;
             case 'readAll':
                 if ($result['dataset'] = $empleado->readAll()) {
                     $result['status'] = 1;
@@ -138,6 +148,8 @@ if (isset($_GET['action'])) {
                     $result['message'] = 'Empleado modificado correctamente';
                     // Se asigna el estado del archivo después de actualizar.
                     $result['fileStatus'] = Validator::changeFile($_FILES['imagenEmpleado'], $empleado::RUTA_IMAGEN, $empleado->getFilename());
+                }else {
+                    $result['error']='Error al editar al empleado';
                 }
                 break;
             case 'updateRowEstado':

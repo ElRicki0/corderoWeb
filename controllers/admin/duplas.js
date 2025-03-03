@@ -12,11 +12,11 @@ const CONTENIDO_EMPLEADO1 = document.getElementById('infoEmpleado1'),
 // ? Constantes del registro de duplas
 const SAVE_FORM = document.getElementById('saveForm'),
     ID_DUPLA = document.getElementById('idDupla'),
-    telefono_DUPLA = document.getElementById('telefonoDupla'),
     NOMBRE_DUPLA = document.getElementById('nombreDupla'),
-    ID_EMPLEADO_1 = document.getElementById('idEmpleado1'),
+    TELEFONO_DUPLA = document.getElementById('telefonoDupla'),
+    // ID_EMPLEADO_1 = document.getElementById('idEmpleado1'),
     DUPLA_EMPLEADO_1 = document.getElementById('duplaEmpleado1'),
-    ID_EMPLEADO_2 = document.getElementById('idEmpleado2'),
+    // ID_EMPLEADO_2 = document.getElementById('idEmpleado2'),
     DUPLA_EMPLEADO_2 = document.getElementById('duplaEmpleado2');
 
 
@@ -33,6 +33,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadTemplate();
     MAIN_TITLE.textContent = 'Administración duplas';
     fillTable();
+});
+
+// ? Método del evento para cuando se envía el formulario de buscar.
+SEARCH_FORM.addEventListener('submit', (event) => {
+    // Se evita recargar la página web después de enviar el formulario.
+    event.preventDefault();
+    // Constante tipo objeto con los datos del formulario.
+    const FORM = new FormData(SEARCH_FORM);
+    // Llamada a la función para llenar la tabla con los resultados de la búsqueda.
+    fillTable(FORM);
 });
 
 // Método del evento para cuando se envía el formulario de guardar.
@@ -92,7 +102,7 @@ const fillTable = async (form = null, buscador) => {
 
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
             TABLE_BODY.innerHTML += `
-                <div class="col-12 card mt-2 text-bg-dark" id="searchForm">
+                <div class="col-12 card mt-2 text-bg-dark" >
     <div class="row justify-content-center align-items-center gx-0">
         <!-- Contenedor de empleados -->
         <div class="col-md-12 col-lg-9 d-flex flex-wrap justify-content-between text-center gap-4">
@@ -212,13 +222,40 @@ const openUpdate = async (id) => {
         SAVE_FORM.reset();
         // Se inicializan los campos con los datos.
         const ROW = DATA.dataset;
-        ID_CABLE.value = ROW.id_cable;
-        NOMBRE_CABLE.value = ROW.nombre_cable;
-        DESCRIPCION_CABLE.value = ROW.descripcion_cable;
-        LONGITUD_CABLE.value = ROW.longitud_cable;
-        LONGITUD_MINIMA_CABLE.value = ROW.longitud_minima_cable;
-        ESTADO_CABLE.value = ROW.estado_cable;
-        fillSelect(CATEGORIA_CABLE_API, 'readAll', 'categoriaCable', parseInt(ROW.id_categoria_cable));
+        (ROW.estado_empleado1) ? icon1 = 'bi bi-pause-circle-fill' : icon1 = 'bi bi-check-circle-fill';
+        (ROW.estado_empleado2) ? icon2 = 'bi bi-pause-circle-fill' : icon2 = 'bi bi-check-circle-fill';
+
+        ID_DUPLA.value = ROW.id_dupla;
+        NOMBRE_DUPLA.value = ROW.nombre_dupla;
+        TELEFONO_DUPLA.value = ROW.telefono_empresa_dupla;
+
+        // ? Se llena el formulario con información relacionada a los empleados
+        CONTENIDO_EMPLEADO1.innerHTML = `
+        <img src="${SERVER_URL}images/empleados/${ROW.imagen_empleado1}" width="200px"
+        height="200px" class="rounded mx-auto d-block" 
+        onerror="this.onerror=null; this.src='../../resources/images/error/404Empleado.png';"
+        style="max-width: 100%; max-height: 100%; object-fit: contain;">
+        <!-- <input type="number" class="d-none" id="idEmpleado1" name="idEmpleado1"> -->
+        <h5 class="text-white mt-2">Nombre empleado</h5>
+        <p class="card-title text-white">${ROW.nombre_empleado1}</p>
+        <p class="card-title text-white">${ROW.apellido_empleado1}</p>
+        <h5 class="text-white">Estado empleado</h5>
+        <p class="card-text text-white">Estado: <i class="${icon1} text-white"></i></p>
+        `;
+        CONTENIDO_EMPLEADO2.innerHTML = `
+        <img src="${SERVER_URL}images/empleados/${ROW.imagen_empleado2}" width="200px"
+        height="200px" class="rounded mx-auto d-block" onerror="this.onerror=null; this.src='../../resources/images/error/404Empleado.png';"
+        style="max-width: 100%; max-height: 100%; object-fit: contain;">
+        <!-- <input type="number" class="d-none" id="idEmpleado2" name="idEmpleado2"> -->
+        <h5 class="text-white mt-2">Nombre empleado</h5>
+        <p class="card-title text-white">${ROW.nombre_empleado2}</p>
+        <p class="card-title text-white">${ROW.apellido_empleado2}</p>
+        <h5 class="text-white">Estado empleado</h5>
+        <p class="card-text text-white">Estado: <i class="${icon2} text-white"></i></p>
+        `;
+
+        fillSelect(EMPLEADO_API, 'readAll', 'duplaEmpleado1', parseInt(ROW.id_empleado1));
+        fillSelect(EMPLEADO_API, 'readAll', 'duplaEmpleado2', parseInt(ROW.id_empleado2));
     } else {
         sweetAlert(2, DATA.error, false);
     }

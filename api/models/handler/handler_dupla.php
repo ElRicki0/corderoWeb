@@ -23,6 +23,46 @@ class DuplasHandler
     }
 
     // ? Métodos para realizar las operaciones SCRUD (search, create, read, update, and delete).
+
+    public function searchRows()
+    {
+        $value = '%' . Validator::getSearchValue() . '%';
+        $sql = '  SELECT
+                        d.id_dupla,
+                        d.nombre_dupla,
+                        d.telefono_empresa_dupla,
+                        d.id_empleado1, 
+                        d.id_empleado2,
+                        e1.nombre_empleado AS nombre_empleado1,
+                        e1.apellido_empleado AS apellido_empleado1,
+                        e1.correo_empleado AS correo_empleado1,
+                        e1.estado_empleado AS estado_empleado1,
+                        e1.imagen_empleado AS imagen_empleado1,
+                        e2.nombre_empleado AS nombre_empleado2,
+                        e2.apellido_empleado AS apellido_empleado2,
+                        e2.correo_empleado AS correo_empleado2,
+                        e2.estado_empleado AS estado_empleado2,
+                        e2.imagen_empleado AS imagen_empleado2,
+                        CASE
+                            WHEN e1.estado_empleado = 0 AND e2.estado_empleado = 0 THEN 0
+                            WHEN e1.estado_empleado <> e2.estado_empleado THEN 0
+                            WHEN e1.estado_empleado = 1 AND e2.estado_empleado = 1 THEN 1
+                            ELSE 0 -- Por defecto, si hay algún caso no cubierto
+                        END AS estado_dupla
+                    FROM
+                        tb_duplas d
+                    LEFT JOIN tb_empleados e1 ON
+                        d.id_empleado1 = e1.id_empleado
+                    LEFT JOIN tb_empleados e2 ON
+                        d.id_empleado2 = e2.id_empleado;  
+                    WHERE
+                        d.nombre_dupla LIKE ? OR
+                        d.telefono_empresa_dupla LIKE ? 
+                ';
+        $params = array($value, $value);
+        return Database::getRows($sql, $params);
+    }
+
     public function createRow()
     {
         $sql = '  INSERT INTO `tb_duplas`(
@@ -44,28 +84,34 @@ class DuplasHandler
 
     public function readAll()
     {
-        $sql = '  SELECT
-                    d.id_dupla,
-                    d.nombre_dupla,
-                    d.telefono_empresa_dupla,
-                    d.id_empleado1, 
-                    d.id_empleado2,
-                    e1.nombre_empleado AS nombre_empleado1,
-                    e1.apellido_empleado AS apellido_empleado1,
-                    e1.correo_empleado AS correo_empleado1,
-                    e1.estado_empleado AS estado_empleado1,
-                    e1.imagen_empleado AS imagen_empleado1,
-                    e2.nombre_empleado AS nombre_empleado2,
-                    e2.apellido_empleado AS apellido_empleado2,
-                    e2.correo_empleado AS correo_empleado2,
-                    e2.estado_empleado AS estado_empleado2,
-                    e2.imagen_empleado AS imagen_empleado2
-                FROM
-                    tb_duplas d
-                INNER JOIN tb_empleados e1 ON
-                    d.id_empleado1 = e1.id_empleado
-                INNER JOIN tb_empleados e2 ON
-                    d.id_empleado2 = e2.id_empleado;              ';
+        $sql = '    SELECT
+                        d.id_dupla,
+                        d.nombre_dupla,
+                        d.telefono_empresa_dupla,
+                        d.id_empleado1, 
+                        d.id_empleado2,
+                        e1.nombre_empleado AS nombre_empleado1,
+                        e1.apellido_empleado AS apellido_empleado1,
+                        e1.correo_empleado AS correo_empleado1,
+                        e1.estado_empleado AS estado_empleado1,
+                        e1.imagen_empleado AS imagen_empleado1,
+                        e2.nombre_empleado AS nombre_empleado2,
+                        e2.apellido_empleado AS apellido_empleado2,
+                        e2.correo_empleado AS correo_empleado2,
+                        e2.estado_empleado AS estado_empleado2,
+                        e2.imagen_empleado AS imagen_empleado2,
+                        CASE
+                            WHEN e1.estado_empleado = 0 AND e2.estado_empleado = 0 THEN 0
+                            WHEN e1.estado_empleado <> e2.estado_empleado THEN 0
+                            WHEN e1.estado_empleado = 1 AND e2.estado_empleado = 1 THEN 1
+                            ELSE 0 -- Por defecto, si hay algún caso no cubierto
+                        END AS estado_dupla
+                    FROM
+                        tb_duplas d
+                    LEFT JOIN tb_empleados e1 ON
+                        d.id_empleado1 = e1.id_empleado
+                    LEFT JOIN tb_empleados e2 ON
+                        d.id_empleado2 = e2.id_empleado;  ';
         return Database::getRows($sql);
     }
 
@@ -95,7 +141,23 @@ class DuplasHandler
                         d.id_empleado2 = e2.id_empleado
                     WHERE d.id_dupla = ?;';
         $params = array($this->id);
-        return Database::getRows($sql, $params);
+        return Database::getRow($sql, $params);
+    }
+
+    public function updateRow()
+    {
+        $sql = 'UPDATE
+                    `tb_duplas`
+                SET
+                    `nombre_dupla` = ?,
+                    `telefono_empresa_dupla` = ?,
+                    `id_empleado1` = ?,
+                    `id_empleado2` = ?,
+                    `actualizacion` = ?
+                WHERE
+                    `id_dupla` = ?';
+        $params = array($this->nombre, $this->telefono, $this->empleado1, $this->empleado2, $this->actualizacion, $this->id);
+        return Database::executeRow($sql, $params);
     }
 
     public function deleteRow()
