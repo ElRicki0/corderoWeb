@@ -84,10 +84,50 @@ if (isset($_GET['action'])) {
                 } else {
                     $result['error'] = 'Error al editar la dupla';
                 }
-
+                break;
+            case 'readByName':
+                if ($result['dataset'] = $duplas->readbyName()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen duplas registrados';
+                }
+                break;
+            case 'readByNameDesc':
+                if ($result['dataset'] = $duplas->readbyNameDesc()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen duplas registrados';
+                }
+                break;
+            case 'readByModify':
+                if ($result['dataset'] = $duplas->readByModify()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen duplas registrados';
+                }
+                break;
+            case 'readByActive':
+                if ($result['dataset'] = $duplas->readByActive()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen duplas registrados';
+                }
+                break;
+            case 'readByInactive':
+                if ($result['dataset'] = $duplas->readByInactive()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen duplas registrados';
+                }
                 break;
             default:
                 $result['error'] = 'Acción no disponible dentro de la sesión';
+                break;
         }
         // Se obtiene la excepción del servidor de base de datos por si ocurrió un problema.
         $result['exception'] = Database::getException();

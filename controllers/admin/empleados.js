@@ -107,7 +107,7 @@ const fillTable = async (form = null) => {
         // Se recorre el conjunto de registros fila por fila.
         DATA.dataset.forEach(row => {
             // Se establece un icono para el estado del empleado.
-            (row.estado_empleado) ? icon = 'bi bi-pause-circle-fill' : icon = 'bi bi-check-circle-fill';
+            (row.estado_empleado) ? icon = 'bi bi-check-circle-fill' : icon = 'bi bi-pause-circle-fill';
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
             TABLE_BODY.innerHTML += `
                 <div class="col-12 card mt-2 text-bg-dark" id="searchForm">
@@ -290,10 +290,10 @@ const readAllTable = async (form = null, buscador) => {
 //                                     onerror="this.onerror=null; this.src='../../resources/images/error/404Empleado.png';"
 //                                     style="max-width: 100%; max-height: 100%; object-fit: contain;">
 //                             </div>
-    
+
 //                             <div class=" col-md-12 col-lg-3 card-body d-flex flex-column align-items-center text-center">
 //                                 <div class="row">
-    
+
 //                                     <div class="col-lg-6 col-md-12 col-sm-12">
 //                                         <h5 class="text-white">Nombre empleado</h5>
 //                                         <p class="card-title text-white">${row.nombre_empleado} ${row.apellido_empleado}</p>
@@ -314,7 +314,7 @@ const readAllTable = async (form = null, buscador) => {
 //                                     </div>
 //                                 </div>
 //                             </div>
-    
+
 //                             <div class="col-sm-12 col-md-12 col-lg-3 text-center my-5">
 //                                 <div class="d-flex flex-column">
 //                                     <button class="btn btn-outline-light mb-2" onclick="openDelete(${row.id_empleado})">
