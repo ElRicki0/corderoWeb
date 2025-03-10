@@ -17,7 +17,13 @@ CREATE TABLE
         municipio_empleado VARCHAR(100),
         estado_empleado TINYINT (1) not NULL,
         imagen_empleado VARCHAR(500),
-        fecha_actualizacion_empleado DATETIME
+        fecha_actualizacion_empleado DATETIME,
+        latitud_inicio_empleado varchar(300),
+        longitud_inicio_empleado varchar(300),
+        hora_inicio_empleado TIME,
+        latitud_final_empleado varchar(300),
+        longitud_final_empleado varchar(300),
+        hora_final_empleado TIME
     );
 
 CREATE TABLE

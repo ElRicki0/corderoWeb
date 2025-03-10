@@ -246,7 +246,7 @@ class EmpleadoHandler
         return Database::getRows($sql);
     }
 
-    public function readByDepartamento( $buscar_departamento)
+    public function readByDepartamento($buscar_departamento)
     {
         $sql = '  SELECT
                     `id_empleado`,
@@ -294,6 +294,27 @@ class EmpleadoHandler
             FROM
                 `tb_empleados`
             WHERE `id_empleado` = ?';
+        $params = array($this->id);
+        return Database::getRow($sql, $params);
+    }
+
+    public function readProfile()
+    {
+        $sql = 'SELECT
+                    `id_empleado`,
+                    `nombre_empleado`,
+                    `apellido_empleado`,
+                    `DUI_empleado`,
+                    `telefono_personal_empleado`,
+                    `correo_empleado`,
+                    `departamento_empleado`,
+                    `municipio_empleado`,
+                    `estado_empleado`,
+                    `imagen_empleado`
+                FROM
+                    `tb_empleados`
+                WHERE
+                    `id_empleado` = ?';
         $params = array($this->id);
         return Database::getRow($sql, $params);
     }

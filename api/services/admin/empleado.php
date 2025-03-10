@@ -15,6 +15,66 @@ if (isset($_GET['action'])) {
     if (isset($_SESSION['idAdministrador'])) {
         //? se realiza una acción cuando el administrador tiene la sesión iniciada
         switch ($_GET['action']) {
+            case 'readOne':
+                if (!$empleado->setId($_POST['idEmpleado'])) {
+                    $result['error'] = $empleado->getDataError();
+                } elseif ($result['dataset'] = $empleado->readOne()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'Empleado inexistente';
+                }
+                break;
+            case 'deleteRow':
+                if (
+                    !$empleado->setId($_POST['idEmpleado']) or
+                    !$empleado->setFilename()
+                ) {
+                    $result['error'] = $empleado->getDataError();
+                } elseif ($empleado->deleteRow()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Empleado eliminado correctamente';
+                } else {
+                    $result['error'] = 'Ocurrió un error al eliminar el empleado';
+                }
+                break;
+            case 'updateRow':
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$empleado->setId($_POST['idEmpleado']) or
+                    !$empleado->setFilename() or
+                    !$empleado->setNombre($_POST['nombreEmpleado']) or
+                    !$empleado->setApellido($_POST['apellidoEmpleado']) or
+                    !$empleado->setDUI($_POST['duiEmpleado']) or
+                    !$empleado->setTelefono($_POST['telefonoEmpleado']) or
+                    !$empleado->setCorreo($_POST['correoEmpleado']) or
+                    !$empleado->setDepartamento($_POST['departamentoEmpleado']) or
+                    !$empleado->setMunicipio($_POST['municipioEmpleado']) or
+                    !$empleado->setEstado(isset($_POST['estadoEmpleado'])) or
+                    !$empleado->setImagen($_FILES['imagenEmpleado'], $empleado->getFilename())
+                ) {
+                    $result['error'] = $empleado->getDataError();
+                } elseif ($empleado->updateRow()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Empleado modificado correctamente';
+                    // Se asigna el estado del archivo después de actualizar.
+                    $result['fileStatus'] = Validator::changeFile($_FILES['imagenEmpleado'], $empleado::RUTA_IMAGEN, $empleado->getFilename());
+                } else {
+                    $result['error'] = 'Error al editar al empleado';
+                }
+                break;
+            case 'updateRowEstado':
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$empleado->setId($_POST['idEmpleado'])
+                ) {
+                    $result['error'] = $empleado->getDataError();
+                } elseif ($empleado->updateRowEstado()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Estado modificado correctamente';
+                } else {
+                    $result['error'] = 'Ocurrió un problema al modificar el estado';
+                }
+                break;
             case 'searchRows':
                 if (!Validator::validateSearch($_POST['search'])) {
                     $result['error'] = Validator::getSearchError();
@@ -81,15 +141,6 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'No existen empleados registrados';
                 }
                 break;
-            case 'readOne':
-                if (!$empleado->setId($_POST['idEmpleado'])) {
-                    $result['error'] = $empleado->getDataError();
-                } elseif ($result['dataset'] = $empleado->readOne()) {
-                    $result['status'] = 1;
-                } else {
-                    $result['error'] = 'Empleado inexistente';
-                }
-                break;
             case 'createRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
@@ -114,62 +165,12 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'Ocurrió un problema al registrar el administrador';
                 }
                 break;
-            case 'deleteRow':
-                if (
-                    !$empleado->setId($_POST['idEmpleado']) or
-                    !$empleado->setFilename()
-                ) {
-                    $result['error'] = $empleado->getDataError();
-                } elseif ($empleado->deleteRow()) {
-                    $result['status'] = 1;
-                    $result['message'] = 'Empleado eliminado correctamente';
-                } else {
-                    $result['error'] = 'Ocurrió un error al eliminar el empleado';
-                }
-                break;
-            case 'updateRow':
-                $_POST = Validator::validateForm($_POST);
-                if (
-                    !$empleado->setId($_POST['idEmpleado']) or
-                    !$empleado->setFilename() or
-                    !$empleado->setNombre($_POST['nombreEmpleado']) or
-                    !$empleado->setApellido($_POST['apellidoEmpleado']) or
-                    !$empleado->setDUI($_POST['duiEmpleado']) or
-                    !$empleado->setTelefono($_POST['telefonoEmpleado']) or
-                    !$empleado->setCorreo($_POST['correoEmpleado']) or
-                    !$empleado->setDepartamento($_POST['departamentoEmpleado']) or
-                    !$empleado->setMunicipio($_POST['municipioEmpleado']) or
-                    !$empleado->setEstado(isset($_POST['estadoEmpleado'])) or
-                    !$empleado->setImagen($_FILES['imagenEmpleado'], $empleado->getFilename())
-                ) {
-                    $result['error'] = $empleado->getDataError();
-                } elseif ($empleado->updateRow()) {
-                    $result['status'] = 1;
-                    $result['message'] = 'Empleado modificado correctamente';
-                    // Se asigna el estado del archivo después de actualizar.
-                    $result['fileStatus'] = Validator::changeFile($_FILES['imagenEmpleado'], $empleado::RUTA_IMAGEN, $empleado->getFilename());
-                }else {
-                    $result['error']='Error al editar al empleado';
-                }
-                break;
-            case 'updateRowEstado':
-                $_POST = Validator::validateForm($_POST);
-                if (
-                    !$empleado->setId($_POST['idEmpleado'])
-                ) {
-                    $result['error'] = $empleado->getDataError();
-                } elseif ($empleado->updateRowEstado()) {
-                    $result['status'] = 1;
-                    $result['message'] = 'Estado modificado correctamente';
-                } else {
-                    $result['error'] = 'Ocurrió un problema al modificar el estado';
-                }
-                break;
-                break;
+
             default:
                 $result['error'] = 'Acción no disponible dentro de la sesión';
                 break;
         }
+
         // Se obtiene la excepción del servidor de base de datos por si ocurrió un problema.
         $result['exception'] = Database::getException();
         // Se indica el tipo de contenido a mostrar y su respectivo conjunto de caracteres.
