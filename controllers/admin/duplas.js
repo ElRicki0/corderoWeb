@@ -97,6 +97,7 @@ const fillTable = async (form = null) => {
         // Se recorre el conjunto de registros (dataset) fila por fila a través del objeto row.
         DATA.dataset.forEach(row => {
             // Se establece un icono para el estado del empleado.
+            (row.tipo_dupla) ? type = 'Permanente' : type = 'Temporal';
             (row.estado_dupla) ? icon = 'bi bi-check-circle-fill' : icon = 'bi bi-pause-circle-fill';
             (row.estado_empleado1) ? icon1 = 'bi bi-check-circle-fill' : icon1 = 'bi bi-pause-circle-fill';
             (row.estado_empleado2) ? icon2 = 'bi bi-check-circle-fill' : icon2 = 'bi bi-pause-circle-fill';
@@ -111,9 +112,8 @@ const fillTable = async (form = null) => {
             <div class="container">
                 <h1>Nombre Dupla: ${row.nombre_dupla}</h1>
                 <h3>Teléfono Dupla: ${row.telefono_empresa_dupla}</h3>
-                <h3 class="card-text text-white">Estado: <i class="${icon} text-white h1"></i></h3>
+                <h3 class="card-text text-white">Tipo: ${type}</h3>
             </div>
-
             <div class="row w-100 mb-3">
                 <!-- Empleado 1 -->
                 <div class="col-lg-6 col-md-12 col-sm-12 text-center">
@@ -162,6 +162,7 @@ const fillTable = async (form = null) => {
             <button class="btn btn-outline-light mb-2 w-75" onclick="openState(${row.id_dupla})">
                 <i class="bi bi-exclamation-octagon"></i> Cambiar Estado
             </button>
+            <h3 class="card-text text-white">Estado: <i class="${icon} text-white h1"></i></h3>
         </div>
     </div>
 </div>
@@ -203,6 +204,12 @@ const readAllTable = async (form = null, buscador) => {
         case 5:
             action = 'readByInactive';
             break;
+        case 6:
+            action = 'readByTypePermanent';
+            break;
+        case 7:
+            action = 'readByTypeTemporal';
+            break;
         default:
             sweetAlert(4, 'Error al filtrar información', true);
             action = 'readAll';
@@ -215,6 +222,7 @@ const readAllTable = async (form = null, buscador) => {
         // Se recorre el conjunto de registros (dataset) fila por fila a través del objeto row.
         DATA.dataset.forEach(row => {
             // Se establece un icono para el estado del empleado.
+            (row.tipo_dupla) ? type = 'Permanente' : type = 'Temporal';
             (row.estado_dupla) ? icon = 'bi bi-check-circle-fill' : icon = 'bi bi-pause-circle-fill';
             (row.estado_empleado1) ? icon1 = 'bi bi-check-circle-fill' : icon1 = 'bi bi-pause-circle-fill';
             (row.estado_empleado2) ? icon2 = 'bi bi-check-circle-fill' : icon2 = 'bi bi-pause-circle-fill';
@@ -229,7 +237,7 @@ const readAllTable = async (form = null, buscador) => {
             <div class="container">
                 <h1>Nombre Dupla: ${row.nombre_dupla}</h1>
                 <h3>Teléfono Dupla: ${row.telefono_empresa_dupla}</h3>
-                <h3 class="card-text text-white">Estado: <i class="${icon} text-white h1"></i></h3>
+                <h3 class="card-text text-white">Tipo: ${type}</h3>
             </div>
 
             <div class="row w-100 mb-3">
@@ -280,6 +288,7 @@ const readAllTable = async (form = null, buscador) => {
             <button class="btn btn-outline-light mb-2 w-75" onclick="openState(${row.id_dupla})">
                 <i class="bi bi-exclamation-octagon"></i> Cambiar Estado
             </button>
+            <h3 class="card-text text-white">Estado: <i class="${icon} text-white h1"></i></h3>
         </div>
     </div>
 </div>

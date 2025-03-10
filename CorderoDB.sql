@@ -31,8 +31,9 @@ CREATE TABLE
         id_dupla INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
         nombre_dupla VARCHAR(100) NOT NULL,
         telefono_empresa_dupla varchar(10) NOT NULL,
-        id_empleado1 INT NULL UNIQUE,
-        id_empleado2 INT NULL UNIQUE,
+        tipo_dupla TINYINT (1) not NULL,
+        id_empleado1 INT NULL,
+        id_empleado2 INT NULL,
         FOREIGN KEY (id_empleado1) REFERENCES tb_empleados (id_empleado) ON DELETE CASCADE,
         FOREIGN KEY (id_empleado2) REFERENCES tb_empleados (id_empleado) ON DELETE CASCADE,
         actualizacion DATETIME

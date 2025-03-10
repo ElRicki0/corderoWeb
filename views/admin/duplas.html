@@ -74,6 +74,19 @@
                                 <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 5)">Inactivo</a></li>
                             </ul>
                         </div>
+
+                        <!-- filtro por tipo -->
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Filtrar por tipo
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 6)">Permanente</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 7)">Temporal</a>
+                                </li>
+                            </ul>
+                        </div>
                         <!-- Dropdown de buscar por departamento -->
                         <!-- <div class="dropdown" id="buscadorDepartamento">
                             <button class="btn btn-secondary dropdown-toggle" type="submit" data-bs-toggle="dropdown"
@@ -137,15 +150,38 @@
                         <form id="saveForm">
                             <!-- Campo oculto para asignar el id del registro al momento de modificar -->
                             <input type="number" class="d-none" id="idDupla" name="idDupla">
-                            <div class="row d-flex justify-content-center align-items-center mb-3">
-                                <div class="col-4">
-                                    <label for="nombreDupla" class="form-label">Nombre de dupla</label>
-                                    <input type="text" class="form-control" id="nombreDupla" name="nombreDupla"
-                                        placeholder="Ingrese un nombre..." required>
-                                    <label for="telefonoDupla" class="form-label">Teléfono de dupla</label>
-                                    <input type="text" class="form-control" id="telefonoDupla" name="telefonoDupla"
-                                        placeholder="Ingrese un numero valido..." oninput="formatPhoneNumber(this)"
-                                        required>
+                            <div class="">
+                                <div class="col-12">
+                                    <h3>Datos generales</h3>
+                                    <div class="row d-flex justify-content-center align-items-center mb-3">
+                                        <div class="col-4">
+                                            <label for="nombreDupla" class="form-label">Nombre de dupla</label>
+                                            <input type="text" class=" form-control" id="nombreDupla" name="nombreDupla"
+                                                placeholder="Ingrese un nombre..." required>
+                                        </div>
+                                        <h3 class=""></h3>
+                                        <div class="col-4">
+                                            <label for="telefonoDupla" class="form-label">Teléfono de dupla</label>
+                                            <input type="text" class=" form-control" id="telefonoDupla"
+                                                name="telefonoDupla" placeholder="Ingrese un numero valido..."
+                                                oninput="formatPhoneNumber(this)" required>
+                                        </div>
+                                    </div>
+                                    <h3>Tipo dupla</h3>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="tipoDupla" id="tipoDupla1"
+                                            value="1">
+                                        <label class="form-check-label h4" for="tipoDupla1">
+                                            Temporal
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="tipoDupla" id="tipoDupla2"
+                                            checked value="0">
+                                        <label class="form-check-label h4" for="tipoDupla2">
+                                            Permanente
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row d-flex justify-content-center align-items-center">

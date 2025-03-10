@@ -50,6 +50,17 @@ class DuplaData extends DuplasHandler
         }
     }
 
+    public function setTipo($value)
+    {
+        if (Validator::validateBoolean($value)) {
+            $this->tipo = $value;
+            return true;
+        } else {
+            $this->data_error = 'tipo dupla incorrecto';
+            return false;
+        }
+    }
+
     public function setEmpleado1($value)
     {
         if (Validator::validateNaturalNumber($value)) {
