@@ -13,17 +13,24 @@ CREATE TABLE
         telefono_personal_empleado varchar(10) NOT NULL,
         correo_empleado VARCHAR(100) UNIQUE,
         clave_empleado VARCHAR(500),
-        departamento_empleado VARCHAR(100),
-        municipio_empleado VARCHAR(100),
-        estado_empleado TINYINT (1) not NULL,
         imagen_empleado VARCHAR(500),
-        fecha_actualizacion_empleado DATETIME,
-        latitud_inicio_empleado varchar(300),
-        longitud_inicio_empleado varchar(300),
-        hora_inicio_empleado TIME,
-        latitud_final_empleado varchar(300),
-        longitud_final_empleado varchar(300),
-        hora_final_empleado TIME
+        fecha_actualizacion_empleado DATETIME
+    );
+    CREATE TABLE   
+    tb_trabajo_empleado (
+        id_trabajo_empleado INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        latitud_inicio_trabajo_empleado varchar(300),
+        longitud_inicio_trabajo_empleado varchar(300),
+        hora_inicio_trabajo_empleado TIME,
+        latitud_final_trabajo_empleado varchar(300),
+        longitud_final_trabajo_empleado varchar(300),
+        hora_final_trabajo_empleado TIME,
+        estado_trabajo_empleado TINYINT (1) not NULL,
+        departamento_trabajo_empleado VARCHAR(100),
+        municipio_trabajo_empleado VARCHAR(100),
+        fecha_actualizacion_trabajo_empleado DATETIME,
+        id_empleado INT,
+        FOREIGN KEY (id_empleado) REFERENCES tb_empleados (id_empleado) ON DELETE CASCADE
     );
 
 CREATE TABLE
@@ -47,9 +54,7 @@ CREATE TABLE
         categoria_herramienta VARCHAR(10),
         categoria_electrica VARCHAR(10),
         estado_herramienta TINYINT (1) NULL NULL,
-        imagen_herramienta VARCHAR(300),
-        id_empleado INT,
-        FOREIGN KEY (id_empleado) REFERENCES tb_empleados (id_empleado) ON DELETE CASCADE
+        imagen_herramienta VARCHAR(300)
     );
 
 CREATE TABLE
@@ -200,14 +205,4 @@ CREATE TABLE
         FOREIGN KEY (id_categoria_escalera) REFERENCES tb_categorias_escaleras (id_categoria_escalera) ON DELETE CASCADE,
         id_administrador INT,
         FOREIGN KEY (id_administrador) REFERENCES tb_administradores (id_administrador) ON DELETE CASCADE
-    );
-
-CREATE TABLE
-    tb_jornada_empleado (
-        id_jornada_empleado INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-        inicio_jornada TIME,
-        fin_jornada TIME,
-        fecha_jornada DATE,
-        id_empleado INT,
-        FOREIGN KEY (id_empleado) REFERENCES tb_empleados (id_empleado) ON DELETE CASCADE
     );

@@ -14,11 +14,11 @@ class EmpleadoHandler
     protected $telefono = null;
     protected $correo = null;
     protected $clave = null;
-    protected $departamento = null;
-    protected $municipio = null;
-    protected $estado = null;
-    protected $imagen = null;
     protected $actualizacion = null;
+    protected $imagen = null;
+    // protected $departamento = null;
+    // protected $municipio = null;
+    // protected $estado = null;
 
     public function __construct()
     {
@@ -107,25 +107,19 @@ class EmpleadoHandler
                     `telefono_personal_empleado`,
                     `correo_empleado`,
                     `clave_empleado`,
-                    `departamento_empleado`,
-                    `municipio_empleado`,
-                    `estado_empleado`,
                     `imagen_empleado`,
                     `fecha_actualizacion_empleado`
                 )
                 VALUES(
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,  
-                    ?,
-                    ?)';
-        $params = array($this->nombre, $this->apellido, $this->dui, $this->telefono, $this->correo,  $this->clave, $this->departamento, $this->municipio, $this->estado, $this->imagen, $this->actualizacion);
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?)';
+        $params = array($this->nombre, $this->apellido, $this->dui, $this->telefono, $this->correo,  $this->clave, $this->imagen, $this->actualizacion);
         return Database::executeRow($sql, $params);
     }
 
@@ -138,10 +132,8 @@ class EmpleadoHandler
                     `DUI_empleado`,
                     `telefono_personal_empleado`,
                     `correo_empleado`,
-                    `departamento_empleado`,
-                    `municipio_empleado`,
-                    `estado_empleado`,
-                    `imagen_empleado`
+                    `imagen_empleado`,
+                    `fecha_actualizacion_empleado`
                 FROM
                     `tb_empleados`';
         return Database::getRows($sql);
@@ -149,17 +141,15 @@ class EmpleadoHandler
 
     public function readByName()
     {
-        $sql = '  SELECT
+        $sql = 'SELECT
                     `id_empleado`,
                     `nombre_empleado`,
                     `apellido_empleado`,
                     `DUI_empleado`,
                     `telefono_personal_empleado`,
                     `correo_empleado`,
-                    `departamento_empleado`,
-                    `municipio_empleado`,
-                    `estado_empleado`,
-                    `imagen_empleado`
+                    `imagen_empleado`,
+                    `fecha_actualizacion_empleado`
                 FROM
                     `tb_empleados`
                 ORDER BY
@@ -169,17 +159,15 @@ class EmpleadoHandler
 
     public function readByNameDesc()
     {
-        $sql = '  SELECT
+        $sql = 'SELECT
                     `id_empleado`,
                     `nombre_empleado`,
                     `apellido_empleado`,
                     `DUI_empleado`,
                     `telefono_personal_empleado`,
                     `correo_empleado`,
-                    `departamento_empleado`,
-                    `municipio_empleado`,
-                    `estado_empleado`,
-                    `imagen_empleado`
+                    `imagen_empleado`,
+                    `fecha_actualizacion_empleado`
                 FROM
                     `tb_empleados`
                 ORDER BY
@@ -189,16 +177,13 @@ class EmpleadoHandler
 
     public function readByModify()
     {
-        $sql = '  SELECT
+        $sql = 'SELECT
                     `id_empleado`,
                     `nombre_empleado`,
                     `apellido_empleado`,
                     `DUI_empleado`,
                     `telefono_personal_empleado`,
                     `correo_empleado`,
-                    `departamento_empleado`,
-                    `municipio_empleado`,
-                    `estado_empleado`,
                     `imagen_empleado`,
                     `fecha_actualizacion_empleado`
                 FROM
@@ -206,64 +191,6 @@ class EmpleadoHandler
                 ORDER BY
                     `fecha_actualizacion_empleado` DESC';
         return Database::getRows($sql);
-    }
-
-    public function readByActive()
-    {
-        $sql = 'SELECT
-                        `id_empleado`,
-                        `nombre_empleado`,
-                        `apellido_empleado`,
-                        `DUI_empleado`,
-                        `telefono_personal_empleado`,
-                        `correo_empleado`,
-                        `departamento_empleado`,
-                        `municipio_empleado`,
-                        `estado_empleado`,
-                        `imagen_empleado`
-                    FROM
-                        `tb_empleados`
-                    WHERE `estado_empleado` = 1';
-        return Database::getRows($sql);
-    }
-
-    public function readByInactive()
-    {
-        $sql = 'SELECT
-                        `id_empleado`,
-                        `nombre_empleado`,
-                        `apellido_empleado`,
-                        `DUI_empleado`,
-                        `telefono_personal_empleado`,
-                        `correo_empleado`,
-                        `departamento_empleado`,
-                        `municipio_empleado`,
-                        `estado_empleado`,
-                        `imagen_empleado`
-                    FROM
-                        `tb_empleados`
-                    WHERE `estado_empleado` = 0';
-        return Database::getRows($sql);
-    }
-
-    public function readByDepartamento($buscar_departamento)
-    {
-        $sql = '  SELECT
-                    `id_empleado`,
-                    `nombre_empleado`,
-                    `apellido_empleado`,
-                    `DUI_empleado`,
-                    `telefono_personal_empleado`,
-                    `correo_empleado`,
-                    `departamento_empleado`,
-                    `municipio_empleado`,
-                    `estado_empleado`,
-                    `imagen_empleado`
-                FROM
-                    `tb_empleados`
-                WHERE `departamento_empleado` = ?';
-        $params = array($buscar_departamento);
-        return Database::getRows($sql, $params);
     }
 
     public function readFilename()
@@ -281,19 +208,17 @@ class EmpleadoHandler
     public function readOne()
     {
         $sql = 'SELECT
-                `id_empleado`,
-                `nombre_empleado`,
-                `apellido_empleado`,
-                `DUI_empleado`,
-                `telefono_personal_empleado`,
-                `correo_empleado`,
-                `departamento_empleado`,
-                `municipio_empleado`,
-                `estado_empleado`,
-                `imagen_empleado`
-            FROM
-                `tb_empleados`
-            WHERE `id_empleado` = ?';
+                    `id_empleado`,
+                    `nombre_empleado`,
+                    `apellido_empleado`,
+                    `DUI_empleado`,
+                    `telefono_personal_empleado`,
+                    `correo_empleado`,
+                    `imagen_empleado`,
+                    `fecha_actualizacion_empleado`
+                FROM
+                    `tb_empleados`
+                WHERE `id_empleado` = ?';
         $params = array($this->id);
         return Database::getRow($sql, $params);
     }
@@ -321,33 +246,19 @@ class EmpleadoHandler
 
     public function updateRow()
     {
-        $sql = '  UPDATE
-                `tb_empleados`
-            SET
-                `nombre_empleado` = ?,
-                `apellido_empleado` = ?,
-                `DUI_empleado` = ?,
-                `telefono_personal_empleado` = ?,
-                `correo_empleado` = ?,
-                `departamento_empleado` = ?,
-                `municipio_empleado` = ?,
-                `estado_empleado` = ?,
-                `imagen_empleado` = ?,
-                `fecha_actualizacion_empleado` = ?
-            WHERE
-                `id_empleado` = ?';
-        $params = array($this->nombre, $this->apellido, $this->dui, $this->telefono, $this->correo, $this->departamento, $this->municipio, $this->estado, $this->imagen, $this->actualizacion, $this->id);
-        return Database::executeRow($sql, $params);
-    }
-
-    public function updateRowEstado()
-    {
-        $sql = 'UPDATE tb_empleados
-                SET estado_empleado = CASE 
-                WHEN estado_empleado = 0 THEN 1 
-                ELSE 0 END
-                WHERE id_empleado = ?';
-        $params = array($this->id);
+        $sql = 'UPDATE
+                    `tb_empleados`
+                SET
+                    `nombre_empleado` = ?,
+                    `apellido_empleado` = ?,
+                    `DUI_empleado` = ?,
+                    `telefono_personal_empleado` = ?,
+                    `correo_empleado` = ?,
+                    `imagen_empleado` = ?,
+                    `fecha_actualizacion_empleado` = ?
+                WHERE
+                    `id_empleado` = ?';
+        $params = array($this->nombre, $this->apellido, $this->dui, $this->telefono, $this->correo, $this->imagen, $this->actualizacion, $this->id);
         return Database::executeRow($sql, $params);
     }
 

@@ -15,6 +15,27 @@ if (isset($_GET['action'])) {
     if (isset($_SESSION['idAdministrador'])) {
         //? se realiza una acción cuando el administrador tiene la sesión iniciada
         switch ($_GET['action']) {
+            case 'createRow':
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$empleado->setNombre($_POST['nombreEmpleado']) or
+                    !$empleado->setApellido($_POST['apellidoEmpleado']) or
+                    !$empleado->setDUI($_POST['duiEmpleado']) or
+                    !$empleado->setTelefono($_POST['telefonoEmpleado']) or
+                    !$empleado->setCorreo($_POST['correoEmpleado']) or
+                    !$empleado->setClave($_POST['claveEmpleado']) or
+                    !$empleado->setImagen($_FILES['imagenEmpleado'])
+                ) {
+                    $result['error'] = $empleado->getDataError();
+                } elseif ($_POST['claveEmpleado'] != $_POST['claveEmpleado2']) {
+                    $result['error'] = 'Claves no validas';
+                } elseif ($empleado->createRow()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Empleado registrado correctamente';
+                } else {
+                    $result['error'] = 'Ocurrió un problema al registrar el administrador';
+                }
+                break;
             case 'readOne':
                 if (!$empleado->setId($_POST['idEmpleado'])) {
                     $result['error'] = $empleado->getDataError();
@@ -47,9 +68,6 @@ if (isset($_GET['action'])) {
                     !$empleado->setDUI($_POST['duiEmpleado']) or
                     !$empleado->setTelefono($_POST['telefonoEmpleado']) or
                     !$empleado->setCorreo($_POST['correoEmpleado']) or
-                    !$empleado->setDepartamento($_POST['departamentoEmpleado']) or
-                    !$empleado->setMunicipio($_POST['municipioEmpleado']) or
-                    !$empleado->setEstado(isset($_POST['estadoEmpleado'])) or
                     !$empleado->setImagen($_FILES['imagenEmpleado'], $empleado->getFilename())
                 ) {
                     $result['error'] = $empleado->getDataError();
@@ -62,7 +80,7 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'Error al editar al empleado';
                 }
                 break;
-            case 'updateRowEstado':
+                // case 'updateRowEstado':
                 $_POST = Validator::validateForm($_POST);
                 if (
                     !$empleado->setId($_POST['idEmpleado'])
@@ -110,61 +128,14 @@ if (isset($_GET['action'])) {
                 }
                 break;
             case 'readByModify':
-                if ($result['dataset'] = $empleado->readByModify()) {
-                    $result['status'] = 1;
-                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
-                } else {
-                    $result['error'] = 'No existen empleados registrados';
-                }
-                break;
-            case 'readByActive':
-                if ($result['dataset'] = $empleado->readByActive()) {
-                    $result['status'] = 1;
-                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
-                } else {
-                    $result['error'] = 'No existen empleados registrados';
-                }
-                break;
-            case 'readByInactive':
-                if ($result['dataset'] = $empleado->readByInactive()) {
-                    $result['status'] = 1;
-                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
-                } else {
-                    $result['error'] = 'No existen empleados registrados';
-                }
-                break;
-            case 'readByDepartamento':
-                if ($result['dataset'] = $empleado->readByDepartamento($_POST['departamentoEmpleado'])) {
-                    $result['status'] = 1;
-                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
-                } else {
-                    $result['error'] = 'No existen empleados registrados';
-                }
-                break;
-            case 'createRow':
-                $_POST = Validator::validateForm($_POST);
-                if (
-                    !$empleado->setNombre($_POST['nombreEmpleado']) or
-                    !$empleado->setApellido($_POST['apellidoEmpleado']) or
-                    !$empleado->setDUI($_POST['duiEmpleado']) or
-                    !$empleado->setTelefono($_POST['telefonoEmpleado']) or
-                    !$empleado->setCorreo($_POST['correoEmpleado']) or
-                    !$empleado->setClave($_POST['claveEmpleado']) or
-                    !$empleado->setDepartamento($_POST['departamentoEmpleado']) or
-                    !$empleado->setMunicipio($_POST['municipioEmpleado']) or
-                    !$empleado->setEstado(isset($_POST['estadoEmpleado'])) or
-                    !$empleado->setImagen($_FILES['imagenEmpleado'])
-                ) {
-                    $result['error'] = $empleado->getDataError();
-                } elseif ($_POST['claveEmpleado'] != $_POST['claveEmpleado2']) {
-                    $result['error'] = 'Claves no validas';
-                } elseif ($empleado->createRow()) {
-                    $result['status'] = 1;
-                    $result['message'] = 'Empleado registrado correctamente';
-                } else {
-                    $result['error'] = 'Ocurrió un problema al registrar el administrador';
-                }
-                break;
+            //     if ($result['dataset'] = $empleado->readByDepartamento($_POST['departamentoEmpleado'])) {
+            //         $result['status'] = 1;
+            //         $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+            //     } else {
+            //         $result['error'] = 'No existen empleados registrados';
+            //     }
+            //     break;
+
 
             default:
                 $result['error'] = 'Acción no disponible dentro de la sesión';

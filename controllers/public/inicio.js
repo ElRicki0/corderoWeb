@@ -1,6 +1,7 @@
 // método que se ejecuta al cargar la pagina web
 document.addEventListener('DOMContentLoaded', async () => {
 loadTemplate();
+MAIN_TITLE.textContent = 'Inicio empleados';
 });
 
     

@@ -3,17 +3,17 @@ const EMPLADO_API = 'services/admin/empleado.php';
 
 // ? Constantes del registro empleado
 const SAVE_FORM = document.getElementById('saveForm'),
+    ID_EMPLEADO = document.getElementById('idEmpleado'),
     NOMBRE_EMPLEADO = document.getElementById('nombreEmpleado'),
     APELLIDO_EMPLEADO = document.getElementById('apellidoEmpleado'),
     DUI_EMPLEADO = document.getElementById('duiEmpleado'),
     TELEFONO_EMPLEADO = document.getElementById('telefonoEmpleado'),
-    DEPARTAMENTO_EMPLEADO = document.getElementById('departamentoEmpleado'),
-    MUNICIPIO_EMPLEADO = document.getElementById('municipioEmpleado'),
+    // DEPARTAMENTO_EMPLEADO = document.getElementById('departamentoEmpleado'),
+    // MUNICIPIO_EMPLEADO = document.getElementById('municipioEmpleado'),
     CORREO_EMPLEADO = document.getElementById('correoEmpleado'),
-    CLAVE_EMPLEADO = document.getElementById('clavesEmpleado'),
-    ESTADO_EMPLEADO = document.getElementById('estadoEmpleado'),
-    ESTADO_CONTENIDO = document.getElementById('estadoContenido'),
-    ID_EMPLEADO = document.getElementById('idEmpleado');
+    CLAVE_EMPLEADO = document.getElementById('clavesEmpleado');
+// ESTADO_EMPLEADO = document.getElementById('estadoEmpleado'),
+// ESTADO_CONTENIDO = document.getElementById('estadoContenido'),
 
 
 // Constantes para establecer los elementos del componente Modal.
@@ -133,10 +133,6 @@ const fillTable = async (form = null) => {
                                 <div class="col-lg-6 col-md-12 col-sm-12">
                                     <h5 class="text-white">Teléfono empleado</h5>
                                     <p class="card-title text-white">${row.telefono_personal_empleado}
-                                    <h5 class="text-white">Departamento Empleado</h5>
-                                    <p class="card-text text-white">${row.departamento_empleado}</p>
-                                    <h5 class="text-white">Municipio Empleado</h5>
-                                    <p class="card-text text-white">${row.municipio_empleado}</p>
                                     <h5 class="text-white">Estado empleado</h5>
                                     <p class="card-text text-white">Estado: <i class="${icon} text-white h1"></i></p>
                                 </div>
@@ -228,12 +224,6 @@ const readAllTable = async (form = null, buscador) => {
                                     <div class="col-lg-6 col-md-12 col-sm-12">
                                         <h5 class="text-white">Teléfono empleado</h5>
                                         <p class="card-title text-white">${row.telefono_personal_empleado}
-                                        <h5 class="text-white">Departamento Empleado</h5>
-                                        <p class="card-text text-white">${row.departamento_empleado}</p>
-                                        <h5 class="text-white">Municipio Empleado</h5>
-                                        <p class="card-text text-white">${row.municipio_empleado}</p>
-                                        <h5 class="text-white">Estado empleado</h5>
-                                        <p class="card-text text-white">Estado: <i class="${icon} text-white h1"></i></p>
                                     </div>
                                 </div>
                             </div>
@@ -430,17 +420,17 @@ const openCreate = () => {
             oninput="formatPassword(this)">
     </div>
     `;
-    ESTADO_CONTENIDO.innerHTML = `
-    <h3 class=" mt-5 text-center form-label">Estado
-        Empleado</h3>
-    <div class="col-lg-12 d-flex justify-content-center">
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="estadoEmpleado"
-                name="estadoEmpleado" checked>
-            <label class="form-check-label" for="estadoEmpleado">Estado</label>
-        </div>
-    </div>
-    `;
+    // ESTADO_CONTENIDO.innerHTML = `
+    // <h3 class=" mt-5 text-center form-label">Estado
+    //     Empleado</h3>
+    // <div class="col-lg-12 d-flex justify-content-center">
+    //     <div class="form-check form-switch">
+    //         <input class="form-check-input" type="checkbox" id="estadoEmpleado"
+    //             name="estadoEmpleado" checked>
+    //         <label class="form-check-label" for="estadoEmpleado">Estado</label>
+    //     </div>
+    // </div>
+    // `;
 }
 
 /*
@@ -495,12 +485,12 @@ const openUpdate = async (id) => {
         APELLIDO_EMPLEADO.value = ROW.apellido_empleado;
         DUI_EMPLEADO.value = ROW.DUI_empleado;
         TELEFONO_EMPLEADO.value = ROW.telefono_personal_empleado;
-        DEPARTAMENTO_EMPLEADO.value = ROW.departamento_empleado;
-        MUNICIPIO_EMPLEADO.value = ROW.municipio_empleado;
+        // DEPARTAMENTO_EMPLEADO.value = ROW.departamento_empleado;
+        // MUNICIPIO_EMPLEADO.value = ROW.municipio_empleado;
         CORREO_EMPLEADO.value = ROW.correo_empleado;
-        ESTADO_EMPLEADO.checked = ROW.estado_producto;
+        // ESTADO_EMPLEADO.checked = ROW.estado_producto;
         CLAVE_EMPLEADO.innerHTML = '';
-        ESTADO_CONTENIDO.innerHTML = '';
+        // ESTADO_CONTENIDO.innerHTML = '';
     } else {
         sweetAlert(2, DATA.error, false);
     }
