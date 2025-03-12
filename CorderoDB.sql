@@ -19,6 +19,8 @@ CREATE TABLE
     CREATE TABLE   
     tb_trabajo_empleado (
         id_trabajo_empleado INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        departamento_trabajo_empleado VARCHAR(100),
+        municipio_trabajo_empleado VARCHAR(100),
         latitud_inicio_trabajo_empleado varchar(300),
         longitud_inicio_trabajo_empleado varchar(300),
         hora_inicio_trabajo_empleado TIME,
@@ -26,8 +28,6 @@ CREATE TABLE
         longitud_final_trabajo_empleado varchar(300),
         hora_final_trabajo_empleado TIME,
         estado_trabajo_empleado TINYINT (1) not NULL,
-        departamento_trabajo_empleado VARCHAR(100),
-        municipio_trabajo_empleado VARCHAR(100),
         fecha_actualizacion_trabajo_empleado DATETIME,
         id_empleado INT,
         FOREIGN KEY (id_empleado) REFERENCES tb_empleados (id_empleado) ON DELETE CASCADE

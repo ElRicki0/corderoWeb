@@ -1,5 +1,5 @@
 // ?constante para trabajar con la API
-const EMPLADO_API = 'services/admin/empleado.php';
+const INFO_TRABAJO_API = 'services/admin/info_trabajo.php';
 
 // ? Constantes del registro empleado
 const SAVE_FORM = document.getElementById('saveForm'),
@@ -27,9 +27,43 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Llamada a la función para mostrar el encabezado y pie del documento.
     loadTemplate();
     MAIN_TITLE.textContent = 'Información laboral empleados';
-    // fillTable();
+    fillTable();
 });
 
+function actualizarMunicipios() {
+    let departamento = document.getElementById("departamentoEmpleado").value;
+
+    // Limpiar opciones previas
+    MUNICIPIO_EMPLEADO.innerHTML = '<option value="">Seleccione un municipio</option>';
+
+    // Definir los municipios por departamento
+    let municipios = {
+        "Ahuachapan": ["Ahuachapán", "Apaneca", "Atiquizaya", "Concepción de Ataco", "El Refugio"],
+        "Cabañas": ["Sensuntepeque", "Victoria", "Guacotecti", "Dolores", "Cinquera"],
+        "Chalatenango": ["Chalatenango", "La Palma", "San Ignacio", "Nueva Concepción", "Tejutla"],
+        "La Libertad": ["Santa Tecla", "Antiguo Cuscatlán", "Colón", "San Juan Opico", "Quezaltepeque"],
+        "La Paz": ["Zacatecoluca", "San Juan Nonualco", "San Pedro Masahuat", "San Rafael Obrajuelo"],
+        "San Salvador": ["San Salvador", "Soyapango", "Mejicanos", "Apopa", "Ilopango"],
+        "San Vicente": ["San Vicente", "Tecoluca", "Apastepeque", "San Ildefonso", "San Esteban Catarina"],
+        "Santa Ana": ["Santa Ana", "Metapán", "Chalchuapa", "Coatepeque", "Candelaria de la Frontera"],
+        "Sonsonate": ["Sonsonate", "Izalco", "Nahuizalco", "Juayúa", "Sonzacate"],
+        "Usulután": ["Usulután", "Jiquilisco", "Santa María", "Puerto El Triunfo", "Jucuapa"],
+        "Morazán": ["San Francisco Gotera", "Cacaopera", "Joateca", "Perquín", "Sociedad"],
+        "La Unión": ["La Unión", "Conchagua", "El Carmen", "Santa Rosa de Lima", "Intipucá"],
+        "San Miguel": ["San Miguel", "Chinameca", "Quelepa", "Moncagua", "Nuevo Edén de San Juan"],
+        // "Tecapa": ["Tecapa 1", "Tecapa 2", "Tecapa 3"] // Agrega municipios si es un departamento válido
+    };
+
+    // Agregar opciones según el departamento seleccionado
+    if (departamento && municipios[departamento]) {
+        municipios[departamento].forEach(municipio => {
+            let opcion = document.createElement("option");
+            opcion.value = municipio;
+            opcion.textContent = municipio;
+            MUNICIPIO_EMPLEADO.appendChild(opcion);
+        });
+    }
+}
 
 // Método del evento para cuando se envía el formulario de buscar.
 SEARCH_FORM.addEventListener('submit', (event) => {
@@ -76,7 +110,7 @@ const fillTable = async (form = null) => {
     // Se verifica la acción a realizar.
     (form) ? action = 'searchRows' : action = 'readAll';
     // Petición para obtener los registros disponibles.
-    const DATA = await fetchData(EMPLADO_API, action, form);
+    const DATA = await fetchData(INFO_TRABAJO_API, action, form);
     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
     if (DATA.status) {
         // Se recorre el conjunto de registros fila por fila.
@@ -480,3 +514,16 @@ const fillTable = async (form = null) => {
 //         sweetAlert(2, DATA.error, false);
 //     }
 // }
+
+/*
+*   Función para preparar el formulario al momento de insertar un registro.
+*   Parámetros: ninguno.
+*   Retorno: ninguno.
+*/
+const openCreate = () => {
+    // Se muestra la caja de diálogo con su título.
+    SAVE_MODAL.show();
+    MODAL_TITLE.textContent = 'Agregar información laboral';
+    // Se prepara el formulario.
+    SAVE_FORM.reset();
+}

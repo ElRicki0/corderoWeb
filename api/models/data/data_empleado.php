@@ -21,7 +21,7 @@ class EmpleadoData extends EmpleadoHandler
             $this->id = $value;
             return true;
         } else {
-            $this->data_error = 'El identificador del administrador es incorrecto';
+            $this->data_error = 'El identificador del empleado es incorrecto';
             return false;
         }
     }
@@ -90,45 +90,7 @@ class EmpleadoData extends EmpleadoHandler
         }
     }
 
-    // public function setDepartamento($value, $min = 2, $max = 50)
-    // {
-    //     if (!Validator::validateAlphabetic($value)) {
-    //         $this->data_error = 'El departamento debe ser un valor alfabético';
-    //         return false;
-    //     } elseif (Validator::validateLength($value, $min, $max)) {
-    //         $this->departamento = $value;
-    //         return true;
-    //     } else {
-    //         $this->data_error = 'El departamento debe tener una longitud entre ' . $min . ' y ' . $max;
-    //         return false;
-    //     }
-    // }
-
-    // public function setMunicipio($value, $min = 2, $max = 50)
-    // {
-    //     if (!Validator::validateAlphabetic($value)) {
-    //         $this->data_error = 'El municipio debe ser un valor alfabético';
-    //         return false;
-    //     } elseif (Validator::validateLength($value, $min, $max)) {
-    //         $this->municipio = $value;
-    //         return true;
-    //     } else {
-    //         $this->data_error = 'El municipio debe tener una longitud entre ' . $min . ' y ' . $max;
-    //         return false;
-    //     }
-    // }
-
-    // public function setEstado($value)
-    // {
-    //     if (Validator::validateBoolean($value)) {
-    //         $this->estado = $value;
-    //         return true;
-    //     } else {
-    //         $this->data_error = 'Estado incorrecto';
-    //         return false;
-    //     }
-    // }
-
+    
     public function setImagen($file, $filename = null)
     {
         if (Validator::validateImageFile($file)) {

@@ -212,7 +212,6 @@ const readAllTable = async (form = null, buscador) => {
     
                             <div class=" col-md-12 col-lg-3 card-body d-flex flex-column align-items-center text-center">
                                 <div class="row">
-    
                                     <div class="col-lg-6 col-md-12 col-sm-12">
                                         <h5 class="text-white">Nombre empleado</h5>
                                         <p class="card-title text-white">${row.nombre_empleado} ${row.apellido_empleado}</p>
@@ -227,7 +226,6 @@ const readAllTable = async (form = null, buscador) => {
                                     </div>
                                 </div>
                             </div>
-    
                             <div class="col-sm-12 col-md-12 col-lg-3 text-center my-5">
                                 <div class="d-flex flex-column">
                                     <button class="btn btn-outline-light mb-2" onclick="openDelete(${row.id_empleado})">
@@ -332,41 +330,6 @@ const readAllTable = async (form = null, buscador) => {
 //         sweetAlert(4, DATA.error, true);
 //     }
 // });
-
-function actualizarMunicipios() {
-    let departamento = document.getElementById("departamentoEmpleado").value;
-
-    // Limpiar opciones previas
-    MUNICIPIO_EMPLEADO.innerHTML = '<option value="">Seleccione un municipio</option>';
-
-    // Definir los municipios por departamento
-    let municipios = {
-        "Ahuachapan": ["Ahuachapán", "Apaneca", "Atiquizaya", "Concepción de Ataco", "El Refugio"],
-        "Cabañas": ["Sensuntepeque", "Victoria", "Guacotecti", "Dolores", "Cinquera"],
-        "Chalatenango": ["Chalatenango", "La Palma", "San Ignacio", "Nueva Concepción", "Tejutla"],
-        "La Libertad": ["Santa Tecla", "Antiguo Cuscatlán", "Colón", "San Juan Opico", "Quezaltepeque"],
-        "La Paz": ["Zacatecoluca", "San Juan Nonualco", "San Pedro Masahuat", "San Rafael Obrajuelo"],
-        "San Salvador": ["San Salvador", "Soyapango", "Mejicanos", "Apopa", "Ilopango"],
-        "San Vicente": ["San Vicente", "Tecoluca", "Apastepeque", "San Ildefonso", "San Esteban Catarina"],
-        "Santa Ana": ["Santa Ana", "Metapán", "Chalchuapa", "Coatepeque", "Candelaria de la Frontera"],
-        "Sonsonate": ["Sonsonate", "Izalco", "Nahuizalco", "Juayúa", "Sonzacate"],
-        "Usulután": ["Usulután", "Jiquilisco", "Santa María", "Puerto El Triunfo", "Jucuapa"],
-        "Morazán": ["San Francisco Gotera", "Cacaopera", "Joateca", "Perquín", "Sociedad"],
-        "La Unión": ["La Unión", "Conchagua", "El Carmen", "Santa Rosa de Lima", "Intipucá"],
-        "San Miguel": ["San Miguel", "Chinameca", "Quelepa", "Moncagua", "Nuevo Edén de San Juan"],
-        // "Tecapa": ["Tecapa 1", "Tecapa 2", "Tecapa 3"] // Agrega municipios si es un departamento válido
-    };
-
-    // Agregar opciones según el departamento seleccionado
-    if (departamento && municipios[departamento]) {
-        municipios[departamento].forEach(municipio => {
-            let opcion = document.createElement("option");
-            opcion.value = municipio;
-            opcion.textContent = municipio;
-            MUNICIPIO_EMPLEADO.appendChild(opcion);
-        });
-    }
-}
 
 /*
 * Función asíncrona para preparar un modal de confirmacion para una funcion de estado
