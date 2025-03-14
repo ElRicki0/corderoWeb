@@ -74,11 +74,9 @@ const fillTable = async (form = null) => {
     if (DATA.status) {
         // Se recorre el conjunto de registros fila por fila.
         DATA.dataset.forEach(row => {
-            // Se establece un icono para el estado del empleado.
-            (row.estado_empleado) ? icon = 'bi bi-eye-fill' : icon = 'bi bi-eye-slash-fill';
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
             TABLE_BODY.innerHTML += `
-<div class="card text-bg-dark mb-5">
+            <div class="card text-bg-dark mb-5">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-3 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">

@@ -31,7 +31,7 @@ if (isset($_GET['action'])) {
                     !$categoria_cable->setDescripcion($_POST['descripcionCategoria']) or
                     !$categoria_cable->setImagen($_FILES['imagenCategoria'])
                 ) {
-                    $result['error'] = $producto->getDataError();
+                    $result['error'] = $categoria_cable->getDataError();
                 } elseif ($categoria_cable->createRow()) {
                     $result['status'] = 1;
                     $result['message'] = 'categoría creada correctamente';

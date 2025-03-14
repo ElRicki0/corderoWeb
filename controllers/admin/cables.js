@@ -194,32 +194,32 @@ const openUpdate = async (id) => {
     }
 }
 
-/*
-*   Función asíncrona para eliminar un registro.
-*   Parámetros: id (identificador del registro seleccionado).
-*   Retorno: ninguno.
-*/
-const openDelete = async (id) => {
-    // Llamada a la función para mostrar un mensaje de confirmación, capturando la respuesta en una constante.
-    const RESPONSE = await confirmAction('¿Desea eliminar el cable de forma permanente?');
-    // Se verifica la respuesta del mensaje.
-    if (RESPONSE) {
-        // Se define una constante tipo objeto con los datos del registro seleccionado.
-        const FORM = new FormData();
-        FORM.append('idCable', id);
-        // Petición para eliminar el registro seleccionado.
-        const DATA = await fetchData(CABLE_API, 'deleteRow', FORM);
-        // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
-        if (DATA.status) {
-            // Se muestra un mensaje de éxito.
-            await sweetAlert(1, DATA.message, true);
-            // Se carga nuevamente la tabla para visualizar los cambios.
-            fillTable();
-        } else {
-            sweetAlert(2, DATA.error, false);
+    /*
+    *   Función asíncrona para eliminar un registro.
+    *   Parámetros: id (identificador del registro seleccionado).
+    *   Retorno: ninguno.
+    */
+    const openDelete = async (id) => {
+        // Llamada a la función para mostrar un mensaje de confirmación, capturando la respuesta en una constante.
+        const RESPONSE = await confirmAction('¿Desea eliminar el cable de forma permanente?');
+        // Se verifica la respuesta del mensaje.
+        if (RESPONSE) {
+            // Se define una constante tipo objeto con los datos del registro seleccionado.
+            const FORM = new FormData();
+            FORM.append('idCable', id);
+            // Petición para eliminar el registro seleccionado.
+            const DATA = await fetchData(CABLE_API, 'deleteRow', FORM);
+            // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
+            if (DATA.status) {
+                // Se muestra un mensaje de éxito.
+                await sweetAlert(1, DATA.message, true);
+                // Se carga nuevamente la tabla para visualizar los cambios.
+                fillTable();
+            } else {
+                sweetAlert(2, DATA.error, false);
+            }
         }
     }
-}
 
 // ? función asíncrona para ordenar los registros de diferentes formas que el  usuario  requiera
 
@@ -227,6 +227,7 @@ const readAllTable = async (form = null, buscador) => {
     // Se inicializa el contenido de la tabla.
     ROWS_FOUND.textContent = '';
     TABLE_BODY.innerHTML = '';
+    
     switch (buscador) {
         case 1:
             action = 'readByName';
@@ -234,7 +235,11 @@ const readAllTable = async (form = null, buscador) => {
         case 2:
             action = 'readByLengthDesc';
             break;
-        
+        case 3:
+            action = 'readByLengthAsc';
+            break;
+        case 4:
+            action = 'readByModify';
             break;
         default:
     }

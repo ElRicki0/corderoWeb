@@ -15,6 +15,16 @@ if (isset($_GET['action'])) {
         $result['session'] = 1;
         // Se compara la acción a realizar cuando un administrador ha iniciado sesión.
         switch ($_GET['action']) {
+            case 'searchRows':
+                if (!Validator::validateSearch($_POST['search'])) {
+                    $result['error'] = Validator::getSearchError();
+                } elseif ($result['dataset'] = $administrador->searchRows()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' coincidencias';
+                } else {
+                    $result['error'] = 'No hay coincidencias';
+                }
+                break;
             case 'getUser':
                 if (isset($_SESSION['correoAdministrador'])) {
                     $result['status'] = 1;
@@ -133,6 +143,9 @@ if (isset($_GET['action'])) {
                 } else {
                     $result['error'] = 'Ocurrió un problema al cambiar la contraseña';
                 }
+                break;
+            default:
+                $result['error'] = 'acción no disponible dentro de la session';
                 break;
         }
     } else {

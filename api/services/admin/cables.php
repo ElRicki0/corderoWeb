@@ -15,6 +15,16 @@ if (isset($_GET['action'])) {
         // if (isset($_SESSION['idAdministrador'])) {
         // ? se compara la acción del administrador con la session iniciada
         switch ($_GET['action']) {
+            case  'searchRows':
+                if (!Validator::validateSearch($_POST['search'])) {
+                    $result['error'] = Validator::getSearchError();
+                } elseif ($result['dataset'] = $cable->searchRows()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' coincidencias';
+                } else {
+                    $result['error'] = 'No hay coincidencias';
+                }
+                break;
             case 'createRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
@@ -31,16 +41,6 @@ if (isset($_GET['action'])) {
                     $result['message'] = 'Cable creado correctamente';
                 } else {
                     $result['error'] = 'Ocurrió un problema al crear el cable';
-                }
-                break;
-            case  'searchRows':
-                if (!Validator::validateSearch($_POST['search'])) {
-                    $result['error'] = Validator::getSearchError();
-                } elseif ($result['dataset'] = $cable->searchRows()) {
-                    $result['status'] = 1;
-                    $result['message'] = 'Existen ' . count($result['dataset']) . ' coincidencias';
-                } else {
-                    $result['error'] = 'No hay coincidencias';
                 }
                 break;
             case 'readAll':

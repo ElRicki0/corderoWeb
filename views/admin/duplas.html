@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../resources/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../resources/css/general.css">
+    <link rel="stylesheet" href="../../resources/css/bootstrap-icons.min.css">
+</head>
+
+<body>
+    <!-- Contenido principal del documento -->
+    <main>
+        <h2 id="mainTitle"></h2>
+        <!-- titulo principal -->
+        <div class="container-fluid">
+            <div class="row py-4">
+                <h3 class="fw-bold "><i class="bi bi-people-fill"></i> Administrar duplas de empleados</h3>
+                <h6 class="fw-medium text-secondary">Esta sección de gestión de las duplas de empleados. Aquí puedes
+                    manejar todos todas las duplas de los trabajadores registrados en tu página web. <br>
+                    La tabla te permite eliminar, dar de baja, editar, ver datos y
+                    reportes generales de actividad.</h6>
+            </div>
+        </div>
+
+        <!-- Formulario de búsqueda -->
+        <div class="row">
+            <form class="col-sm-12 col-md-12 col-lg-10" id="searchForm">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 col-sm-12 mt-5">
+                        <input type="search" class="form-control custom-input border-2" id="search" name="search"
+                            placeholder="Nombre o teléfono" required>
+                    </div>
+                    <div class="col-lg-5 col-md-9 col-sm-9 d-flex flex-row align-items-center gap-2 mt-5">
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-search"></i>
+                            </button>
+                            <button type="reset" class="btn btn-secondary" onclick="fillTable()">
+                                <i class="bi bi-arrow-counterclockwise"></i>
+                            </button>
+                            <button type="button" class="btn btn-warning" onclick="openCreate()">
+                                <i class="bi bi-person-fill-add"></i>
+                            </button>
+                        </div>
+
+                        <!-- Dropdown -->
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                ordenar registros
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 1)">Nombre (A-Z)</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Nombre descendente
+                                        (Z-A)</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 3)">Actualizado
+                                        recientemente</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- filtro por estado -->
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Filtrar por estado
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 4)">Activo</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 5)">Inactivo</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- filtro por tipo -->
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Filtrar por tipo
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 6)">Permanente</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 7)">Temporal</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Dropdown de buscar por departamento -->
+                        <!-- <div class="dropdown" id="buscadorDepartamento">
+                            <button class="btn btn-secondary dropdown-toggle" type="submit" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Filtrar por departamento
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Ahuachapán" href="">Ahuachapán</a>
+                                </li>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Santa Ana" href="">Santa Ana</a>
+                                </li>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Sonsonate" href="">Sonsonate</a>
+                                </li>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Chalatenango" href="">Chalatenango</a>
+                                </li>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="La Libertad" href="">La Libertad</a>
+                                </li>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="San Salvador" href="">San Salvador</a>
+                                </li>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Cuscatlán" href="">Cuscatlán</a>
+                                </li>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="La Paz" href="">La Paz</a>
+                                </li>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Cabañas" href="">Cabañas</a>
+                                </li>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="San Vicente" href="">San Vicente</a>
+                                </li>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Usulután" href="">Usulután</a>
+                                </li>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="San Miguel" href="">San Miguel</a>
+                                </li>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Morazán" href="">Morazán</a>
+                                </li>
+                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="La Unión" href="">La Unión</a>
+                                </li>
+
+                            </ul>
+                        </div> -->
+                    </div>
+                </div>
+            </form>
+        </div>
+        <p id="rowsFound" class=" fw-bold mt-3"></p>
+
+        <!-- Contenedor para la tabla con scroll -->
+        <div id="duplas" class="justify-content-center row">
+        </div>
+
+        <div class="modal fade" id="saveModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                <div class="modal-content bg-dark text-white">
+                    <div class="modal-header">
+                        <!-- Cambiar color del botón de cerrar -->
+                        <h1 class="fs-4 fw-bold text-center mb-4" id="modalTitle"> </h1>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <!-- Body del modal -->
+                    <div class="modal-body text-center">
+                        <!-- Formulario saveForm -->
+                        <form id="saveForm">
+                            <!-- Campo oculto para asignar el id del registro al momento de modificar -->
+                            <input type="number" class="d-none" id="idDupla" name="idDupla">
+                            <div class="">
+                                <div class="col-12">
+                                    <h3>Datos generales</h3>
+                                    <div class="row d-flex justify-content-center align-items-center mb-3">
+                                        <div class="col-4">
+                                            <label for="nombreDupla" class="form-label">Nombre de dupla</label>
+                                            <input type="text" class=" form-control" id="nombreDupla" name="nombreDupla"
+                                                placeholder="Ingrese un nombre..." required>
+                                        </div>
+                                        <h3 class=""></h3>
+                                        <div class="col-4">
+                                            <label for="telefonoDupla" class="form-label">Teléfono de dupla</label>
+                                            <input type="text" class=" form-control" id="telefonoDupla"
+                                                name="telefonoDupla" placeholder="Ingrese un numero valido..."
+                                                oninput="formatPhoneNumber(this)" required>
+                                        </div>
+                                    </div>
+                                    <h3>Tipo dupla</h3>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="tipoDupla" id="tipoDupla1"
+                                            value="1">
+                                        <label class="form-check-label h4" for="tipoDupla1">
+                                            Temporal
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="tipoDupla" id="tipoDupla2"
+                                            checked value="0">
+                                        <label class="form-check-label h4" for="tipoDupla2">
+                                            Permanente
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row d-flex justify-content-center align-items-center">
+                                <!-- Columna del Empleado 1 con borde vertical en pantallas grandes -->
+                                <div class="col-12 col-lg-6 border-end border-bottom border-white">
+                                    <h3>Empleado 1°</h3>
+                                    <div id="infoEmpleado1">
+                                        <img src="../../resources/images/error/404Empleado.png" width="200px"
+                                            height="200px" class="rounded mx-auto d-block" alt="">
+                                        <!-- <input type="number" class="d-none" id="idEmpleado1" name="idEmpleado1"> -->
+                                        <h5 class="text-white mt-2">Nombre empleado</h5>
+                                        <p class="card-title text-white"></p>
+                                        <p class="card-title text-white"></p>
+                                        <h5 class="text-white">Estado empleado</h5>
+                                        <p class="card-text text-white">Estado: <i class="${icon} text-white"></i></p>
+                                    </div>
+                                    <div class="row d-flex justify-content-center align-items-center mb-3">
+                                        <div class="col-6">
+                                            <h5 for="dumplaEmpleado" class="text-white">Seleccionar empleado</h5>
+                                            <select id="duplaEmpleado1" name="duplaEmpleado1" class="form-select "
+                                                required>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Columna del Empleado 2 -->
+                                <div class="col-12 col-lg-6 border-bottom">
+                                    <h3>Empleado 2°</h3>
+                                    <div id="infoEmpleado2">
+                                        <img src="../../resources/images/error/404Empleado.png" width="200px"
+                                            height="200px" class="rounded mx-auto d-block" alt="">
+                                        <!-- <input type="number" class="d-none" id="idEmpleado2" name="idEmpleado2"> -->
+                                        <h5 class="text-white mt-2">Nombre empleado</h5>
+                                        <p class="card-title text-white"></p>
+                                        <p class="card-title text-white"></p>
+                                        <h5 class="text-white">Estado empleado</h5>
+                                        <p class="card-text text-white">Estado: <i class="${icon} text-white"></i></p>
+                                    </div>
+                                    <div class="row d-flex justify-content-center align-items-center mb-3">
+                                        <div class="col-6">
+                                            <h5 for="dumplaEmpleado" class="text-white">Seleccionar empleado</h5>
+                                            <select id="duplaEmpleado2" name="duplaEmpleado2" class="form-select "
+                                                required>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary ps-4 pe-4">
+                                <i class="bi bi-person-fill-add me-1"></i> Aceptar
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- IMPORTACIÓN DE ARCHIVOS JAVASCRIPT -->
+    <!-- Llamada al framework y librería de mensajes -->
+    <script src="../../resources/js/bootstrap.bundle.min.js"></script>
+    <script src="../../resources/js/sweetalert.min.js"></script>
+    <!-- Llamada al controlador general de la aplicación -->
+    <script type="text/javascript" src="../../controllers/utils/components.js"></script>
+    <!-- Llamada al controlador del sitio privado -->
+    <script type="text/javascript" src="../../controllers/utils/admin.js"></script>
+    <!-- ? Llama al validador de textos -->
+    <script src="../../controllers/utils/inputValidator.js"></script>
+    <!-- Llamada al controlador de la página web -->
+    <!-- ! cambiar el link js para el controntrolador -->
+    <script src="../../controllers/admin/duplas.js"></script>
+
+</body>
+
+</html>

@@ -115,3 +115,37 @@ function formatPassword(input) {
     // Establecer el valor formateado en el campo de entrada
     input.value = Contraseña;
 }
+
+// Código de validación de campo de DUI
+function formatDui(input) {
+    // Obtener el valor actual del campo de entrada
+    let Dui = input.value;
+
+    // Eliminar caracteres que no sean números o guion
+    Dui = Dui.replace(/[^\d-]/g, '');
+
+    // Eliminar cualquier guion presente y reconstruir el formato correctamente
+    Dui = Dui.replace(/-/g, ''); 
+
+    // Insertar el guion solo en la posición correcta (después del octavo dígito)
+    if (Dui.length > 8) {
+        Dui = Dui.slice(0, 8) + '-' + Dui.slice(8, 9);
+    }
+
+    // Establecer el formato de tipo DUI correcto
+    let duiPattern = /^\d{8}-\d$/;
+    if (!duiPattern.test(Dui)) {
+        // Mostrar mensaje de error
+        input.classList.add("is-invalid");
+    } else {
+        // En caso de pasar la validación
+        input.setCustomValidity("");
+        input.classList.remove("is-invalid");
+    }
+
+    // Establecer el valor formateado en el campo de entrada
+    input.value = Dui;
+
+    // Limitar la cantidad máxima de caracteres a 10
+    input.setAttribute("maxlength", "10");
+}
