@@ -169,4 +169,10 @@ class InfoTrabajoData extends InfoTrabajoHandler
             return false;
         }
     }
+    
+    // Método para obtener el error de los datos.
+    public function getDataError()
+    {
+        return $this->data_error;
+    }
 }

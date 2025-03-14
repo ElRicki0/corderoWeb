@@ -22,24 +22,112 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'No existen información registrada';
                 }
                 break;
+            case 'readByName':
+                if ($result['dataset'] = $trabajo->readByName()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen información registrada';
+                }
+                break;
+            case 'readByNameDesc':
+                if ($result['dataset'] = $trabajo->readByNameDesc()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen información registrada';
+                }
+                break;
+            case 'readByModify':
+                if ($result['dataset'] = $trabajo->readByModify()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen información registrada';
+                }
+                break;
+            case 'readByActive':
+                if ($result['dataset'] = $trabajo->readByActive()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen información registrada';
+                }
+                break;
+            case 'readByInactive':
+                if ($result['dataset'] = $trabajo->readByInactive()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen información registrada';
+                }
+                break;
             case 'createRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
-                    !$trabajo->setDepartamento($_POST['nombreProducto']) or
-                    !$trabajo->setMunicipio($_POST['descripcionProducto']) or
-                    !$trabajo->setEmpleado($_POST['precioProducto']) or
-                    !$trabajo->setEstado(isset($_POST['estadoProducto']) ? 1 : 0) 
+                    !$trabajo->setDepartamento($_POST['departamentoTrabajo']) or
+                    !$trabajo->setMunicipio($_POST['municipioTrabajo']) or
+                    !$trabajo->setEmpleado($_POST['empleadoTrabajo']) or
+                    !$trabajo->setEstado(isset($_POST['estadoTrabajo']) ? 1 : 0)
                 ) {
-                    $result['error'] = $producto->getDataError();
-                } elseif ($producto->createRow()) {
+                    $result['error'] = $trabajo->getDataError();
+                } elseif ($trabajo->createRow()) {
                     $result['status'] = 1;
-                    $result['message'] = 'Producto creado correctamente';
-                    // Se asigna el estado del archivo después de insertar.
-                    $result['fileStatus'] = Validator::saveFile($_FILES['imagenProducto'], $producto::RUTA_IMAGEN);
+                    $result['message'] = 'Información creado correctamente';
                 } else {
-                    $result['error'] = 'Ocurrió un problema al crear el producto';
+                    $result['error'] = 'Ocurrió un problema al crear la información';
                 }
                 break;
+            case 'updateRow':
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$trabajo->setId($_POST['idTrabajo']) or
+                    !$trabajo->setDepartamento($_POST['departamentoTrabajo']) or
+                    !$trabajo->setMunicipio($_POST['municipioTrabajo']) or
+                    !$trabajo->setEmpleado($_POST['empleadoTrabajo']) or
+                    !$trabajo->setEstado(isset($_POST['estadoTrabajo']) ? 1 : 0)
+                ) {
+                    $result['error'] = $trabajo->getDataError();
+                } elseif ($trabajo->updateRow()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Información actualizada correctamente';
+                } else {
+                    $result['error'] = 'Ocurrió un problema al editar la información';
+                }
+                break;
+            case 'updateStatus':
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$trabajo->setId($_POST['idTrabajo']) or
+                    !$trabajo->setEstado(isset($_POST['estadoTrabajo']) ? 1 : 0)
+                ) {
+                    $result['error'] = $trabajo->getDataError();
+                } elseif ($trabajo->updateStatus()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Estado actualizado correctamente';
+                } else {
+                    $result['error'] = 'Ocurrió un problema al actualizar el estado';
+                }
+                break;
+            case 'readOne':
+                if (!$trabajo->setId($_POST['idTrabajo'])) {
+                    $result['error'] = $trabajo->getDataError();
+                } elseif ($result['dataset'] = $trabajo->readOne()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'Información inexistente';
+                }
+                break;
+            case 'deleteRow':
+                if (!$trabajo->setId($_POST['idTrabajo'])) {
+                    $result['error'] = $trabajo->getDataError();
+                } elseif ($trabajo->deleteRow()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Producto eliminado correctamente';
+                } else {
+                    $result['error'] = 'Ocurrió un problema al eliminar la información';
+                }
+
                 break;
             default:
                 $result['error'] = 'Acción no disponible dentro de la sesión';

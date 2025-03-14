@@ -20,7 +20,8 @@
         <!-- titulo principal -->
         <div class="container-fluid">
             <div class="row py-4">
-                <h3 class="fw-bold "> <i class="bi bi-person-vcard-fill me-1"></i> Administrar información laboral de empleados</h3>
+                <h3 class="fw-bold "> <i class="bi bi-person-vcard-fill me-1"></i> Administrar información laboral de
+                    empleados</h3>
                 <h6 class="fw-medium text-secondary">Bienvenido a la sección de gestión de empleados. Aquí puedes
                     manejar todos los trabajadores registrados en tu página web. <br>
                     La tabla te permite eliminar, dar de baja, editar, ver graficas y
@@ -77,44 +78,6 @@
                                 <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 5)">Inactivo</a></li>
                             </ul>
                         </div>
-                        <!-- Dropdown de buscar por departamento -->
-                        <!-- <div class="dropdown" id="buscadorDepartamento">
-                            <button class="btn btn-secondary dropdown-toggle" type="submit" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                Filtrar por departamento
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Ahuachapán" href="">Ahuachapán</a>
-                                </li>
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Santa Ana" href="">Santa Ana</a>
-                                </li>
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Sonsonate" href="">Sonsonate</a>
-                                </li>
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Chalatenango" href="">Chalatenango</a>
-                                </li>
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="La Libertad" href="">La Libertad</a>
-                                </li>
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="San Salvador" href="">San Salvador</a>
-                                </li>
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Cuscatlán" href="">Cuscatlán</a>
-                                </li>
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="La Paz" href="">La Paz</a>
-                                </li>
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Cabañas" href="">Cabañas</a>
-                                </li>
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="San Vicente" href="">San Vicente</a>
-                                </li>
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Usulután" href="">Usulután</a>
-                                </li>
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="San Miguel" href="">San Miguel</a>
-                                </li>
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Morazán" href="">Morazán</a>
-                                </li>
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="La Unión" href="">La Unión</a>
-                                </li>
-
-                            </ul>
-                        </div> -->
                     </div>
                 </div>
             </form>
@@ -122,62 +85,7 @@
         <p id="rowsFound" class=" fw-bold mt-3"></p>
 
         <!-- Contenedor para la tabla con scroll -->
-
-        <div id="empleados" class=" justify-content-center row">
-
-            <!-- color oscuro serán las cards de información de los empleados -->
-            <!-- <div class="col-12 card mt-2 text-bg-dark" id="searchForm">
-                    <div class="row justify-content-center align-items-center">
-                        <div class="col-12 mt-3 d-flex justify-content-center align-items-center"
-                            style="height: 300px; width: 300px;">
-                            <img src="../../resources/error/images/404Empleado.png" class="card-img-top" alt="..."
-                                onerror="this.onerror=null; this.src='../../resources/img/error/cliente.jpg';"
-                                style="max-width: 100%; max-height: 100%; object-fit: contain;">
-                        </div>
-
-                        <div class=" col-md-12 col-lg-3 card-body d-flex flex-column align-items-center text-center">
-                            <div class="row">
-
-                                <div class="col-lg-4 col-md-12 col-sm-12">
-                                    <h5 class="text-white">Nombre empleado</h5>
-                                    <p class="card-title text-white">${row.nombre_empleado} ${row.apellido_empleado}</p>
-                                    <h5 class="text-white">DUI Empleado</h5>
-                                    <p class="card-text text-white">${row.dui_empleado}</p>
-                                    <h5 class="text-white">Correo Empleado</h5>
-                                    <p class="card-text text-white">${row.correo_empleado}</p>
-                                </div>
-                                <div class="col-lg-4 col-md-12 col-sm-12">
-                                    <h5 class="text-white">Teléfono empleado</h5>
-                                    <p class="card-title text-white">${row.nombre_empleado}
-                                    <h5 class="text-white">Departamento Empleado</h5>
-                                    <p class="card-text text-white">${row.dui_empleado}</p>
-                                    <h5 class="text-white">Municipio Empleado</h5>
-                                    <p class="card-text text-white">${row.correo_empleado}</p>
-                                    <h5 class="text-white">Estado empleado</h5>
-                                    <p class="card-text text-white">Estado: <i class="${icon} text-white"></i></p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-12 col-md-12 col-lg-3 text-center my-5">
-                            <div class="d-flex flex-column">
-                                <button class="btn btn-outline-light mb-2" onclick="openDelete(${row.id_empleado})">
-                                    <i class="bi bi-trash3-fill"></i> Eliminar
-                                </button>
-                                <button class="btn btn-outline-light mb-2" onclick="openUpdate(${row.id_empleado})">
-                                    <i class="bi bi-pencil-fill"></i>Actualizar
-                                </button>
-                                <button class="btn btn-outline-light mb-2" onclick="openState(${row.id_empleado})">
-                                    <i class="bi bi-exclamation-octagon"></i> Cambiar Estado
-                                </button>
-                                <button type="button" class="btn btn-outline-light mb-2"
-                                    onclick="openChart(${row.id_empleado})">
-                                    <i class="bi bi-bar-chart-line-fill"></i> Ver Gráfico
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
+        <div id="trabajos" class=" justify-content-center row">
         </div>
         <!-- Modal Alterar registro (agregar o editar) -->
         <div class="modal fade" id="saveModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -188,88 +96,79 @@
                     <form id="saveForm">
 
                         <!-- Campo oculto para asignar el id del registro al momento de modificar -->
-                        <input type="number" class="d-none" id="idEmpleado" name="idEmpleado">
-                        <form class="needs-validation">
 
-                            <!-- Body del modal -->
-                            <div class="modal-body">
-                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                                    aria-label="Close"></button> <!-- Cambiar color del botón de cerrar -->
-                                <h1 class="fs-4 fw-bold text-center mb-4" id="modalTitle"> </h1>
 
-                                <!-- Inputs -->
-                                <div class="row d-flex justify-content-center align-items-center">
-                                    <!-- <div class="col-12 text-center">
-                                        <label for="imagenEmpleado">
-                                            <h3 for="imagenEmpleado" class="form-label">Imagen
-                                                Empleado</h3>
-                                            <img id="imagenMuestra"
-                                                class="rounded  mx-auto d-block img-fluid mt-3 border border-3 border-secondary-subtle rounded-circle imagen_R"
-                                                src="../../resources/images/error/404Empleado.png" alt="..."
-                                                width="200px" height="200px">
-                                            <input id="imagenEmpleado" type="file" name="imagenEmpleado"
-                                                class="d-none form-control" accept=".png, .jpg">
-                                        </label>
-                                    </div>
-                                    <div class="col-6">
-                                        <label class="form-label">Nombre(s)</label>
-                                        <input id="nombreEmpleado" name="nombreEmpleado" class="form-control"
-                                            autocomplete="off" required oninput="formatAlphabetic(this)">
-                                    </div>
-                                    <div class="col-6">
-                                        <label class="form-label">Apellido(s)</label>
-                                        <input id="apellidoEmpleado" name="apellidoEmpleado" autocomplete="off"
-                                            class="form-control" required oninput="formatAlphabetic(this)">
-                                    </div>
-                                    <div class="col-6">
-                                        <label class="form-label">DUI</label>
-                                        <input id="duiEmpleado" name="duiEmpleado" class="form-control"
-                                            autocomplete="off" type="text" required oninput="formatDui(this)">
-                                    </div>
-                                    <div class="col-6 ">
-                                        <label class="form-label">Numero teléfono</label>
-                                        <input id="telefonoEmpleado" name="telefonoEmpleado" class="form-control"
-                                            autocomplete="off" required oninput="formatPhoneNumber(this)">
-                                    </div> -->
-                                    <div class="col-6">
-                                        <label class="form-label">Departamento</label>
-                                        <select id="departamentoEmpleado" name="departamentoEmpleado"
-                                            class="form-control" autocomplete="off" onchange="actualizarMunicipios()">
-                                            <option value="">Seleccionar Departamento</option>
-                                            <option value="Ahuachapan">Ahuachapán</option>
-                                            <option value="Cabañas">Cabañas</option>
-                                            <option value="Chalatenango">Chalatenango</option>
-                                            <option value="La Libertad">La Libertad</option>
-                                            <option value="La Paz">La Paz</option>
-                                            <option value="San Salvador">San Salvador</option>
-                                            <option value="San Vicente">San Vicente</option>
-                                            <option value="Santa Ana">Santa Ana</option>
-                                            <option value="Sonsonate">Sonsonate</option>
-                                            <option value="Usulután">Usulután</option>
-                                            <option value="Morazán">Morazán</option>
-                                            <option value="La Unión">La Unión</option>
-                                            <option value="San Miguel">San Miguel</option>
-                                            <option value="Tecapa">Tecapa</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-6">
-                                        <label class="form-label">Municipio</label>
-                                        <select id="municipioEmpleado" name="municipioEmpleado" class="form-control"
-                                            autocomplete="off">
-                                            <option value="">Primero seleccione un departamento</option>
-                                        </select>
-                                    </div>
-                                    
+                        <!-- Body del modal -->
+                        <div class="modal-body">
+                            <input type="number" class="d-none" id="idTrabajoooo" name="idTrabajooo">
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                aria-label="Close"></button> <!-- Cambiar color del botón de cerrar -->
+                            <h1 class="fs-4 fw-bold text-center mb-4" id="modalTitle"></h1>
+
+                            <h3 class="text-center">Estado empleado</h3>
+                            <div class="d-flex justify-content-center align-items-center">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="estadoTrabajo"
+                                        id="estadoTrabajo1" value="1">
+                                    <label class="form-check-label h4" for="estadoTrabajo1">
+                                        Activo
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="estadoTrabajo"
+                                        id="estadoTrabajo2" value="0" checked>
+                                    <label class="form-check-label h4" for="estadoTrabajo2">
+                                        Inactivo
+                                    </label>
                                 </div>
                             </div>
-                            <div class="row mb-3">
-                                <div class="col-12 text-end">
-                                    <button type="submit" class="btn btn-primary ps-4 pe-4">
-                                        <i class="bi bi-person-fill-add me-1"></i> Aceptar
-                                    </button>
+                            <div class="row">
+                                <div class="container col-6">
+                                    <label for="empleadoTrabajo" class="form-label">Seleccionar empleado</label>
+                                    <select id="empleadoTrabajo" name="empleadoTrabajo" class="form-select" required>
+                                    </select>
                                 </div>
                             </div>
-                        </form>
+
+                            <!-- Inputs -->
+                            <div class="row">
+                                <div class="col-6">
+                                    <label class="form-label">Departamento</label>
+                                    <select id="departamentoTrabajo" name="departamentoTrabajo" class="form-control"
+                                        autocomplete="off" onchange="actualizarMunicipios()">
+                                        <option value="No seleccionado">Seleccionar Departamento</option>
+                                        <option value="Ahuachapan">Ahuachapán</option>
+                                        <option value="Cabañas">Cabañas</option>
+                                        <option value="Chalatenango">Chalatenango</option>
+                                        <option value="La Libertad">La Libertad</option>
+                                        <option value="La Paz">La Paz</option>
+                                        <option value="San Salvador">San Salvador</option>
+                                        <option value="San Vicente">San Vicente</option>
+                                        <option value="Santa Ana">Santa Ana</option>
+                                        <option value="Sonsonate">Sonsonate</option>
+                                        <option value="Usulután">Usulután</option>
+                                        <option value="Morazán">Morazán</option>
+                                        <option value="La Unión">La Unión</option>
+                                        <option value="San Miguel">San Miguel</option>
+                                        <option value="Tecapa">Tecapa</option>
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label">Municipio</label>
+                                    <select id="municipioTrabajo" name="municipioTrabajo" class="form-control"
+                                        autocomplete="off">
+                                        <option>Primero seleccione un departamento</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-12 text-end">
+                                <button type="submit" class="btn btn-primary ps-4 pe-4">
+                                    <i class="bi bi-person-fill-add me-1"></i> Aceptar
+                                </button>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
