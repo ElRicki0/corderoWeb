@@ -116,7 +116,7 @@ const fillTable = async (form = null) => {
         // Se recorre el conjunto de registros fila por fila.
         DATA.dataset.forEach(row => {
             // Se establece un icono para el estado del empleado.            
-            (row.estado_empleado) ? icon = 'bi bi-pause-circle-fill' : icon = 'bi bi-check-circle-fill';
+            (row.estado_trabajo_empleado) ? icon = 'bi bi-check-circle-fill' : icon = 'bi bi-pause-circle-fill';
 
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
             TABLE_BODY.innerHTML += `
@@ -210,7 +210,7 @@ const readAllTable = async (form = null, buscador) => {
         // Se recorre el conjunto de registros fila por fila.
         DATA.dataset.forEach(row => {
             // Se establece un icono para el estado del empleado.
-            (row.estado_empleado) ? icon = 'bi bi-pause-circle-fill' : icon = 'bi bi-check-circle-fill';
+            (row.estado_trabajo_empleado) ? icon = 'bi bi-check-circle-fill' : icon = 'bi bi-pause-circle-fill';
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
             TABLE_BODY.innerHTML += `
             <div class="col-12 card mt-2 text-bg-dark" id="searchForm">
@@ -359,12 +359,14 @@ const openUpdate = async (id) => {
             MUNICIPIO_TRABAJO.value = ROW.municipio_trabajo_empleado;
         }, 100); // Pequeño retraso para asegurar la carga de los municipios
 
-        // Manejar el estado del trabajo
-        if (ROW.estado_trabajo_empleado == 1) {
-            document.getElementById('estadoTrabajo1').checked = true; // Activo
-        } else if (ROW.estado_trabajo_empleado == 0) {
-            document.getElementById('estadoTrabajo2').checked = true; // Inactivo
-        }
+        // // Manejar el estado del trabajo
+        // if (ROW.estado_trabajo_empleado == 1) {
+        //     document.getElementById('estadoTrabajo1').checked = true; // Activo
+        // } else if (ROW.estado_trabajo_empleado == 0) {
+        //     document.getElementById('estadoTrabajo2').checked = true; // Inactivo
+        // }
+
+        ESTADO_TRABAJO.checked = ROW.estado_trabajo_empleado;
 
     } else {
         sweetAlert(2, DATA.error, false);

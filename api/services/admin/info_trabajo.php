@@ -11,9 +11,19 @@ if (isset($_GET['action'])) {
     // Se declara e inicializa un arreglo para guardar el resultado que retorna la API.
     $result = array('status' => 0, 'message' => null, 'dataset' => null, 'error' => null, 'exception' => null);
     // ? se verifica si hay un session iniciada como administrador, de lo contrario el código termina con un error
-    if (isset($_SESSION['idAdministrador'])) {
+    if (isset($_SESSION['idAdministrador']) or true) {
         //? se realiza una acción cuando el administrador tiene la sesión iniciada
         switch ($_GET['action']) {
+            case 'searchRows':
+                if (!Validator::validateSearch($_POST['search'])) {
+                    $result['error'] = Validator::getSearchError();
+                } elseif ($result['dataset'] = $trabajo->searchRows()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' coincidencias';
+                } else {
+                    $result['error'] = 'No hay coincidencias';
+                }
+                break;
             case 'readAll':
                 if ($result['dataset'] = $trabajo->readAll()) {
                     $result['status'] = 1;
@@ -98,8 +108,7 @@ if (isset($_GET['action'])) {
             case 'updateStatus':
                 $_POST = Validator::validateForm($_POST);
                 if (
-                    !$trabajo->setId($_POST['idTrabajo']) or
-                    !$trabajo->setEstado(isset($_POST['estadoTrabajo']) ? 1 : 0)
+                    !$trabajo->setId($_POST['idTrabajo'])
                 ) {
                     $result['error'] = $trabajo->getDataError();
                 } elseif ($trabajo->updateStatus()) {

@@ -100,14 +100,15 @@
 
                         <!-- Body del modal -->
                         <div class="modal-body">
-                            <input type="number" class="d-none" id="idTrabajoooo" name="idTrabajooo">
+                            <input type="number" class="d-none" id="idTrabajo" name="idTrabajo">
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                 aria-label="Close"></button> <!-- Cambiar color del botón de cerrar -->
                             <h1 class="fs-4 fw-bold text-center mb-4" id="modalTitle"></h1>
 
                             <h3 class="text-center">Estado empleado</h3>
                             <div class="d-flex justify-content-center align-items-center">
-                                <div class="form-check form-check-inline">
+                                
+                                <!-- <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="estadoTrabajo"
                                         id="estadoTrabajo1" value="1">
                                     <label class="form-check-label h4" for="estadoTrabajo1">
@@ -120,6 +121,11 @@
                                     <label class="form-check-label h4" for="estadoTrabajo2">
                                         Inactivo
                                     </label>
+                                </div> -->
+                                <div class="form-check form-switch form-check-reverse">
+                                    <input class="form-check-input" type="checkbox" id="estadoTrabajo"
+                                        name="estadoTrabajo" checked>
+                                    <label class="form-check-label" for="estadoTrabajo">Estado</label>
                                 </div>
                             </div>
                             <div class="row">
