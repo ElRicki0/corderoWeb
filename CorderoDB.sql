@@ -41,9 +41,9 @@ CREATE TABLE
         tipo_dupla TINYINT (1) not NULL,
         id_empleado1 INT NULL,
         id_empleado2 INT NULL,
-        FOREIGN KEY (id_empleado1) REFERENCES tb_empleados (id_empleado) ON DELETE CASCADE,
-        FOREIGN KEY (id_empleado2) REFERENCES tb_empleados (id_empleado) ON DELETE CASCADE,
-        actualizacion DATETIME
+        FOREIGN KEY (id_empleado1) REFERENCES tb_trabajo_empleado (id_trabajo_empleado) ON DELETE CASCADE,
+        FOREIGN KEY (id_empleado2) REFERENCES tb_trabajo_empleado (id_trabajo_empleado) ON DELETE CASCADE,
+        fecha_actualizacion_dupla DATETIME
     );
 
 CREATE TABLE

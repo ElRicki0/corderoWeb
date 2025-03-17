@@ -82,6 +82,8 @@ class InfoTrabajoHandler
     {
         $sql = 'SELECT
                     `id_trabajo_empleado`,
+                    e.nombre_empleado,
+                    e.apellido_empleado,
                     `latitud_inicio_trabajo_empleado`,
                     `longitud_inicio_trabajo_empleado`,
                     `hora_inicio_trabajo_empleado`,
@@ -92,8 +94,6 @@ class InfoTrabajoHandler
                     `departamento_trabajo_empleado`,
                     `municipio_trabajo_empleado`,
                     `fecha_actualizacion_trabajo_empleado`,
-                    e.nombre_empleado,
-                    e.apellido_empleado,
                     e.correo_empleado,
                     e.imagen_empleado
                 FROM
@@ -272,8 +272,7 @@ class InfoTrabajoHandler
                         ELSE `estado_trabajo_empleado` -- No cambia si es otro valor
                     END,
                     `fecha_actualizacion_trabajo_empleado` = ?
-                    WHERE `id_trabajo_empleado` = ?;
-';
+                    WHERE `id_trabajo_empleado` = ?;';
         $params = array($this->actualizacion, $this->id);
         return Database::executeRow($sql, $params);
     }

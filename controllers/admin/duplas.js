@@ -1,5 +1,5 @@
 // ?constante para trabajar con la api
-const EMPLEADO_API = 'services/admin/empleado.php';
+const TRABAJO_API = 'services/admin/info_trabajo.php';
 const DUPLA_API = 'services/admin/duplas.php';
 // Constantes para establecer los elementos del componente Modal.
 const SAVE_MODAL = new bootstrap.Modal('#saveModal'),
@@ -73,8 +73,8 @@ const openCreate = async () => {
     MODAL_TITLE.textContent = 'Crear dupla para empleados';
     // Se prepara el formulario.
     SAVE_FORM.reset();
-    fillSelect(EMPLEADO_API, 'readAll', 'duplaEmpleado1');
-    fillSelect(EMPLEADO_API, 'readAll', 'duplaEmpleado2');
+    fillSelect(TRABAJO_API, 'readAll', 'duplaEmpleado1');
+    fillSelect(TRABAJO_API, 'readAll', 'duplaEmpleado2');
     CONTENIDO_EMPLEADO1.innerHTML = '';
     CONTENIDO_EMPLEADO2.innerHTML = '';
 }
@@ -99,8 +99,8 @@ const fillTable = async (form = null) => {
             // Se establece un icono para el estado del empleado.
             (row.tipo_dupla) ? type = 'Permanente' : type = 'Temporal';
             (row.estado_dupla) ? icon = 'bi bi-check-circle-fill' : icon = 'bi bi-pause-circle-fill';
-            (row.estado_empleado1) ? icon1 = 'bi bi-check-circle-fill' : icon1 = 'bi bi-pause-circle-fill';
-            (row.estado_empleado2) ? icon2 = 'bi bi-check-circle-fill' : icon2 = 'bi bi-pause-circle-fill';
+            (row.estado_trabajo_empleado1) ? icon1 = 'bi bi-check-circle-fill' : icon1 = 'bi bi-pause-circle-fill';
+            (row.estado_trabajo_empleado2) ? icon2 = 'bi bi-check-circle-fill' : icon2 = 'bi bi-pause-circle-fill';
 
 
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
@@ -160,7 +160,7 @@ const fillTable = async (form = null) => {
                 <i class="bi bi-pencil-fill"></i> Actualizar
             </button>
             <button class="btn btn-outline-light mb-2 w-75" onclick="openState(${row.id_dupla})">
-                <i class="bi bi-exclamation-octagon"></i> Cambiar Estado
+                <i class="bi bi-exclamation-octagon"></i> Cambiar tipo dupla
             </button>
             <h3 class="card-text text-white">Estado: <i class="${icon} text-white h1"></i></h3>
         </div>
@@ -286,7 +286,7 @@ const readAllTable = async (form = null, buscador) => {
                 <i class="bi bi-pencil-fill"></i> Actualizar
             </button>
             <button class="btn btn-outline-light mb-2 w-75" onclick="openState(${row.id_dupla})">
-                <i class="bi bi-exclamation-octagon"></i> Cambiar Estado
+                <i class="bi bi-exclamation-octagon"></i> Cambiar tipo dupla
             </button>
             <h3 class="card-text text-white">Estado: <i class="${icon} text-white h1"></i></h3>
         </div>
@@ -381,9 +381,37 @@ const openUpdate = async (id) => {
         <p class="card-text text-white">Estado: <i class="${icon2} text-white"></i></p>
         `;
 
-        fillSelect(EMPLEADO_API, 'readAll', 'duplaEmpleado1', parseInt(ROW.id_empleado1));
-        fillSelect(EMPLEADO_API, 'readAll', 'duplaEmpleado2', parseInt(ROW.id_empleado2));
+        fillSelect(TRABAJO_API, 'readAll', 'duplaEmpleado1');
+        fillSelect(TRABAJO_API, 'readAll', 'duplaEmpleado2');
     } else {
         sweetAlert(2, DATA.error, false);
+    }
+}
+
+/*
+* Función asíncrona para preparar un modal de confirmacion para una funcion de estado
+* Parámetros: id (identificador del registro seleccionado).
+* Retorno: ninguno.
+*/
+const openState = async (id) => {
+    // Se muestra un mensaje de confirmación y se captura la respuesta en una constante.
+    const RESPONSE = await confirmAction('¿Está seguro de cambiar el tipo de dupla?');
+    // Se verifica la respuesta del mensaje.
+    if (RESPONSE) {
+        // Se define un objeto con los datos del registro seleccionado.
+        const FORM = new FormData();
+        FORM.append('idDupla', id);
+
+        // Petición para cambiar el estado del cliente
+        const DATA = await fetchData(DUPLA_API, 'updateStatus', FORM);
+
+        // Se comprueba si la respuesta es satisfactoria
+        if (DATA.status) {
+            sweetAlert(1, DATA.message, true); // Mensaje de éxito
+            fillTable(); // Recargar la tabla para visualizar los cambios
+        } else {
+            sweetAlert(1, 'Tipo cambiado con éxito', false); // Mensaje de error
+            fillTable(); // Recargar la tabla para visualizar los cambios
+        }
     }
 }
