@@ -126,70 +126,152 @@ class EmpleadoHandler
     public function readAll()
     {
         $sql = 'SELECT
-                    `id_empleado`,
-                    `nombre_empleado`,
-                    `apellido_empleado`,
-                    `DUI_empleado`,
-                    `telefono_personal_empleado`,
-                    `correo_empleado`,
-                    `imagen_empleado`,
-                    `fecha_actualizacion_empleado`
+                    e.id_empleado,
+                    e.nombre_empleado,
+                    e.apellido_empleado,
+                    e.DUI_empleado,
+                    e.telefono_personal_empleado,
+                    e.correo_empleado,
+                    e.imagen_empleado,
+                    e.fecha_actualizacion_empleado,
+                    CASE 
+                        WHEN t.id_empleado IS NOT NULL THEN 1 
+                        ELSE 0 
+                    END AS empleado_agregado,
+                    COALESCE(t.estado_trabajo_empleado, 0) AS estado_trabajo_empleado
                 FROM
-                    `tb_empleados`';
+                    tb_empleados e
+                LEFT JOIN 
+                    tb_trabajo_empleado t 
+                ON
+                    e.id_empleado = t.id_empleado;';
         return Database::getRows($sql);
     }
 
     public function readByName()
     {
         $sql = 'SELECT
-                    `id_empleado`,
-                    `nombre_empleado`,
-                    `apellido_empleado`,
-                    `DUI_empleado`,
-                    `telefono_personal_empleado`,
-                    `correo_empleado`,
-                    `imagen_empleado`,
-                    `fecha_actualizacion_empleado`
+                    e.id_empleado,
+                    e.nombre_empleado,
+                    e.apellido_empleado,
+                    e.DUI_empleado,
+                    e.telefono_personal_empleado,
+                    e.correo_empleado,
+                    e.imagen_empleado,
+                    e.fecha_actualizacion_empleado,
+                    CASE 
+                        WHEN t.id_empleado IS NOT NULL THEN 1 
+                        ELSE 0 
+                    END AS empleado_agregado,
+                    COALESCE(t.estado_trabajo_empleado, 0) AS estado_trabajo_empleado
                 FROM
-                    `tb_empleados`
+                    tb_empleados e
+                LEFT JOIN 
+                    tb_trabajo_empleado t
+                ON
+                    e.id_empleado = t.id_empleado -- Condición de unión
                 ORDER BY
-                    `nombre_empleado`';
+                    e.nombre_empleado;';
         return Database::getRows($sql);
     }
 
     public function readByNameDesc()
     {
         $sql = 'SELECT
-                    `id_empleado`,
-                    `nombre_empleado`,
-                    `apellido_empleado`,
-                    `DUI_empleado`,
-                    `telefono_personal_empleado`,
-                    `correo_empleado`,
-                    `imagen_empleado`,
-                    `fecha_actualizacion_empleado`
+                    e.id_empleado,
+                    e.nombre_empleado,
+                    e.apellido_empleado,
+                    e.DUI_empleado,
+                    e.telefono_personal_empleado,
+                    e.correo_empleado,
+                    e.imagen_empleado,
+                    e.fecha_actualizacion_empleado,
+                    CASE 
+                        WHEN t.id_empleado IS NOT NULL THEN 1 
+                        ELSE 0 
+                    END AS empleado_agregado,
+                    COALESCE(t.estado_trabajo_empleado, 0) AS estado_trabajo_empleado
                 FROM
-                    `tb_empleados`
+                    tb_empleados e
+                LEFT JOIN 
+                    tb_trabajo_empleado t
+                ON
+                    e.id_empleado = t.id_empleado -- Condición de unión
                 ORDER BY
-                    `nombre_empleado` DESC';
+                    e.nombre_empleado DESC';
         return Database::getRows($sql);
     }
 
     public function readByModify()
     {
         $sql = 'SELECT
-                    `id_empleado`,
-                    `nombre_empleado`,
-                    `apellido_empleado`,
-                    `DUI_empleado`,
-                    `telefono_personal_empleado`,
-                    `correo_empleado`,
-                    `imagen_empleado`,
-                    `fecha_actualizacion_empleado`
+                    e.id_empleado,
+                    e.nombre_empleado,
+                    e.apellido_empleado,
+                    e.DUI_empleado,
+                    e.telefono_personal_empleado,
+                    e.correo_empleado,
+                    e.imagen_empleado,
+                    e.fecha_actualizacion_empleado,
+                    CASE 
+                        WHEN t.id_empleado IS NOT NULL THEN 1 
+                        ELSE 0 
+                    END AS empleado_agregado,
+                    COALESCE(t.estado_trabajo_empleado, 0) AS estado_trabajo_empleado
                 FROM
-                    `tb_empleados`
+                    tb_empleados e
+                LEFT JOIN 
+                    tb_trabajo_empleado t
+                                    ON
+                    e.id_empleado = t.id_empleado -- Condición de unión
                 ORDER BY
-                    `fecha_actualizacion_empleado` DESC';
+                    e.fecha_actualizacion_empleado DESC';
+        return Database::getRows($sql);
+    }
+
+    public function readByInformation()
+    {
+        $sql = 'SELECT
+                    e.id_empleado,
+                    e.nombre_empleado,
+                    e.apellido_empleado,
+                    e.DUI_empleado,
+                    e.telefono_personal_empleado,
+                    e.correo_empleado,
+                    e.imagen_empleado,
+                    e.fecha_actualizacion_empleado,
+                    CASE WHEN t.id_empleado IS NOT NULL THEN 1 ELSE 0
+                END AS empleado_agregado,
+                COALESCE(t.estado_trabajo_empleado, 0) AS estado_trabajo_empleado
+                FROM
+                    tb_empleados e
+                LEFT JOIN tb_trabajo_empleado t ON
+                    e.id_empleado = t.id_empleado
+                WHERE
+                    t.id_empleado IS NOT NULL; -- Filtra solo los empleados agregados';
+        return Database::getRows($sql);
+    }
+
+    public function readByNoInformation()
+    {
+        $sql = 'SELECT
+                    e.id_empleado,
+                    e.nombre_empleado,
+                    e.apellido_empleado,
+                    e.DUI_empleado,
+                    e.telefono_personal_empleado,
+                    e.correo_empleado,
+                    e.imagen_empleado,
+                    e.fecha_actualizacion_empleado,
+                    CASE WHEN t.id_empleado IS NOT NULL THEN 1 ELSE 0
+                END AS empleado_agregado,
+                COALESCE(t.estado_trabajo_empleado, 0) AS estado_trabajo_empleado
+                FROM
+                    tb_empleados e
+                LEFT JOIN tb_trabajo_empleado t ON
+                    e.id_empleado = t.id_empleado
+                WHERE
+                    t.id_empleado IS NULL; -- Filtra solo los empleados agregados';
         return Database::getRows($sql);
     }
 

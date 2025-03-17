@@ -28,8 +28,6 @@
                     reportes generales de actividad.</h6>
             </div>
         </div>
-        <!-- <button type="button" class=" btn btn-dark"><i class="bi bi-person-vcard-fill me-1"></i>Información laboral
-            empleados</button> -->
         <button type="button" class="btn btn-dark fs-3" onclick="window.location.href='../admin/info_empleados.html'">
             <i class="bi bi-person-vcard-fill me-1"></i>Información laboral empleados
         </button>
@@ -82,44 +80,18 @@
                                 <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 5)">Inactivo</a></li>
                             </ul>
                         </div>
-                        <!-- Dropdown de buscar por departamento -->
-                        <!-- <div class="dropdown" id="buscadorDepartamento">
-                            <button class="btn btn-secondary dropdown-toggle" type="submit" data-bs-toggle="dropdown"
+                        <!-- filtro por estado -->
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">
-                                Filtrar por departamento
+                                Estado empleado
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Ahuachapán" href="">Ahuachapán</a>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 6)">Información agregada</a>
                                 </li>
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Santa Ana" href="">Santa Ana</a>
-                                </li>
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Sonsonate" href="">Sonsonate</a>
-                                </li>
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Chalatenango" href="">Chalatenango</a>
-                                </li>
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="La Libertad" href="">La Libertad</a>
-                                </li>
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="San Salvador" href="">San Salvador</a>
-                                </li>
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Cuscatlán" href="">Cuscatlán</a>
-                                </li>
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="La Paz" href="">La Paz</a>
-                                </li>
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Cabañas" href="">Cabañas</a>
-                                </li>
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="San Vicente" href="">San Vicente</a>
-                                </li>
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Usulután" href="">Usulután</a>
-                                </li>
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="San Miguel" href="">San Miguel</a>
-                                </li>
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="Morazán" href="">Morazán</a>
-                                </li>
-                                <li><a class="dropdown-item" onclick="readByDepartamento()" name="departamentoEmpleado" value="La Unión" href="">La Unión</a>
-                                </li>
-
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 7)">Información pendiente a agregar</a></li>
                             </ul>
-                        </div> -->
+                        </div>
                     </div>
                 </div>
             </form>

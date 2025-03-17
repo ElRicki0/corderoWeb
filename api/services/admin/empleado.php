@@ -9,7 +9,7 @@ if (isset($_GET['action'])) {
     // Se instancia la clase correspondiente.
     $empleado = new EmpleadoData;
     // Se declara e inicializa un arreglo para guardar el resultado que retorna la API.
-    $result = array('status' => 0, 'message' => null, 'dataset' => null, 'error' => null, 'exception' => null);
+    $result = array('status' => 0, 'message' => null, 'dataset' => null, 'error' => null, 'exception' => null, 'fileStatus' => null);
     // $result = array('status' => 0, 'session' => 0, 'message' => null, 'dataset' => null, 'error' => null, 'exception' => null, 'username' => null, 'fileStatus' => null);
     // ? se verifica si hay un session iniciada como administrador, de lo contrario el código termina con un error
     if (isset($_SESSION['idAdministrador'])) {
@@ -32,6 +32,8 @@ if (isset($_GET['action'])) {
                 } elseif ($empleado->createRow()) {
                     $result['status'] = 1;
                     $result['message'] = 'Empleado registrado correctamente';
+                    // Se asigna el estado del archivo después de insertar.
+                    $result['fileStatus'] = Validator::saveFile($_FILES['imagenEmpleado'], $empleado::RUTA_IMAGEN);
                 } else {
                     $result['error'] = 'Ocurrió un problema al registrar el administrador';
                 }
@@ -128,15 +130,29 @@ if (isset($_GET['action'])) {
                 }
                 break;
             case 'readByModify':
-            //     if ($result['dataset'] = $empleado->readByDepartamento($_POST['departamentoEmpleado'])) {
-            //         $result['status'] = 1;
-            //         $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
-            //     } else {
-            //         $result['error'] = 'No existen empleados registrados';
-            //     }
-            //     break;
-
-
+                if ($result['dataset'] = $empleado->readByModify()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen empleados registrados';
+                }
+                break;
+                case 'readByInformation':
+                    if ($result['dataset'] = $empleado->readByInformation()) {
+                        $result['status'] = 1;
+                        $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                    } else {
+                        $result['error'] = 'No existen empleados registrados';
+                    }
+                    break;
+                    case 'readByNoInformation':
+                        if ($result['dataset'] = $empleado->readByNoInformation()) {
+                            $result['status'] = 1;
+                            $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                        } else {
+                            $result['error'] = 'No existen empleados registrados';
+                        }
+                        break;
             default:
                 $result['error'] = 'Acción no disponible dentro de la sesión';
                 break;
