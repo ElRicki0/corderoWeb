@@ -72,24 +72,14 @@
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">
-                                Filtrar por estado
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 4)">Activo</a>
-                                </li>
-                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 5)">Inactivo</a></li>
-                            </ul>
-                        </div>
-                        <!-- filtro por estado -->
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
                                 Estado empleado
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 6)">Información agregada</a>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 6)">Información
+                                        agregada</a>
                                 </li>
-                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 7)">Información pendiente a agregar</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 7)">Información
+                                        pendiente a agregar</a></li>
                             </ul>
                         </div>
                     </div>
@@ -101,60 +91,6 @@
         <!-- Contenedor para la tabla con scroll -->
 
         <div id="empleados" class=" justify-content-center row">
-
-            <!-- color oscuro serán las cards de información de los empleados -->
-            <!-- <div class="col-12 card mt-2 text-bg-dark" id="searchForm">
-                    <div class="row justify-content-center align-items-center">
-                        <div class="col-12 mt-3 d-flex justify-content-center align-items-center"
-                            style="height: 300px; width: 300px;">
-                            <img src="../../resources/error/images/404Empleado.png" class="card-img-top" alt="..."
-                                onerror="this.onerror=null; this.src='../../resources/img/error/cliente.jpg';"
-                                style="max-width: 100%; max-height: 100%; object-fit: contain;">
-                        </div>
-
-                        <div class=" col-md-12 col-lg-3 card-body d-flex flex-column align-items-center text-center">
-                            <div class="row">
-
-                                <div class="col-lg-4 col-md-12 col-sm-12">
-                                    <h5 class="text-white">Nombre empleado</h5>
-                                    <p class="card-title text-white">${row.nombre_empleado} ${row.apellido_empleado}</p>
-                                    <h5 class="text-white">DUI Empleado</h5>
-                                    <p class="card-text text-white">${row.dui_empleado}</p>
-                                    <h5 class="text-white">Correo Empleado</h5>
-                                    <p class="card-text text-white">${row.correo_empleado}</p>
-                                </div>
-                                <div class="col-lg-4 col-md-12 col-sm-12">
-                                    <h5 class="text-white">Teléfono empleado</h5>
-                                    <p class="card-title text-white">${row.nombre_empleado}
-                                    <h5 class="text-white">Departamento Empleado</h5>
-                                    <p class="card-text text-white">${row.dui_empleado}</p>
-                                    <h5 class="text-white">Municipio Empleado</h5>
-                                    <p class="card-text text-white">${row.correo_empleado}</p>
-                                    <h5 class="text-white">Estado empleado</h5>
-                                    <p class="card-text text-white">Estado: <i class="${icon} text-white"></i></p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-12 col-md-12 col-lg-3 text-center my-5">
-                            <div class="d-flex flex-column">
-                                <button class="btn btn-outline-light mb-2" onclick="openDelete(${row.id_empleado})">
-                                    <i class="bi bi-trash3-fill"></i> Eliminar
-                                </button>
-                                <button class="btn btn-outline-light mb-2" onclick="openUpdate(${row.id_empleado})">
-                                    <i class="bi bi-pencil-fill"></i>Actualizar
-                                </button>
-                                <button class="btn btn-outline-light mb-2" onclick="openState(${row.id_empleado})">
-                                    <i class="bi bi-exclamation-octagon"></i> Cambiar Estado
-                                </button>
-                                <button type="button" class="btn btn-outline-light mb-2"
-                                    onclick="openChart(${row.id_empleado})">
-                                    <i class="bi bi-bar-chart-line-fill"></i> Ver Gráfico
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
         </div>
         <!-- Modal Alterar registro (agregar o editar) -->
         <div class="modal fade" id="saveModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -238,6 +174,25 @@
                             </div>
                         </form>
                     </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- modal para elegir el tipo de búsqueda (zona o municipio) -->
+        <div class="modal fade" tabindex="-1" id="typeSearch">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Seleccione tipo de búsqueda</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>hola mundo</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
                 </div>
             </div>
         </div>

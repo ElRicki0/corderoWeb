@@ -387,3 +387,8 @@ const openCreate = () => {
     fillSelect(EMPLEADO_API, 'readAll', 'empleadoTrabajo');
 
 }
+
+// * Función para prepara el formulario de búsqueda de empleado por zona en El Salvador
+const openLocation= ()=>{
+    
+}

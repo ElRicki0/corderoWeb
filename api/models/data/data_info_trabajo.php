@@ -28,8 +28,8 @@ class InfoTrabajoData extends InfoTrabajoHandler
     {
         if (!$value) {
             return true;
-        } elseif (!Validator::validateString($value)) {
-            $this->data_error = 'La latitud contiene caracteres prohibidos';
+        } elseif (!Validator::validateDecimalNumber($value)) {
+            $this->data_error = 'La latitud inicial contiene caracteres prohibidos';
             return false;
         } elseif (Validator::validateLength($value, $min, $max)) {
             $this->latitudInicio = $value;
@@ -44,8 +44,8 @@ class InfoTrabajoData extends InfoTrabajoHandler
     {
         if (!$value) {
             return true;
-        } elseif (!Validator::validateString($value)) {
-            $this->data_error = 'La longitud contiene caracteres prohibidos';
+        } elseif (!Validator::validateDecimalNumber($value)) {
+            $this->data_error = 'La longitud inicial contiene caracteres prohibidos';
             return false;
         } elseif (Validator::validateLength($value, $min, $max)) {
             $this->longitudInicio = $value;
@@ -61,7 +61,7 @@ class InfoTrabajoData extends InfoTrabajoHandler
         if (!$value) {
             return true;
         } elseif (!Validator::validateString($value)) {
-            $this->data_error = 'La hora contiene caracteres prohibidos';
+            $this->data_error = 'La hora inicio contiene caracteres prohibidos';
             return false;
         } elseif (Validator::validateLength($value, $min, $max)) {
             $this->horaInicio = $value;
@@ -76,7 +76,7 @@ class InfoTrabajoData extends InfoTrabajoHandler
     {
         if (!$value) {
             return true;
-        } elseif (!Validator::validateString($value)) {
+        } elseif (!Validator::validateDecimalNumber($value)) {
             $this->data_error = 'La latitud Final contiene caracteres prohibidos';
             return false;
         } elseif (Validator::validateLength($value, $min, $max)) {
@@ -92,7 +92,7 @@ class InfoTrabajoData extends InfoTrabajoHandler
     {
         if (!$value) {
             return true;
-        } elseif (!Validator::validateString($value)) {
+        } elseif (!Validator::validateDecimalNumber($value)) {
             $this->data_error = 'La longitud Final contiene caracteres prohibidos';
             return false;
         } elseif (Validator::validateLength($value, $min, $max)) {

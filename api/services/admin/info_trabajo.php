@@ -14,6 +14,7 @@ if (isset($_GET['action'])) {
     if (isset($_SESSION['idAdministrador']) or true) {
         //? se realiza una acción cuando el administrador tiene la sesión iniciada
         switch ($_GET['action']) {
+            // ? acciones de servidor para administrador
             case 'searchRows':
                 if (!Validator::validateSearch($_POST['search'])) {
                     $result['error'] = Validator::getSearchError();
@@ -136,7 +137,33 @@ if (isset($_GET['action'])) {
                 } else {
                     $result['error'] = 'Ocurrió un problema al eliminar la información';
                 }
+                break;
 
+            // ?acciones para las pantallas para empleado
+            case 'startWork':
+                    // echo($_POST['latitudInicio']);
+                    // die;
+                if (
+                    !$trabajo->setId($_POST['idInformacion'])or
+                    !$trabajo->setHoraInicio($_POST['horaInicio']) or
+                    !$trabajo->setLatitudInicio($_POST['latitudInicio']) or
+                    !$trabajo->setLongitudInicio($_POST['longitudInicio']) 
+                ) {
+                    $result['error'] = $trabajo->getDataError();
+                } elseif ($trabajo->startWork()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'jornada laboral iniciada con éxito';
+                } else {
+                    $result['error'] = 'ERROR #110 / consulte con un administrador para solucionar el problema';
+                }
+                break;
+            case 'readInformation':
+                if ($result['dataset'] = $trabajo->readInformation()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Información conseguida con éxito';
+                } else {
+                    $result['error'] = 'No existe información registrada';
+                }
                 break;
             default:
                 $result['error'] = 'Acción no disponible dentro de la sesión';

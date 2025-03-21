@@ -248,6 +248,17 @@ class InfoTrabajoHandler
         return Database::getRow($sql, $params);
     }
 
+    public function readInformation()
+    {
+        $sql = 'SELECT
+                    `id_trabajo_empleado`
+                FROM
+                    `tb_trabajo_empleado`
+                WHERE `id_empleado` = ?';
+        $params = array($_SESSION['idEmpleado']);
+        return Database::getRows($sql, $params);
+    }
+
     public function updateRow()
     {
         $sql = '  UPDATE
@@ -281,6 +292,23 @@ class InfoTrabajoHandler
     {
         $sql = 'DELETE FROM `tb_trabajo_empleado` WHERE `id_trabajo_empleado`= ? ';
         $params = array($this->id);
+        return Database::executeRow($sql, $params);
+    }
+
+    // ? métodos necesarios para el apartado public 
+
+    public function startWork()
+    {
+        $sql = 'UPDATE
+                    `tb_trabajo_empleado`
+                SET
+                    `latitud_inicio_trabajo_empleado` = ?,
+                    `longitud_inicio_trabajo_empleado` = ?,
+                    `hora_inicio_trabajo_empleado` = ?,
+                    `estado_trabajo_empleado` = 1
+                WHERE
+                    `id_trabajo_empleado` = ?';
+        $params = array($this->latitudInicio, $this->longitudInicio, $this->horaInicio, $this->id);
         return Database::executeRow($sql, $params);
     }
 }

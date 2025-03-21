@@ -18,8 +18,20 @@
             <h2>Jornada laboral diaria</h2>
             <h4>Horas-Minutos-Segundos</h4>
             <h3>00:00:00</h3>
-
-            <button type="button" class="btn btn-primary">guardar hora actual</button>
+            <form id="saveForm">
+                <input type="number" class="d-none" id="idInformacion" name="idInformacion">
+                <!-- Campo oculto para obtener la hora actual del empleado -->
+                <input type="text" class="" id="latitudInicio" name="latitudInicio">
+                <input type="text" class="" id="longitudInicio" name="longitudInicio">
+                <!-- campo oculto para obtener la ubicación actual del usuario -->
+                <input type="text" class="d-none" id="horaInicio" name="horaInicio">
+                <input type="text" class="d-none" id="horaFinal" name="horaFinal">
+                <!-- <button type="button" class="btn btn-primary" onclick="openLocation()">ubicación actual</button> -->
+                <div class="container mt-5" id="buttonsOptions">
+                    <button type="button" class="btn btn-primary" onclick="startWork()">Inicio jornada</button>
+                    <button type="button" class="btn btn-warning disabled">Inicio Fin de jornada</button>
+                </div>
+            </form>
         </div>
     </main>
 
