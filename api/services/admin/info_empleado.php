@@ -128,58 +128,23 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'Información inexistente';
                 }
                 break;
-            case 'deleteRow':
-                if (!$trabajo->setId($_POST['idTrabajo'])) {
-                    $result['error'] = $trabajo->getDataError();
-                } elseif ($trabajo->deleteRow()) {
+            case 'readByActive5':
+                if ($result['dataset'] = $trabajo->readByActive5()) {
                     $result['status'] = 1;
-                    $result['message'] = 'Producto eliminado correctamente';
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
                 } else {
-                    $result['error'] = 'Ocurrió un problema al eliminar la información';
+                    $result['error'] = 'No existen información registrada';
+                }
+                break;
+            case 'readByInactive5':
+                if ($result['dataset'] = $trabajo->readByInactive5()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen información registrada';
                 }
                 break;
 
-            // ?acciones para las pantallas para empleado
-            case 'startWork':
-                // echo($_POST['latitudInicio']);
-                // die;
-                if (
-                    !$trabajo->setId($_POST['idInformacion']) or
-                    !$trabajo->setHoraInicio($_POST['horaInicio']) or
-                    !$trabajo->setLatitudInicio($_POST['latitud']) or
-                    !$trabajo->setLongitudInicio($_POST['longitud'])
-                ) {
-                    $result['error'] = $trabajo->getDataError();
-                } elseif ($trabajo->startWork()) {
-                    $result['status'] = 1;
-                    $result['message'] = 'jornada laboral iniciada con éxito';
-                } else {
-                    $result['error'] = 'ERROR #110 / consulte con un administrador para solucionar el problema';
-                }
-                break;
-            case 'endWork':   
-                if (
-                    !$trabajo->setId($_POST['idInformacion']) or
-                    !$trabajo->setHoraFinal($_POST['horaFinal']) or
-                    !$trabajo->setLatitudFinal($_POST['latitud']) or
-                    !$trabajo->setLongitudFinal($_POST['longitud'])
-                ) {
-                    $result['error'] = $trabajo->getDataError();
-                } elseif ($trabajo->endWork()) {
-                    $result['status'] = 1;
-                    $result['message'] = 'jornada laboral terminada con éxito';
-                } else {
-                    $result['error'] = 'ERROR #120 / consulte con un administrador para solucionar el problema';
-                }
-                break;
-            case 'readInformation':
-                if ($result['dataset'] = $trabajo->readInformation()) {
-                    $result['status'] = 1;
-                    $result['message'] = 'Información conseguida con éxito';
-                } else {
-                    $result['error'] = 'No existe información registrada';
-                }
-                break;
             default:
                 $result['error'] = 'Acción no disponible dentro de la sesión';
                 break;

@@ -1,5 +1,5 @@
 // ?constante para trabajar con la api
-const TRABAJO_API = 'services/admin/info_trabajo.php';
+const INFO_EMPLEADO_API = 'services/admin/info_empleado.php';
 const DUPLA_API = 'services/admin/duplas.php';
 // Constantes para establecer los elementos del componente Modal.
 const SAVE_MODAL = new bootstrap.Modal('#saveModal'),
@@ -73,8 +73,8 @@ const openCreate = async () => {
     MODAL_TITLE.textContent = 'Crear dupla para empleados';
     // Se prepara el formulario.
     SAVE_FORM.reset();
-    fillSelect(TRABAJO_API, 'readAll', 'duplaEmpleado1');
-    fillSelect(TRABAJO_API, 'readAll', 'duplaEmpleado2');
+    fillSelect(INFO_EMPLEADO_API, 'readAll', 'duplaEmpleado1');
+    fillSelect(INFO_EMPLEADO_API, 'readAll', 'duplaEmpleado2');
     CONTENIDO_EMPLEADO1.innerHTML = '';
     CONTENIDO_EMPLEADO2.innerHTML = '';
 }
@@ -381,8 +381,8 @@ const openUpdate = async (id) => {
         <p class="card-text text-white">Estado: <i class="${icon2} text-white"></i></p>
         `;
 
-        fillSelect(TRABAJO_API, 'readAll', 'duplaEmpleado1');
-        fillSelect(TRABAJO_API, 'readAll', 'duplaEmpleado2');
+        fillSelect(INFO_EMPLEADO_API, 'readAll', 'duplaEmpleado1');
+        fillSelect(INFO_EMPLEADO_API, 'readAll', 'duplaEmpleado2');
     } else {
         sweetAlert(2, DATA.error, false);
     }

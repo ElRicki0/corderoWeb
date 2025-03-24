@@ -232,6 +232,54 @@ class InfoTrabajoHandler
         return Database::getRows($sql);
     }
 
+    public function readByActive5()
+    {
+        $sql = '  SELECT
+                    `id_trabajo_empleado`,
+                    `latitud_inicio_trabajo_empleado`,
+                    `longitud_inicio_trabajo_empleado`,
+                    `hora_inicio_trabajo_empleado`,
+                    `estado_trabajo_empleado`,
+                    `departamento_trabajo_empleado`,
+                    `municipio_trabajo_empleado`,
+                    `fecha_actualizacion_trabajo_empleado`,
+                    e.nombre_empleado,
+                    e.apellido_empleado,
+                    e.correo_empleado,
+                    e.imagen_empleado
+                FROM
+                    `tb_trabajo_empleado` te
+                INNER JOIN tb_empleados e ON
+                    te.id_empleado = e.id_empleado
+                ORDER BY `hora_inicio_trabajo_empleado` DESC  -- Ordena por hora de finalización (más recientes primero)
+                LIMIT 5';
+        return Database::getRows($sql);
+    }
+
+    public function readByInactive5()
+    {
+        $sql = '  SELECT
+                    `id_trabajo_empleado`,
+                    `latitud_final_trabajo_empleado`,
+                    `longitud_final_trabajo_empleado`,
+                    `hora_final_trabajo_empleado`,
+                    `estado_trabajo_empleado`,
+                    `departamento_trabajo_empleado`,
+                    `municipio_trabajo_empleado`,
+                    `fecha_actualizacion_trabajo_empleado`,
+                    e.nombre_empleado,
+                    e.apellido_empleado,
+                    e.correo_empleado,
+                    e.imagen_empleado
+                FROM
+                    `tb_trabajo_empleado` te
+                INNER JOIN tb_empleados e ON
+                    te.id_empleado = e.id_empleado
+                ORDER BY `hora_final_trabajo_empleado` DESC  -- Ordena por hora de finalización (más recientes primero)
+                LIMIT 5';
+        return Database::getRows($sql);
+    }
+
     public function readOne()
     {
         $sql = 'SELECT

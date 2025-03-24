@@ -1,5 +1,5 @@
 // ?constante para trabajar con la API
-const INFO_TRABAJO_API = 'services/admin/info_trabajo.php';
+const INFO_EMPLEADO_API = 'services/public/info_empleado.php';
 
 // Variables para guardar hora y ubicación de inicio y final de jornada
 const HORA_INICIO = document.getElementById('horaInicio'),
@@ -72,7 +72,7 @@ function getLocation() {
 //     // Se define un objeto con los datos del registro seleccionado.
 //     const FORM = new FormData();
 //     // Petición para iniciar la jornada del registro seleccionado.
-//     const DATA = await fetchData(INFO_TRABAJO_API, 'startWork', FORM);
+//     const DATA = await fetchData(INFO_EMPLEADO_API, 'startWork', FORM);
 //     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
 //     if (DATA.status) {
 //         // Se muestra un mensaje de éxito.
@@ -92,7 +92,7 @@ const startWork = async (id) => {
         const FORM = new FormData(SAVE_FORM);
         FORM.append('idInformacion', id);
         // Petición para eliminar el registro seleccionado.
-        const DATA = await fetchData(INFO_TRABAJO_API, 'startWork', FORM);
+        const DATA = await fetchData(INFO_EMPLEADO_API, 'startWork', FORM);
         // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
         if (DATA.status) {
             // Se muestra un mensaje de éxito.
@@ -132,7 +132,7 @@ const endWork = async (id) => {
         const FORM = new FormData(SAVE_FORM);
         FORM.append('idInformacion', id);
         // Petición para eliminar el registro seleccionado.
-        const DATA = await fetchData(INFO_TRABAJO_API, 'endWork', FORM);
+        const DATA = await fetchData(INFO_EMPLEADO_API, 'endWork', FORM);
         // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
         if (DATA.status) {
             // Se muestra un mensaje de éxito.
@@ -148,7 +148,7 @@ const endWork = async (id) => {
 const fillOptions = async () => {
     BUTTONS_OPTIONS.innerHTML = '';
     // Petición para obtener los datos del usuario que ha iniciado sesión.
-    const DATA = await fetchData(INFO_TRABAJO_API, 'readInformation');
+    const DATA = await fetchData(INFO_EMPLEADO_API, 'readInformation');
     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
     if (DATA.status) {
         // Se recorre el conjunto de registros (dataset) fila por fila a través del objeto row.

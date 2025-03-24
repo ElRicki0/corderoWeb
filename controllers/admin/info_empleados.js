@@ -1,5 +1,5 @@
 // ?constante para trabajar con la API
-const INFO_TRABAJO_API = 'services/admin/info_trabajo.php';
+const INFO_EMPLEADO_API = 'services/admin/info_empleado.php';
 const EMPLEADO_API = 'services/admin/empleado.php';
 
 // ? Constantes del registro empleado
@@ -84,7 +84,7 @@ SAVE_FORM.addEventListener('submit', async (event) => {
     // Constante tipo objeto con los datos del formulario.
     const FORM = new FormData(SAVE_FORM);
     // Petición para guardar los datos del formulario.
-    const DATA = await fetchData(INFO_TRABAJO_API, action, FORM);
+    const DATA = await fetchData(INFO_EMPLEADO_API, action, FORM);
     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
     if (DATA.status) {
         // Se cierra la caja de diálogo.
@@ -110,7 +110,7 @@ const fillTable = async (form = null) => {
     // Se verifica la acción a realizar.
     (form) ? action = 'searchRows' : action = 'readAll';
     // Petición para obtener los registros disponibles.
-    const DATA = await fetchData(INFO_TRABAJO_API, action, form);
+    const DATA = await fetchData(INFO_EMPLEADO_API, action, form);
     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
     if (DATA.status) {
         // Se recorre el conjunto de registros fila por fila.
@@ -204,7 +204,7 @@ const readAllTable = async (form = null, buscador) => {
             break;
     }
     // Petición para obtener los registros disponibles.
-    const DATA = await fetchData(INFO_TRABAJO_API, action, form);
+    const DATA = await fetchData(INFO_EMPLEADO_API, action, form);
     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
     if (DATA.status) {
         // Se recorre el conjunto de registros fila por fila.
@@ -285,7 +285,7 @@ const openState = async (id) => {
         FORM.append('idTrabajo', id);
 
         // Petición para cambiar el estado del cliente
-        const DATA = await fetchData(INFO_TRABAJO_API, 'updateStatus', FORM);
+        const DATA = await fetchData(INFO_EMPLEADO_API, 'updateStatus', FORM);
 
         // Se comprueba si la respuesta es satisfactoria
         if (DATA.status) {
@@ -311,7 +311,7 @@ const openDelete = async (id) => {
         const FORM = new FormData();
         FORM.append('idTrabajo', id);
         // Petición para eliminar el registro seleccionado.
-        const DATA = await fetchData(INFO_TRABAJO_API, 'deleteRow', FORM);
+        const DATA = await fetchData(INFO_EMPLEADO_API, 'deleteRow', FORM);
         // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
         if (DATA.status) {
             // Se muestra un mensaje de éxito.
@@ -334,7 +334,7 @@ const openUpdate = async (id) => {
     const FORM = new FormData();
     FORM.append('idTrabajo', id);
     // Petición para obtener los datos del registro solicitado.
-    const DATA = await fetchData(INFO_TRABAJO_API, 'readOne', FORM);
+    const DATA = await fetchData(INFO_EMPLEADO_API, 'readOne', FORM);
     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
     if (DATA.status) {
         // Se muestra la caja de diálogo con su título.

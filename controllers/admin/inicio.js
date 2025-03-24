@@ -1,4 +1,10 @@
 const CABLES_API = 'services/admin/cables.php'
+const INFO_EMPLEADOS_API = 'services/admin/info_empleado.php'
+
+// ? variables para mostrar a los últimos empleados que iniciaron y terminaron una jornada laboral
+const JORNADAS_EMPLEADOS = document.getElementById('jornadasEmpleados'),
+    INICIO_BOTON = document.getElementById('inicioBoton'),
+    FINALIZACION_BOTON = document.getElementById('finalizacionBoton');
 
 // Método del evento para cuando el documento ha cargado.
 document.addEventListener('DOMContentLoaded', async () => {
@@ -90,5 +96,80 @@ const graficoPastelCategorias = async () => {
     } else {
         document.getElementById('ContanidoCable3').remove();
         console.log(DATA.error);
+    }
+}
+
+// *   función asíncrona para mostrar los últimos 5 inicios de jornada laboral o las finalizaciones.
+// *   Parámetros: ninguno.
+// *   Retorno: ninguno.
+const inicioJornadas = async () => {
+    JORNADAS_EMPLEADOS.innerHTML = '';
+    INICIO_BOTON.classList.add('disabled');
+    FINALIZACION_BOTON.classList.remove('disabled');
+    // Petición para obtener los registros disponibles.
+    const DATA = await fetchData(INFO_EMPLEADOS_API, 'readByActive5');
+    // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
+    if (DATA.status) {
+        // Se recorre el conjunto de registros (dataset) fila por fila a través del objeto row.
+        DATA.dataset.forEach(row => {
+            // Se establece un icono para el estado del producto.
+            (parseInt(row.estado_producto)) ? icon = 'bi bi-eye-fill' : icon = 'bi bi-eye-slash-fill';
+            // Se crean y concatenan las filas de la tabla con los datos de cada registro.
+            JORNADAS_EMPLEADOS.innerHTML += `
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#empleadoInformacion${row.id_trabajo_empleado}" aria-expanded="false"
+                            aria-controls="empleadoInformacion${row.id_trabajo_empleado}">
+                            ${row.nombre_empleado} ${row.apellido_empleado}
+                        </button>
+                    </h2>
+                    <div id="empleadoInformacion${row.id_trabajo_empleado}" class="accordion-collapse collapse"
+                        data-bs-parent="#jornadasEmpleados">
+                        <div class="accordion-body">
+                            <button type="button" class="btn btn-info"><h5>Mostrar ubicación</h5></button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    } else {
+        sweetAlert(4, DATA.error, true);
+    }
+}
+
+const finalizacionJornadas = async () => {
+    JORNADAS_EMPLEADOS.innerHTML = '';
+    FINALIZACION_BOTON.classList.add('disabled');
+    INICIO_BOTON.classList.remove('disabled');
+    // Petición para obtener los registros disponibles.
+    const DATA = await fetchData(INFO_EMPLEADOS_API, 'readByInactive5');
+    // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
+    if (DATA.status) {
+        // Se recorre el conjunto de registros (dataset) fila por fila a través del objeto row.
+        DATA.dataset.forEach(row => {
+            // Se establece un icono para el estado del producto.
+            (parseInt(row.estado_producto)) ? icon = 'bi bi-eye-fill' : icon = 'bi bi-eye-slash-fill';
+            // Se crean y concatenan las filas de la tabla con los datos de cada registro.
+            JORNADAS_EMPLEADOS.innerHTML += `
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseOne" aria-expanded="false"
+                            aria-controls="flush-collapseOne">
+                            Accordion Item #1
+                        </button>
+                    </h2>
+                    <div id="flush-collapseOne" class="accordion-collapse collapse"
+                        data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">Placeholder content for this accordion, which is intended to
+                            demonstrate the <code>.accordion-flush</code> class. This is the first item's
+                            accordion body.</div>
+                    </div>
+                </div>
+            `;
+        });
+    } else {
+        sweetAlert(4, DATA.error, true);
     }
 }
