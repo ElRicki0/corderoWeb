@@ -251,7 +251,8 @@ class InfoTrabajoHandler
     public function readInformation()
     {
         $sql = 'SELECT
-                    `id_trabajo_empleado`
+                    `id_trabajo_empleado`,
+                    `estado_trabajo_empleado`
                 FROM
                     `tb_trabajo_empleado`
                 WHERE `id_empleado` = ?';
@@ -309,6 +310,21 @@ class InfoTrabajoHandler
                 WHERE
                     `id_trabajo_empleado` = ?';
         $params = array($this->latitudInicio, $this->longitudInicio, $this->horaInicio, $this->id);
+        return Database::executeRow($sql, $params);
+    }
+
+    public function endWork()
+    {
+        $sql = 'UPDATE
+                    `tb_trabajo_empleado`
+                SET
+                    `latitud_final_trabajo_empleado` = ?,
+                    `longitud_final_trabajo_empleado` = ?,
+                    `hora_final_trabajo_empleado` = ?,
+                    `estado_trabajo_empleado` = 0
+                WHERE
+                    `id_trabajo_empleado` = ?';
+        $params = array($this->latitudFinal, $this->longitudFinal, $this->horaFinal, $this->id);
         return Database::executeRow($sql, $params);
     }
 }

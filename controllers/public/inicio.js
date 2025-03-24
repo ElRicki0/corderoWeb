@@ -3,8 +3,8 @@ const INFO_TRABAJO_API = 'services/admin/info_trabajo.php';
 
 // Variables para guardar hora y ubicación de inicio y final de jornada
 const HORA_INICIO = document.getElementById('horaInicio'),
-    LATITUD_INICIO = document.getElementById('latitudInicio'),
-    LONGITUD_INICIO = document.getElementById('longitudInicio'),
+    LATITUD = document.getElementById('latitud'),
+    LONGITUD = document.getElementById('longitud'),
     HORA_FINAL = document.getElementById('horaFinal');
 
 // constantes para la inserción de botones para empleado
@@ -14,13 +14,19 @@ const BUTTONS_OPTIONS = document.getElementById('buttonsOptions');
 const SAVE_FORM = document.getElementById('saveForm'),
     ID_INFORMACION = document.getElementById('idInformacion');
 
+// variables para mostrar la información del empleado
+const INFO_EMPLOYEE = document.getElementById('infoEmployee'),
+    NOMBRE_EMPLEADO = document.getElementById('nombreEmpleado'),
+    CORREO_EMPLEADO = document.getElementById('correoEmpleado'),
+    DUI_EMPLEADO = document.getElementById('duiEmpleado'),
+    TELEFONO_EMPLEADO = document.getElementById('telefonoEmpleado');
+
 // Método que se ejecuta al cargar la página web
 document.addEventListener('DOMContentLoaded', async () => {
     loadTemplate();
     MAIN_TITLE.textContent = 'Inicio empleados';
     fillOptions();
-    // Actualizar la hora inmediatamente al cargar la página
-    actualizarHora();
+    fillInformation();
     // Actualizar la hora cada segundo (1000 milisegundos)
     setInterval(actualizarHora, 1000);
 });
@@ -47,8 +53,8 @@ function getLocation() {
                 var lon = position.coords.longitude;
                 // var mapsUrl = `https://www.google.com/maps?q=${lat},${lon}`;
                 console.log(lat + ' - ' + lon + ' = ubicación actual');
-                LONGITUD_INICIO.value = lon;
-                LATITUD_INICIO.value = lat
+                LONGITUD.value = lon;
+                LATITUD.value = lat
             },
             (error) => {
                 console.error("Error al obtener la ubicación:", error.message);
@@ -79,7 +85,7 @@ function getLocation() {
 
 const startWork = async (id) => {
     // Llamada a la función para mostrar un mensaje de confirmación, capturando la respuesta en una constante.
-    const RESPONSE = await confirmAction('¿Desea eliminar el Empleado de forma permanente?');
+    const RESPONSE = await confirmAction('¿Desea iniciar la jornada?');
     // Se verifica la respuesta del mensaje.
     if (RESPONSE) {
         // Se define un objeto con los datos del registro seleccionado.
@@ -91,21 +97,23 @@ const startWork = async (id) => {
         if (DATA.status) {
             // Se muestra un mensaje de éxito.
             await sweetAlert(1, DATA.message, true);
+            // ? recarga el estado del empleado
+            fillOptions();
+            // * método para habilitar y deshabilitar botones 
+            // // Lógica para alternar los botones
+            // const startButton = document.querySelector('button.btn-primary'); // Botón "Inicio jornada"
+            // const endButton = document.querySelector('button.btn-warning');  // Botón "Fin de jornada"
 
-            // Lógica para alternar los botones
-            const startButton = document.querySelector('button.btn-primary'); // Botón "Inicio jornada"
-            const endButton = document.querySelector('button.btn-warning');  // Botón "Fin de jornada"
+            // if (startButton && endButton) {
+            //     // Alternar clases
+            //     startButton.classList.remove('btn-primary');
+            //     startButton.classList.add('btn-warning');
+            //     startButton.disabled = true; // Deshabilitar el botón clickeado
 
-            if (startButton && endButton) {
-                // Alternar clases
-                startButton.classList.remove('btn-primary');
-                startButton.classList.add('btn-warning');
-                startButton.disabled = true; // Deshabilitar el botón clickeado
-
-                endButton.classList.remove('btn-warning');
-                endButton.classList.add('btn-primary');
-                endButton.disabled = false; // Habilitar el otro botón
-            }
+            //     endButton.classList.remove('btn-warning');
+            //     endButton.classList.add('btn-primary');
+            //     endButton.disabled = false; // Habilitar el otro botón
+            // }
 
             // Se carga nuevamente la tabla para visualizar los cambios.
             // fillTable();
@@ -115,6 +123,28 @@ const startWork = async (id) => {
     }
 };
 
+const endWork = async (id) => {
+    // Llamada a la función para mostrar un mensaje de confirmación, capturando la respuesta en una constante.
+    const RESPONSE = await confirmAction('¿Desea terminar la jornada?');
+    // Se verifica la respuesta del mensaje.
+    if (RESPONSE) {
+        // Se define un objeto con los datos del registro seleccionado.
+        const FORM = new FormData(SAVE_FORM);
+        FORM.append('idInformacion', id);
+        // Petición para eliminar el registro seleccionado.
+        const DATA = await fetchData(INFO_TRABAJO_API, 'endWork', FORM);
+        // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
+        if (DATA.status) {
+            // Se muestra un mensaje de éxito.
+            await sweetAlert(1, DATA.message, true);
+            // ? recarga el estado del empleado
+            fillOptions();
+        } else {
+            sweetAlert(2, DATA.error, false);
+        }
+    }
+}
+
 const fillOptions = async () => {
     BUTTONS_OPTIONS.innerHTML = '';
     // Petición para obtener los datos del usuario que ha iniciado sesión.
@@ -123,11 +153,28 @@ const fillOptions = async () => {
     if (DATA.status) {
         // Se recorre el conjunto de registros (dataset) fila por fila a través del objeto row.
         DATA.dataset.forEach(row => {
-
+            const jornadaIniciada = parseInt(row.estado_trabajo_empleado);
+            // Se establece un icono para el estado del producto.
+            const estado = jornadaIniciada ? 'text-info">Jornada iniciada' : 'text-warning">Jornada no iniciada';
+            
+            // Deshabilitar iniciar jornada si ya está iniciada, y terminar jornada si no está iniciada
+            const disabledIniciar = jornadaIniciada ? 'disabled' : '';
+            const disabledTerminar = !jornadaIniciada ? 'disabled' : '';
+            
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
             BUTTONS_OPTIONS.innerHTML += `
-                <button type="button" class="btn btn-primary" onclick="startWork(${row.id_trabajo_empleado})">Inicio jornada</button>
-                <button type="button" class="btn btn-warning" onclick="startWork(${row.id_trabajo_empleado})">Inicio Fin de jornada</button>            
+                <div class="col-12 mb-4">
+                    <div class="bg-secondary d-inline-block p-3 rounded">
+                        <h4>Estado de trabajo</h4>
+                        <h4 class="${estado}</h4>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button type="button" class="btn btn-primary" ${disabledIniciar}
+                        onclick="startWork(${row.id_trabajo_empleado})"><h2>Iniciar jornada</h2></button>
+                    <button type="button" class="btn btn-warning" ${disabledTerminar}
+                        onclick="endWork(${row.id_trabajo_empleado})"><h2>Terminar jornada</h2></button>
+                </div>           
             `;
         });
         // Se inicializan los campos del formulario con los datos del usuario que ha iniciado sesión.
@@ -135,6 +182,23 @@ const fillOptions = async () => {
         ID_INFORMACION.value = ROW.id_trabajo_empleado;
     } else {
         sweetAlert(2, DATA.error, null);
+    }
+}
+
+const fillInformation = async () => {
+
+    // petición para obtener los datos del empleado
+    const DATA = await fetchData(USER_API, 'readProfile');
+    // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
+    if (DATA.status) {
+        // Se inicializan los campos del formulario con los datos del usuario que ha iniciado sesión.
+        const ROW = DATA.dataset;
+        NOMBRE_EMPLEADO.textContent = ROW.nombre_empleado +' '+ ROW.apellido_empleado;
+        CORREO_EMPLEADO.textContent = ROW.correo_empleado;
+        DUI_EMPLEADO.textContent = ROW.DUI_empleado;
+        TELEFONO_EMPLEADO.textContent = ROW.telefono_personal_empleado;
+    } else {
+        sweetAlert(4, DATA.error, true);
     }
 }
 

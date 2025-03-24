@@ -141,13 +141,13 @@ if (isset($_GET['action'])) {
 
             // ?acciones para las pantallas para empleado
             case 'startWork':
-                    // echo($_POST['latitudInicio']);
-                    // die;
+                // echo($_POST['latitudInicio']);
+                // die;
                 if (
-                    !$trabajo->setId($_POST['idInformacion'])or
+                    !$trabajo->setId($_POST['idInformacion']) or
                     !$trabajo->setHoraInicio($_POST['horaInicio']) or
-                    !$trabajo->setLatitudInicio($_POST['latitudInicio']) or
-                    !$trabajo->setLongitudInicio($_POST['longitudInicio']) 
+                    !$trabajo->setLatitudInicio($_POST['latitud']) or
+                    !$trabajo->setLongitudInicio($_POST['longitud'])
                 ) {
                     $result['error'] = $trabajo->getDataError();
                 } elseif ($trabajo->startWork()) {
@@ -155,6 +155,21 @@ if (isset($_GET['action'])) {
                     $result['message'] = 'jornada laboral iniciada con éxito';
                 } else {
                     $result['error'] = 'ERROR #110 / consulte con un administrador para solucionar el problema';
+                }
+                break;
+            case 'endWork':   
+                if (
+                    !$trabajo->setId($_POST['idInformacion']) or
+                    !$trabajo->setHoraFinal($_POST['horaFinal']) or
+                    !$trabajo->setLatitudFinal($_POST['latitud']) or
+                    !$trabajo->setLongitudFinal($_POST['longitud'])
+                ) {
+                    $result['error'] = $trabajo->getDataError();
+                } elseif ($trabajo->endWork()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'jornada laboral terminada con éxito';
+                } else {
+                    $result['error'] = 'ERROR #120 / consulte con un administrador para solucionar el problema';
                 }
                 break;
             case 'readInformation':

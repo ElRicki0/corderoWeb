@@ -314,15 +314,12 @@ class EmpleadoHandler
                     `DUI_empleado`,
                     `telefono_personal_empleado`,
                     `correo_empleado`,
-                    `departamento_empleado`,
-                    `municipio_empleado`,
-                    `estado_empleado`,
                     `imagen_empleado`
                 FROM
                     `tb_empleados`
                 WHERE
-                    `id_empleado` = ?';
-        $params = array($this->id);
+                    `id_empleado`= ?';
+        $params = array($_SESSION['idEmpleado']);
         return Database::getRow($sql, $params);
     }
 

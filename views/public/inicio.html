@@ -16,22 +16,32 @@
         <h1 id="mainTitle"></h1>
         <div class="text-center">
             <h2>Jornada laboral diaria</h2>
-            <h4>Horas-Minutos-Segundos</h4>
-            <h3>00:00:00</h3>
-            <form id="saveForm">
+            <form id="saveForm" class="mb-4">
                 <input type="number" class="d-none" id="idInformacion" name="idInformacion">
                 <!-- Campo oculto para obtener la hora actual del empleado -->
-                <input type="text" class="" id="latitudInicio" name="latitudInicio">
-                <input type="text" class="" id="longitudInicio" name="longitudInicio">
+                <input type="text" class="d-none" id="latitud" name="latitud">
+                <input type="text" class="d-none" id="longitud" name="longitud">
                 <!-- campo oculto para obtener la ubicación actual del usuario -->
                 <input type="text" class="d-none" id="horaInicio" name="horaInicio">
                 <input type="text" class="d-none" id="horaFinal" name="horaFinal">
                 <!-- <button type="button" class="btn btn-primary" onclick="openLocation()">ubicación actual</button> -->
-                <div class="container mt-5" id="buttonsOptions">
-                    <button type="button" class="btn btn-primary" onclick="startWork()">Inicio jornada</button>
-                    <button type="button" class="btn btn-warning disabled">Inicio Fin de jornada</button>
+                <div class="mt-5 row" id="buttonsOptions">
                 </div>
             </form>
+            <hr class="border-3">
+            <div id="infoEmployee" class="d-flex flex-column gap-3">
+                <h3>Nombre empleado</h3>
+                <p class="h5" id="nombreEmpleado"></p>
+                <h3>Correo empleado</h3>
+                <p class="h5" id="correoEmpleado"></p>
+                <h3>DUI empleado</h3>
+                <p class="h5" id="duiEmpleado"></p>
+                <h3>Teléfono empleado</h3>
+                <p class="h5" id="telefonoEmpleado"></p>
+            </div>
+            <button type="button" class="btn btn-danger" onclick="logOut()">
+                <h4>Cerrar sesión</h4>
+            </button>
         </div>
     </main>
 
