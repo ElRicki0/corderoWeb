@@ -28,9 +28,6 @@
                     reportes generales de actividad.</h6>
             </div>
         </div>
-        <button type="button" class="btn btn-dark fs-3" onclick="window.location.href='../admin/info_empleados.html'">
-            <i class="bi bi-person-vcard-fill me-1"></i>Información laboral empleados
-        </button>
         <!-- ? Formulario de búsqueda -->
         <div class="row">
             <form class="col-sm-12 col-md-12 col-lg-10" id="searchForm">
@@ -144,24 +141,33 @@
                                         <input id="telefonoEmpleado" name="telefonoEmpleado" class="form-control"
                                             autocomplete="off" required oninput="formatPhoneNumber(this)">
                                     </div>
-                                    <div class="col-12 ">
-                                        <label class="form-label">Correo electrónico</label>
-                                        <input id="correoEmpleado" name="correoEmpleado" class="form-control"
-                                            autocomplete="off" required oninput="formatEmail(this)">
+                                    <div class="col-6">
+                                        <label class="form-label">Departamento</label>
+                                        <select id="departamentoEmpleado" name="departamentoEmpleado" class="form-control"
+                                            autocomplete="off" onchange="actualizarMunicipios()">
+                                            <option value="No seleccionado">Seleccionar Departamento</option>
+                                            <option value="Ahuachapan">Ahuachapán</option>
+                                            <option value="Cabañas">Cabañas</option>
+                                            <option value="Chalatenango">Chalatenango</option>
+                                            <option value="La Libertad">La Libertad</option>
+                                            <option value="La Paz">La Paz</option>
+                                            <option value="San Salvador">San Salvador</option>
+                                            <option value="San Vicente">San Vicente</option>
+                                            <option value="Santa Ana">Santa Ana</option>
+                                            <option value="Sonsonate">Sonsonate</option>
+                                            <option value="Usulután">Usulután</option>
+                                            <option value="Morazán">Morazán</option>
+                                            <option value="La Unión">La Unión</option>
+                                            <option value="San Miguel">San Miguel</option>
+                                            <option value="Tecapa">Tecapa</option>
+                                        </select>
                                     </div>
-                                    <div id="clavesEmpleado" class="row mt-3">
-                                        <div class="col-lg-6">
-                                            <label for="" class="form-label">Clave</label>
-                                            <input type="password" id="claveEmpleado" name="claveEmpleado"
-                                                autocomplete="off" class="form-control" required
-                                                oninput="formatPassword(this)">
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <label for="" class="form-label">Repetir Clave</label>
-                                            <input type="password" id="claveEmpleado2" name="claveEmpleado2"
-                                                autocomplete="off" class="form-control" required
-                                                oninput="formatPassword(this)">
-                                        </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Municipio</label>
+                                        <select id="municipioEmpleado" name="municipioEmpleado" class="form-control"
+                                            autocomplete="off">
+                                            <option>Primero seleccione un departamento</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>

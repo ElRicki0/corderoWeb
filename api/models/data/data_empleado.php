@@ -65,20 +65,6 @@ class EmpleadoData extends EmpleadoHandler
         }
     }
 
-    public function setCorreo($value, $min = 8, $max = 100)
-    {
-        if (!Validator::validateEmail($value)) {
-            $this->data_error = 'El correo no es válido';
-            return false;
-        } elseif (Validator::validateLength($value, $min, $max)) {
-            $this->correo = $value;
-            return true;
-        } else {
-            $this->data_error = 'El correo debe tener una longitud entre ' . $min . ' y ' . $max;
-            return false;
-        }
-    }
-
     public function setTelefono($value)
     {
         if (Validator::validatePhone($value)) {
@@ -108,13 +94,30 @@ class EmpleadoData extends EmpleadoHandler
         }
     }
 
-    public function setClave($value)
+    public function setDepartamento($value, $min = 2, $max = 50)
     {
-        if (Validator::validatePassword($value)) {
-            $this->clave = password_hash($value, PASSWORD_DEFAULT);
+        if (!Validator::validateAlphabetic($value)) {
+            $this->data_error = 'El departamento debe ser un valor alfabético';
+            return false;
+        } elseif (Validator::validateLength($value, $min, $max)) {
+            $this->departamento = $value;
             return true;
         } else {
-            $this->data_error = Validator::getPasswordError();
+            $this->data_error = 'El departamento debe tener una longitud entre ' . $min . ' y ' . $max;
+            return false;
+        }
+    }
+
+    public function setMunicipio($value, $min = 2, $max = 50)
+    {
+        if (!Validator::validateAlphabetic($value)) {
+            $this->data_error = 'El municipio debe ser un valor alfabético';
+            return false;
+        } elseif (Validator::validateLength($value, $min, $max)) {
+            $this->municipio = $value;
+            return true;
+        } else {
+            $this->data_error = 'El municipio debe tener una longitud entre ' . $min . ' y ' . $max;
             return false;
         }
     }

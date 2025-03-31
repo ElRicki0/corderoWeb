@@ -26,13 +26,16 @@ if (isset($_GET['action'])) {
             case 'createRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
-                    !$duplas->setNombre($_POST['nombreDupla']) or
                     !$duplas->setTelefono($_POST['telefonoDupla']) or
                     !$duplas->setTipo($_POST['tipoDupla']) or
+                    !$duplas->setUsuario($_POST['usuarioDupla']) or
+                    !$duplas->setClave($_POST['claveDupla']) or
                     !$duplas->setEmpleado1($_POST['duplaEmpleado1']) or
                     !$duplas->setEmpleado2($_POST['duplaEmpleado2'])
                 ) {
                     $result['error'] = $duplas->getDataError();
+                } elseif ($_POST['claveDupla'] != $_POST['claveDupla2']) {
+                    $result['error'] = 'Contraseñas diferentes';
                 } elseif ($duplas->createRow()) {
                     $result['status'] = 1;
                     $result['message'] = 'Dupla creado correctamente';
@@ -44,8 +47,8 @@ if (isset($_GET['action'])) {
                 $_POST = Validator::validateForm($_POST);
                 if (
                     !$duplas->setId($_POST['idDupla']) or
-                    !$duplas->setNombre($_POST['nombreDupla']) or
                     !$duplas->setTelefono($_POST['telefonoDupla']) or
+                    !$duplas->setUsuario($_POST['usuarioDupla']) or
                     !$duplas->setEmpleado1($_POST['duplaEmpleado1']) or
                     !$duplas->setEmpleado2($_POST['duplaEmpleado2'])
                 ) {

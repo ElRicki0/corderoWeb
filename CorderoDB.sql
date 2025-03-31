@@ -11,39 +11,39 @@ CREATE TABLE
         apellido_empleado VARCHAR(50),
         DUI_empleado VARCHAR(15) NOT NULL UNIQUE,
         telefono_personal_empleado varchar(10) NOT NULL,
-        correo_empleado VARCHAR(100) UNIQUE,
-        clave_empleado VARCHAR(500),
-        imagen_empleado VARCHAR(500),
-        fecha_actualizacion_empleado DATETIME
-    );
-    CREATE TABLE   
-    tb_trabajo_empleado (
-        id_trabajo_empleado INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+		  imagen_empleado VARCHAR(500),
         departamento_trabajo_empleado VARCHAR(100),
         municipio_trabajo_empleado VARCHAR(100),
-        latitud_inicio_trabajo_empleado varchar(300),
-        longitud_inicio_trabajo_empleado varchar(300),
-        hora_inicio_trabajo_empleado TIME,
-        latitud_final_trabajo_empleado varchar(300),
-        longitud_final_trabajo_empleado varchar(300),
-        hora_final_trabajo_empleado TIME,
-        estado_trabajo_empleado TINYINT (1) not NULL,
-        fecha_actualizacion_trabajo_empleado DATETIME,
-        id_empleado INT,
-        FOREIGN KEY (id_empleado) REFERENCES tb_empleados (id_empleado) ON DELETE CASCADE
+        fecha_actualizacion_empleado DATETIME
     );
 
 CREATE TABLE
     tb_duplas (
         id_dupla INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-        nombre_dupla VARCHAR(100) NOT NULL,
+        usuario_dupla VARCHAR(100) UNIQUE,
+        clave_dupla VARCHAR(500),
         telefono_empresa_dupla varchar(10) NOT NULL,
         tipo_dupla TINYINT (1) not NULL,
-        id_empleado1 INT NULL,
+        id_empleado1 INT NOT NULL,
         id_empleado2 INT NULL,
-        FOREIGN KEY (id_empleado1) REFERENCES tb_trabajo_empleado (id_trabajo_empleado) ON DELETE CASCADE,
-        FOREIGN KEY (id_empleado2) REFERENCES tb_trabajo_empleado (id_trabajo_empleado) ON DELETE CASCADE,
+        FOREIGN KEY (id_empleado1) REFERENCES tb_empleados (id_empleado) ON DELETE CASCADE,
+        FOREIGN KEY (id_empleado2) REFERENCES tb_empleados (id_empleado) ON DELETE CASCADE,
         fecha_actualizacion_dupla DATETIME
+    );
+
+CREATE TABLE
+    tb_trabajo_duplas (
+        id_trabajo_dupla INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        latitud_inicio_trabajo_dupla varchar(300),
+        longitud_inicio_trabajo_dupla varchar(300),
+        hora_inicio_trabajo_dupla TIME,
+        latitud_final_trabajo_dupla varchar(300),
+        longitud_final_trabajo_dupla varchar(300),
+        hora_final_trabajo_dupla TIME,
+        estado_trabajo_dupla TINYINT (1) not NULL,
+        id_dupla INT NOT NULL,
+        FOREIGN KEY (id_dupla) REFERENCES tb_duplas(id_dupla) ON DELETE CASCADE,
+        fecha_actualizacion_trabajo_dupla DATETIME 
     );
 
 CREATE TABLE

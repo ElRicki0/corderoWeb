@@ -1,5 +1,5 @@
 // ?constante para trabajar con la api
-const INFO_EMPLEADO_API = 'services/admin/info_empleado.php';
+const EMPLEADO_API = 'services/admin/empleado.php';
 const DUPLA_API = 'services/admin/duplas.php';
 // Constantes para establecer los elementos del componente Modal.
 const SAVE_MODAL = new bootstrap.Modal('#saveModal'),
@@ -12,13 +12,11 @@ const CONTENIDO_EMPLEADO1 = document.getElementById('infoEmpleado1'),
 // ? Constantes del registro de duplas
 const SAVE_FORM = document.getElementById('saveForm'),
     ID_DUPLA = document.getElementById('idDupla'),
-    NOMBRE_DUPLA = document.getElementById('nombreDupla'),
     TELEFONO_DUPLA = document.getElementById('telefonoDupla'),
-    // ID_EMPLEADO_1 = document.getElementById('idEmpleado1'),
+    USUARIO_DUPLA = document.getElementById('usuarioDupla'),
     DUPLA_EMPLEADO_1 = document.getElementById('duplaEmpleado1'),
-    // ID_EMPLEADO_2 = document.getElementById('idEmpleado2'),
+    CLAVE_DUPLA = document.getElementById('claveDupla'),
     DUPLA_EMPLEADO_2 = document.getElementById('duplaEmpleado2');
-
 
 // ? Constante para establecer el formulario de buscar.
 const SEARCH_FORM = document.getElementById('searchForm');
@@ -73,8 +71,25 @@ const openCreate = async () => {
     MODAL_TITLE.textContent = 'Crear dupla para empleados';
     // Se prepara el formulario.
     SAVE_FORM.reset();
-    fillSelect(INFO_EMPLEADO_API, 'readAll', 'duplaEmpleado1');
-    fillSelect(INFO_EMPLEADO_API, 'readAll', 'duplaEmpleado2');
+    fillSelect(EMPLEADO_API, 'readAll', 'duplaEmpleado1');
+    fillSelect(EMPLEADO_API, 'readAll', 'duplaEmpleado2');
+    CLAVE_DUPLA.innerHTML=`                                               
+    <div class="row justify-content-center">
+        <div class="col-6 col-md-3 mb-3">
+            <label for="claveDupla" class="form-label">Clave</label>
+            <input type="password" class="form-control" id="claveDupla"
+                name="claveDupla" placeholder="Ingrese su clave..."
+                required>
+        </div>
+
+        <div class="col-6 col-md-3 mb-3">
+            <label for="claveDupla2" class="form-label">Repetir
+                Clave</label>
+            <input type="password" class="form-control" id="claveDupla2"
+                name="claveDupla2" placeholder="Repita su clave..."
+                required>
+        </div>
+    </div>`;
     CONTENIDO_EMPLEADO1.innerHTML = '';
     CONTENIDO_EMPLEADO2.innerHTML = '';
 }
@@ -99,9 +114,6 @@ const fillTable = async (form = null) => {
             // Se establece un icono para el estado del empleado.
             (row.tipo_dupla) ? type = 'Permanente' : type = 'Temporal';
             (row.estado_dupla) ? icon = 'bi bi-check-circle-fill' : icon = 'bi bi-pause-circle-fill';
-            (row.estado_trabajo_empleado1) ? icon1 = 'bi bi-check-circle-fill' : icon1 = 'bi bi-pause-circle-fill';
-            (row.estado_trabajo_empleado2) ? icon2 = 'bi bi-check-circle-fill' : icon2 = 'bi bi-pause-circle-fill';
-
 
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
             TABLE_BODY.innerHTML += `
@@ -110,7 +122,7 @@ const fillTable = async (form = null) => {
         <!-- Contenedor de empleados -->
         <div class="col-md-12 col-lg-9 d-flex flex-wrap justify-content-between text-center gap-4">
             <div class="container">
-                <h1>Nombre Dupla: ${row.nombre_dupla}</h1>
+                <h1>Nombre Dupla: ${row.usuario_dupla}</h1>
                 <h3>Teléfono Dupla: ${row.telefono_empresa_dupla}</h3>
                 <h3 class="card-text text-white">Tipo: ${type}</h3>
             </div>
@@ -126,10 +138,8 @@ const fillTable = async (form = null) => {
                     <h5 class="text-white mt-2">Nombre empleado</h5>
                     <p class="card-title text-white">${row.nombre_empleado1}</p>
                     <p class="card-title text-white">${row.apellido_empleado1}</p>
-                    <h5 class="text-white">Correo Empleado</h5>
-                    <p class="card-text text-white">${row.correo_empleado1}</p>
-                    <h5 class="text-white">Estado empleado</h5>
-                    <p class="card-text text-white">Estado: <i class="${icon1} text-white"></i></p>
+                    <h5 class="text-white">Teléfono Empleado</h5>
+                    <p class="card-text text-white">${row.telefono_personal_empleado1}</p>
                 </div>
 
                 <!-- Empleado 2 -->
@@ -143,10 +153,8 @@ const fillTable = async (form = null) => {
                     <h5 class="text-white mt-2">Nombre empleado</h5>
                     <p class="card-title text-white">${row.nombre_empleado2}</p>
                     <p class="card-title text-white">${row.apellido_empleado2}</p>
-                    <h5 class="text-white">Correo Empleado</h5>
-                    <p class="card-text text-white">${row.correo_empleado2}</p>
-                    <h5 class="text-white">Estado empleado</h5>
-                    <p class="card-text text-white">Estado: <i class="${icon2} text-white"></i></p>
+                    <h5 class="text-white">Teléfono Empleado</h5>
+                    <p class="card-text text-white">${row.telefono_personal_empleado2}</p>
                 </div>
             </div>
         </div>
@@ -223,9 +231,7 @@ const readAllTable = async (form = null, buscador) => {
         DATA.dataset.forEach(row => {
             // Se establece un icono para el estado del empleado.
             (row.tipo_dupla) ? type = 'Permanente' : type = 'Temporal';
-            (row.estado_dupla) ? icon = 'bi bi-check-circle-fill' : icon = 'bi bi-pause-circle-fill';
-            (row.estado_empleado1) ? icon1 = 'bi bi-check-circle-fill' : icon1 = 'bi bi-pause-circle-fill';
-            (row.estado_empleado2) ? icon2 = 'bi bi-check-circle-fill' : icon2 = 'bi bi-pause-circle-fill';
+            (row.estado_trabajo) ? icon = 'bi bi-check-circle-fill' : icon = 'bi bi-pause-circle-fill';
 
 
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
@@ -235,9 +241,10 @@ const readAllTable = async (form = null, buscador) => {
         <!-- Contenedor de empleados -->
         <div class="col-md-12 col-lg-9 d-flex flex-wrap justify-content-between text-center gap-4">
             <div class="container">
-                <h1>Nombre Dupla: ${row.nombre_dupla}</h1>
+                <h1>Nombre Dupla: ${row.usuario_dupla}</h1>
                 <h3>Teléfono Dupla: ${row.telefono_empresa_dupla}</h3>
                 <h3 class="card-text text-white">Tipo: ${type}</h3>
+                <h3>Usuario Dupla: ${row.usuario_dupla}</h3>
             </div>
 
             <div class="row w-100 mb-3">
@@ -252,10 +259,8 @@ const readAllTable = async (form = null, buscador) => {
                     <h5 class="text-white mt-2">Nombre empleado</h5>
                     <p class="card-title text-white">${row.nombre_empleado1}</p>
                     <p class="card-title text-white">${row.apellido_empleado1}</p>
-                    <h5 class="text-white">Correo Empleado</h5>
-                    <p class="card-text text-white">${row.correo_empleado1}</p>
-                    <h5 class="text-white">Estado empleado</h5>
-                    <p class="card-text text-white">Estado: <i class="${icon1} text-white"></i></p>
+                    <h5 class="text-white">Teléfono Empleado</h5>
+                    <p class="card-text text-white">${row.telefono_personal_empleado1}</p>
                 </div>
 
                 <!-- Empleado 2 -->
@@ -269,10 +274,8 @@ const readAllTable = async (form = null, buscador) => {
                     <h5 class="text-white mt-2">Nombre empleado</h5>
                     <p class="card-title text-white">${row.nombre_empleado2}</p>
                     <p class="card-title text-white">${row.apellido_empleado2}</p>
-                    <h5 class="text-white">Correo Empleado</h5>
-                    <p class="card-text text-white">${row.correo_empleado2}</p>
-                    <h5 class="text-white">Estado empleado</h5>
-                    <p class="card-text text-white">Estado: <i class="${icon2} text-white"></i></p>
+                    <h5 class="text-white">Teléfono Empleado</h5>
+                    <p class="card-text text-white">${row.telefono_personal_empleado2}</p>
                 </div>
             </div>
         </div>
@@ -349,12 +352,12 @@ const openUpdate = async (id) => {
         SAVE_FORM.reset();
         // Se inicializan los campos con los datos.
         const ROW = DATA.dataset;
-        (ROW.estado_empleado1) ? icon1 = 'bi bi-pause-circle-fill' : icon1 = 'bi bi-check-circle-fill';
-        (ROW.estado_empleado2) ? icon2 = 'bi bi-pause-circle-fill' : icon2 = 'bi bi-check-circle-fill';
 
         ID_DUPLA.value = ROW.id_dupla;
-        NOMBRE_DUPLA.value = ROW.nombre_dupla;
         TELEFONO_DUPLA.value = ROW.telefono_empresa_dupla;
+        USUARIO_DUPLA.value = ROW.usuario_dupla;
+
+        CLAVE_DUPLA.innerHTML='';
 
         // ? Se llena el formulario con información relacionada a los empleados
         CONTENIDO_EMPLEADO1.innerHTML = `
@@ -366,8 +369,6 @@ const openUpdate = async (id) => {
         <h5 class="text-white mt-2">Nombre empleado</h5>
         <p class="card-title text-white">${ROW.nombre_empleado1}</p>
         <p class="card-title text-white">${ROW.apellido_empleado1}</p>
-        <h5 class="text-white">Estado empleado</h5>
-        <p class="card-text text-white">Estado: <i class="${icon1} text-white"></i></p>
         `;
         CONTENIDO_EMPLEADO2.innerHTML = `
         <img src="${SERVER_URL}images/empleados/${ROW.imagen_empleado2}" width="200px"
@@ -377,12 +378,10 @@ const openUpdate = async (id) => {
         <h5 class="text-white mt-2">Nombre empleado</h5>
         <p class="card-title text-white">${ROW.nombre_empleado2}</p>
         <p class="card-title text-white">${ROW.apellido_empleado2}</p>
-        <h5 class="text-white">Estado empleado</h5>
-        <p class="card-text text-white">Estado: <i class="${icon2} text-white"></i></p>
         `;
 
-        fillSelect(INFO_EMPLEADO_API, 'readAll', 'duplaEmpleado1');
-        fillSelect(INFO_EMPLEADO_API, 'readAll', 'duplaEmpleado2');
+        fillSelect(EMPLEADO_API, 'readAll', 'duplaEmpleado1', parseInt(ROW.id_empleado1));
+        fillSelect(EMPLEADO_API, 'readAll', 'duplaEmpleado2', parseInt(ROW.id_empleado2));
     } else {
         sweetAlert(2, DATA.error, false);
     }

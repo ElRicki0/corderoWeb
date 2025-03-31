@@ -8,11 +8,11 @@ const SAVE_FORM = document.getElementById('saveForm'),
     APELLIDO_EMPLEADO = document.getElementById('apellidoEmpleado'),
     DUI_EMPLEADO = document.getElementById('duiEmpleado'),
     TELEFONO_EMPLEADO = document.getElementById('telefonoEmpleado'),
-    // DEPARTAMENTO_EMPLEADO = document.getElementById('departamentoEmpleado'),
-    // MUNICIPIO_EMPLEADO = document.getElementById('municipioEmpleado'),
-    CORREO_EMPLEADO = document.getElementById('correoEmpleado'),
-    // ESTADO_TRABAJO = document.getElementById('estadoTrabajo'),
-    CLAVE_EMPLEADO = document.getElementById('clavesEmpleado');
+    DEPARTAMENTO_EMPLEADO = document.getElementById('departamentoEmpleado'),
+    MUNICIPIO_EMPLEADO = document.getElementById('municipioEmpleado');
+// CORREO_EMPLEADO = document.getElementById('correoEmpleado'),
+// ESTADO_TRABAJO = document.getElementById('estadoTrabajo'),
+// CLAVE_EMPLEADO = document.getElementById('clavesEmpleado');
 // ESTADO_CONTENIDO = document.getElementById('estadoContenido'),
 
 
@@ -89,6 +89,41 @@ SAVE_FORM.addEventListener('submit', async (event) => {
     }
 });
 
+function actualizarMunicipios() {
+    let departamento = document.getElementById("departamentoEmpleado").value;
+
+    // Limpiar opciones previas
+    MUNICIPIO_EMPLEADO.innerHTML = '<option value="">Seleccione un municipio</option>';
+
+    // Definir los municipios por departamento
+    let municipios = {
+        "Ahuachapan": ["Ahuachapán", "Apaneca", "Atiquizaya", "Concepción de Ataco", "El Refugio"],
+        "Cabañas": ["Sensuntepeque", "Victoria", "Guacotecti", "Dolores", "Cinquera"],
+        "Chalatenango": ["Chalatenango", "La Palma", "San Ignacio", "Nueva Concepción", "Tejutla"],
+        "La Libertad": ["Santa Tecla", "Antiguo Cuscatlán", "Colón", "San Juan Opico", "Quezaltepeque"],
+        "La Paz": ["Zacatecoluca", "San Juan Nonualco", "San Pedro Masahuat", "San Rafael Obrajuelo"],
+        "San Salvador": ["San Salvador", "Soyapango", "Mejicanos", "Apopa", "Ilopango"],
+        "San Vicente": ["San Vicente", "Tecoluca", "Apastepeque", "San Ildefonso", "San Esteban Catarina"],
+        "Santa Ana": ["Santa Ana", "Metapán", "Chalchuapa", "Coatepeque", "Candelaria de la Frontera"],
+        "Sonsonate": ["Sonsonate", "Izalco", "Nahuizalco", "Juayúa", "Sonzacate"],
+        "Usulután": ["Usulután", "Jiquilisco", "Santa María", "Puerto El Triunfo", "Jucuapa"],
+        "Morazán": ["San Francisco Gotera", "Cacaopera", "Joateca", "Perquín", "Sociedad"],
+        "La Unión": ["La Unión", "Conchagua", "El Carmen", "Santa Rosa de Lima", "Intipucá"],
+        "San Miguel": ["San Miguel", "Chinameca", "Quelepa", "Moncagua", "Nuevo Edén de San Juan"],
+        // "Tecapa": ["Tecapa 1", "Tecapa 2", "Tecapa 3"] // Agrega municipios si es un departamento válido
+    };
+
+    // Agregar opciones según el departamento seleccionado
+    if (departamento && municipios[departamento]) {
+        municipios[departamento].forEach(municipio => {
+            let opcion = document.createElement("option");
+            opcion.value = municipio;
+            opcion.textContent = municipio;
+            MUNICIPIO_EMPLEADO.appendChild(opcion);
+        });
+    }
+}
+
 /*
 *   Función asíncrona para llenar la tabla con los registros disponibles.
 *   Parámetros: form (objeto opcional con los datos de búsqueda).
@@ -131,12 +166,14 @@ const fillTable = async (form = null) => {
                                     <p class="card-title text-white">${row.nombre_empleado} ${row.apellido_empleado}</p>
                                     <h5 class="text-white">DUI Empleado</h5>
                                     <p class="card-text text-white">${row.DUI_empleado}</p>
-                                    <h5 class="text-white">Correo Empleado</h5>
-                                    <p class="card-text text-white">${row.correo_empleado}</p>
                                 </div>
                                 <div class="col-lg-6 col-md-12 col-sm-12">
                                     <h5 class="text-white">Teléfono empleado</h5>
                                     <p class="card-title text-white">${row.telefono_personal_empleado}
+                                    <h5 class="text-white">Departamento</h5>
+                                    <p class="card-title text-white">${row.departamento_trabajo_empleado}
+                                    <h5 class="text-white">Municipio</h5>
+                                    <p class="card-title text-white">${row.municipio_trabajo_empleado}
                                     <h5 class="text-white">Estado empleado</h5>
                                     <p class="card-text text-white">Estado: <i class="${icon} text-white h1"></i></p>
                                 </div>
@@ -144,7 +181,7 @@ const fillTable = async (form = null) => {
                         </div>
 
                         <div class="col-sm-12 col-md-12 col-lg-3 text-center my-5">
-                            <div class="d-flex flex-column">
+                            <div class="d-flex       flex-column">
                                 <button class="btn btn-outline-light mb-2" onclick="openDelete(${row.id_empleado})">
                                     <i class="bi bi-trash3-fill"></i> Eliminar
                                 </button>
@@ -160,7 +197,7 @@ const fillTable = async (form = null) => {
         ROWS_FOUND.textContent = DATA.message;
     } else {
         TABLE_BODY.innerHTML = `
-        <div class="col-5    justify-content-center align-items-center">
+            <div class="col-5    justify-content-center align-items-center">
                 <img src="../../resources/images/error/404iNFORMACION.png" class="card-img-top" alt="ERROR CARGAR IMAGEN">
             </div>
         `
@@ -229,12 +266,14 @@ const readAllTable = async (form = null, buscador) => {
                                     <p class="card-title text-white">${row.nombre_empleado} ${row.apellido_empleado}</p>
                                     <h5 class="text-white">DUI Empleado</h5>
                                     <p class="card-text text-white">${row.DUI_empleado}</p>
-                                    <h5 class="text-white">Correo Empleado</h5>
-                                    <p class="card-text text-white">${row.correo_empleado}</p>
                                 </div>
                                 <div class="col-lg-6 col-md-12 col-sm-12">
                                     <h5 class="text-white">Teléfono empleado</h5>
                                     <p class="card-title text-white">${row.telefono_personal_empleado}
+                                    <h5 class="text-white">Departamento</h5>
+                                    <p class="card-title text-white">${row.departamento_trabajo_empleado}
+                                    <h5 class="text-white">Municipio</h5>
+                                    <p class="card-title text-white">${row.municipio_trabajo_empleado}
                                     <h5 class="text-white">Estado empleado</h5>
                                     <p class="card-text text-white">Estado: <i class="${icon} text-white h1"></i></p>
                                 </div>
@@ -277,20 +316,6 @@ const openCreate = () => {
     MODAL_TITLE.textContent = 'Agregar Empleado';
     // Se prepara el formulario.
     SAVE_FORM.reset();
-    CLAVE_EMPLEADO.innerHTML = `
-    <div class="col-lg-6">
-        <label for="" class="form-label">Clave</label>
-        <input type="password" id="claveEmpleado" name="claveEmpleado"
-            autocomplete="off" class="form-control" required
-            oninput="formatPassword(this)">
-    </div>
-    <div class="col-lg-6">
-        <label for="" class="form-label">Repetir Clave</label>
-        <input type="password" id="claveEmpleado2" name="claveEmpleado2"
-            autocomplete="off" class="form-control" required
-            oninput="formatPassword(this)">
-    </div>
-    `;
 }
 
 /*
@@ -345,12 +370,8 @@ const openUpdate = async (id) => {
         APELLIDO_EMPLEADO.value = ROW.apellido_empleado;
         DUI_EMPLEADO.value = ROW.DUI_empleado;
         TELEFONO_EMPLEADO.value = ROW.telefono_personal_empleado;
-        // DEPARTAMENTO_EMPLEADO.value = ROW.departamento_empleado;
-        // MUNICIPIO_EMPLEADO.value = ROW.municipio_empleado;
-        CORREO_EMPLEADO.value = ROW.correo_empleado;
-        // ESTADO_EMPLEADO.checked = ROW.estado_producto;
-        CLAVE_EMPLEADO.innerHTML = '';
-        // ESTADO_CONTENIDO.innerHTML = '';
+        DEPARTAMENTO_EMPLEADO.value = ROW.departamento_trabajo_empleado;
+        MUNICIPIO_EMPLEADO.value = ROW.municipio_trabajo_empleado;
     } else {
         sweetAlert(2, DATA.error, false);
     }

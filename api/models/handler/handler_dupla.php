@@ -6,9 +6,11 @@ class DuplasHandler
 {
     // ? declaración de atributos para el manejo de la base de datos  
     protected $id = null;
-    protected $nombre = null;
+    // protected $nombre = null;
     protected $telefono = null;
     protected $tipo = null;
+    protected $usuario = null;
+    protected $clave = null;
     protected $empleado1 = null;
     protected $empleado2 = null;
     protected $actualizacion = null;
@@ -23,327 +25,295 @@ class DuplasHandler
         return $this->actualizacion;
     }
 
+    // ? métodos para administrar al usuario de la dupla
+
+    /*
+     *  Métodos para gestionar la cuenta del empleado.
+     */
+    public function checkUser($username, $password)
+    {
+        $sql = 'SELECT `id_empleado`, `correo_empleado`,`clave_empleado` FROM `tb_empleados` WHERE `correo_empleado` =?';
+        $params = array($username);
+        if (!($data = Database::getRow($sql, $params))) {
+            return false;
+        } elseif (password_verify($password, $data['clave_empleado'])) {
+            $_SESSION['idEmpleado'] = $data['id_empleado'];
+            $_SESSION['correoEmpleado'] = $data['correo_empleado'];
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // * validación para comprobar si la contraseña es correcta
+    public function checkPassword($password)
+    {
+        $sql = 'SELECT clave_empleado
+                FROM tb_empleados
+                WHERE id_empleado = ?';
+        $params = array($_SESSION['idEmpleado']);
+        if (!($data = Database::getRow($sql, $params))) {
+            return false;
+        } elseif (password_verify($password, $data['clave_empleado'])) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     // ? Métodos para realizar las operaciones SCRUD (search, create, read, update, and delete).
 
     public function searchRows()
     {
         $value = '%' . Validator::getSearchValue() . '%';
         $sql = '  SELECT
-                        d.id_dupla,
-                        d.nombre_dupla,
-                        d.telefono_empresa_dupla,
-                        d.id_empleado1, 
-                        d.id_empleado2,
-                        e1.nombre_empleado AS nombre_empleado1,
-                        e1.apellido_empleado AS apellido_empleado1,
-                        e1.correo_empleado AS correo_empleado1,
-                        e1.estado_empleado AS estado_empleado1,
-                        e1.imagen_empleado AS imagen_empleado1,
-                        e2.nombre_empleado AS nombre_empleado2,
-                        e2.apellido_empleado AS apellido_empleado2,
-                        e2.correo_empleado AS correo_empleado2,
-                        e2.estado_empleado AS estado_empleado2,
-                        e2.imagen_empleado AS imagen_empleado2,
-                        CASE
-                            WHEN e1.estado_empleado = 0 AND e2.estado_empleado = 0 THEN 0
-                            WHEN e1.estado_empleado <> e2.estado_empleado THEN 0
-                            WHEN e1.estado_empleado = 1 AND e2.estado_empleado = 1 THEN 1
-                            ELSE 0 -- Por defecto, si hay algún caso no cubierto
-                        END AS estado_dupla
-                    FROM
-                        tb_duplas d
-                    LEFT JOIN tb_empleados e1 ON
-                        d.id_empleado1 = e1.id_empleado
-                    LEFT JOIN tb_empleados e2 ON
-                        d.id_empleado2 = e2.id_empleado;  
-                    WHERE
-                        d.nombre_dupla LIKE ? OR
-                        d.telefono_empresa_dupla LIKE ? 
+                    dp.`id_dupla`,
+                    dp.`telefono_empresa_dupla`,
+                    dp.`tipo_dupla`,
+                    dp.`usuario_dupla`,
+                    em1.nombre_empleado AS nombre_empleado1,
+                    em1.apellido_empleado AS apellido_empleado1,
+                    em1.telefono_personal_empleado AS telefono_personal_empleado1,
+                    em1.imagen_empleado AS imagen_empleado1,
+                    em2.nombre_empleado AS nombre_empleado2,
+                    em2.apellido_empleado AS apellido_empleado2,
+                    em2.telefono_personal_empleado AS telefono_personal_empleado2,
+                    em2.imagen_empleado AS imagen_empleado2,
+                    CASE 
+                        WHEN td.estado_trabajo_dupla IS NULL OR td.estado_trabajo_dupla = 0 THEN 0
+                        ELSE 1
+                    END AS estado_trabajo,
+                    dp.`fecha_actualizacion_dupla`
+                FROM
+                    `tb_duplas` dp
+                INNER JOIN tb_empleados em1 ON
+                    dp.id_empleado1 = em1.id_empleado 
+                LEFT JOIN tb_empleados em2 ON
+                    dp.id_empleado2 = em2.id_empleado
+                LEFT JOIN tb_trabajo_duplas td ON
+                    dp.id_dupla = td.id_dupla AND td.estado_trabajo_dupla = 1
+                    WHERE dp.usuario_dupla like ? or dp.telefono_empresa_dupla LIKE ? OR em1.nombre_empleado LIKE ? 
+                    OR em1.apellido_empleado LIKE ? OR em1.telefono_personal_empleado LIKE ? OR em2.nombre_empleado LIKE ? 
+                    OR em2.apellido_empleado LIKE ? OR em2.telefono_personal_empleado LIKE ? 
                 ';
-        $params = array($value, $value);
+        $params = array($value, $value, $value, $value, $value, $value, $value, $value);
         return Database::getRows($sql, $params);
     }
 
     public function createRow()
     {
-        $sql = '  INSERT INTO `tb_duplas`(
-                `nombre_dupla`,
-                `telefono_empresa_dupla`,
-                `tipo_dupla`,   
-                `id_empleado1`,
-                `id_empleado2`,
-                `fecha_actualizacion_dupla`
-            )
-            VALUES(
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?)';
-        $params = array($this->nombre, $this->telefono, $this->tipo, $this->empleado1, $this->empleado2, $this->actualizacion);
+        $sql = 'INSERT INTO `tb_duplas`(
+                    `telefono_empresa_dupla`,
+                    `tipo_dupla`,
+                    `usuario_dupla`,
+                    `clave_dupla`,
+                    `id_empleado1`,
+                    `id_empleado2`,
+                    `fecha_actualizacion_dupla`
+                )
+                VALUES(
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?)';
+        $params = array($this->telefono, $this->tipo, $this->usuario, $this->clave, $this->empleado1, $this->empleado2, $this->actualizacion);
         return Database::executeRow($sql, $params);
     }
 
     public function readAll()
     {
         $sql = 'SELECT
-                    d.id_dupla,
-                    d.nombre_dupla,
-                    d.telefono_empresa_dupla,
-                    d.id_empleado1,
-                    d.id_empleado2,
-                    d.tipo_dupla,
-                    e1.nombre_empleado AS nombre_empleado1,
-                    e1.apellido_empleado AS apellido_empleado1,
-                    e1.correo_empleado AS correo_empleado1,
-                    e1.imagen_empleado AS imagen_empleado1,
-                    t1.estado_trabajo_empleado AS estado_trabajo_empleado1,
-                    e2.nombre_empleado AS nombre_empleado2,
-                    e2.apellido_empleado AS apellido_empleado2,
-                    e2.correo_empleado AS correo_empleado2,
-                    e2.imagen_empleado AS imagen_empleado2,
-                    t2.estado_trabajo_empleado AS estado_trabajo_empleado2,
-                    CASE
-                        WHEN t1.estado_trabajo_empleado = 1 AND t2.estado_trabajo_empleado = 1 THEN 1
-                        ELSE 0
-                    END AS estado_dupla
+                    dp.`id_dupla`,
+                    dp.`telefono_empresa_dupla`,
+                    dp.`tipo_dupla`,
+                    dp.`usuario_dupla`,
+                    em1.nombre_empleado AS nombre_empleado1,
+                    em1.apellido_empleado AS apellido_empleado1,
+                    em1.telefono_personal_empleado AS telefono_personal_empleado1,
+                    em1.imagen_empleado AS imagen_empleado1,
+                    em2.nombre_empleado AS nombre_empleado2,
+                    em2.apellido_empleado AS apellido_empleado2,
+                    em2.telefono_personal_empleado AS telefono_personal_empleado2,
+                    em2.imagen_empleado AS imagen_empleado2,
+                    CASE 
+                        WHEN td.estado_trabajo_dupla IS NULL OR td.estado_trabajo_dupla = 0 THEN 0
+                        ELSE 1
+                    END AS estado_trabajo,
+                    dp.`fecha_actualizacion_dupla`
                 FROM
-                    tb_duplas d
-                LEFT JOIN tb_empleados e1 ON
-                    d.id_empleado1 = e1.id_empleado
-                LEFT JOIN tb_empleados e2 ON
-                    d.id_empleado2 = e2.id_empleado
-                LEFT JOIN tb_trabajo_empleado t1 ON
-                    e1.id_empleado = t1.id_empleado
-                LEFT JOIN tb_trabajo_empleado t2 ON
-                    e2.id_empleado = t2.id_empleado';
+                    `tb_duplas` dp
+                INNER JOIN tb_empleados em1 ON
+                    dp.id_empleado1 = em1.id_empleado 
+                LEFT JOIN tb_empleados em2 ON
+                    dp.id_empleado2 = em2.id_empleado
+                LEFT JOIN tb_trabajo_duplas td ON
+                    dp.id_dupla = td.id_dupla AND td.estado_trabajo_dupla = 1;';
         return Database::getRows($sql);
     }
 
     public function readByName()
     {
         $sql = ' SELECT
-                    d.id_dupla,
-                    d.nombre_dupla,
-                    d.telefono_empresa_dupla,
-                    d.id_empleado1,
-                    d.id_empleado2,
-                    d.tipo_dupla,
-                    e1.nombre_empleado AS nombre_empleado1,
-                    e1.apellido_empleado AS apellido_empleado1,
-                    e1.correo_empleado AS correo_empleado1,
-                    e1.imagen_empleado AS imagen_empleado1,
-                    t1.estado_trabajo_empleado AS estado_trabajo_empleado1,
-                    e2.nombre_empleado AS nombre_empleado2,
-                    e2.apellido_empleado AS apellido_empleado2,
-                    e2.correo_empleado AS correo_empleado2,
-                    e2.imagen_empleado AS imagen_empleado2,
-                    t2.estado_trabajo_empleado AS estado_trabajo_empleado2,
-                    CASE
-                        WHEN t1.estado_trabajo_empleado = 1 AND t2.estado_trabajo_empleado = 1 THEN 1
-                        ELSE 0
-                    END AS estado_dupla
+                    `id_dupla`,
+                    `telefono_empresa_dupla`,
+                    `tipo_dupla`,
+                    `usuario_dupla`,
+                    em1.nombre_empleado AS nombre_empleado1,
+                    em1.apellido_empleado AS apellido_empleado1,
+                    em1.telefono_personal_empleado AS telefono_personal_empleado1,
+                    em1.imagen_empleado AS imagen_empleado1,
+                    em2.nombre_empleado AS nombre_empleado2,
+                    em2.apellido_empleado AS apellido_empleado2,
+                    em2.telefono_personal_empleado AS telefono_personal_empleado2,
+                    em2.imagen_empleado AS imagen_empleado2,
+                    `fecha_actualizacion_dupla`
                 FROM
-                    tb_duplas d
-                LEFT JOIN tb_empleados e1 ON
-                    d.id_empleado1 = e1.id_empleado
-                LEFT JOIN tb_empleados e2 ON
-                    d.id_empleado2 = e2.id_empleado
-                LEFT JOIN tb_trabajo_empleado t1 ON
-                    e1.id_empleado = t1.id_empleado
-                LEFT JOIN tb_trabajo_empleado t2 ON
-                    e2.id_empleado = t2.id_empleado
-                ORDER BY d.nombre_dupla';
+                    `tb_duplas` dp
+                INNER JOIN tb_empleados em1 ON
+                    dp.id_empleado1 = em1.id_empleado 
+                INNER JOIN tb_empleados em2 ON
+                    dp.id_empleado2 = em2.id_empleado
+                ORDER BY `usuario_dupla`';
         return Database::getRows($sql);
     }
 
     public function readByNameDesc()
     {
         $sql = ' SELECT
-                    d.id_dupla,
-                    d.nombre_dupla,
-                    d.telefono_empresa_dupla,
-                    d.id_empleado1,
-                    d.id_empleado2,
-                    d.tipo_dupla,
-                    e1.nombre_empleado AS nombre_empleado1,
-                    e1.apellido_empleado AS apellido_empleado1,
-                    e1.correo_empleado AS correo_empleado1,
-                    e1.imagen_empleado AS imagen_empleado1,
-                    t1.estado_trabajo_empleado AS estado_trabajo_empleado1,
-                    e2.nombre_empleado AS nombre_empleado2,
-                    e2.apellido_empleado AS apellido_empleado2,
-                    e2.correo_empleado AS correo_empleado2,
-                    e2.imagen_empleado AS imagen_empleado2,
-                    t2.estado_trabajo_empleado AS estado_trabajo_empleado2,
-                    CASE
-                        WHEN t1.estado_trabajo_empleado = 1 AND t2.estado_trabajo_empleado = 1 THEN 1
-                        ELSE 0
-                    END AS estado_dupla
+                    `id_dupla`,
+                    `telefono_empresa_dupla`,
+                    `tipo_dupla`,
+                    `usuario_dupla`,
+                    em1.nombre_empleado AS nombre_empleado1,
+                    em1.apellido_empleado AS apellido_empleado1,
+                    em1.telefono_personal_empleado AS telefono_personal_empleado1,
+                    em1.imagen_empleado AS imagen_empleado1,
+                    em2.nombre_empleado AS nombre_empleado2,
+                    em2.apellido_empleado AS apellido_empleado2,
+                    em2.telefono_personal_empleado AS telefono_personal_empleado2,
+                    em2.imagen_empleado AS imagen_empleado2,
+                    `fecha_actualizacion_dupla`
                 FROM
-                    tb_duplas d
-                LEFT JOIN tb_empleados e1 ON
-                    d.id_empleado1 = e1.id_empleado
-                LEFT JOIN tb_empleados e2 ON
-                    d.id_empleado2 = e2.id_empleado
-                LEFT JOIN tb_trabajo_empleado t1 ON
-                    e1.id_empleado = t1.id_empleado
-                LEFT JOIN tb_trabajo_empleado t2 ON
-                    e2.id_empleado = t2.id_empleado
-                ORDER BY d.nombre_dupla DESC';
+                    `tb_duplas` dp
+                INNER JOIN tb_empleados em1 ON
+                    dp.id_empleado1 = em1.id_empleado 
+                INNER JOIN tb_empleados em2 ON
+                    dp.id_empleado2 = em2.id_empleado
+                ORDER BY usuario_dupla DESC';
         return Database::getRows($sql);
     }
 
     public function readByModify()
     {
-        $sql = ' SELECT
-                    d.id_dupla,
-                    d.nombre_dupla,
-                    d.telefono_empresa_dupla,
-                    d.id_empleado1,
-                    d.id_empleado2,
-                    d.tipo_dupla,
-                    e1.nombre_empleado AS nombre_empleado1,
-                    e1.apellido_empleado AS apellido_empleado1,
-                    e1.correo_empleado AS correo_empleado1,
-                    e1.imagen_empleado AS imagen_empleado1,
-                    t1.estado_trabajo_empleado AS estado_trabajo_empleado1,
-                    e2.nombre_empleado AS nombre_empleado2,
-                    e2.apellido_empleado AS apellido_empleado2,
-                    e2.correo_empleado AS correo_empleado2,
-                    e2.imagen_empleado AS imagen_empleado2,
-                    t2.estado_trabajo_empleado AS estado_trabajo_empleado2,
-                    d.fecha_actualizacion_dupla,
-                    CASE
-                        WHEN t1.estado_trabajo_empleado = 1 AND t2.estado_trabajo_empleado = 1 THEN 1
-                        ELSE 0
-                    END AS estado_dupla
+        $sql = 'SELECT
+                    `id_dupla`,
+                    `telefono_empresa_dupla`,
+                    `tipo_dupla`,
+                    `usuario_dupla`,
+                    em1.nombre_empleado AS nombre_empleado1,
+                    em1.apellido_empleado AS apellido_empleado1,
+                    em1.telefono_personal_empleado AS telefono_personal_empleado1,
+                    em1.imagen_empleado AS imagen_empleado1,
+                    em2.nombre_empleado AS nombre_empleado2,
+                    em2.apellido_empleado AS apellido_empleado2,
+                    em2.telefono_personal_empleado AS telefono_personal_empleado2,
+                    em2.imagen_empleado AS imagen_empleado2,
+                    `fecha_actualizacion_dupla`
                 FROM
-                    tb_duplas d
-                LEFT JOIN tb_empleados e1 ON
-                    d.id_empleado1 = e1.id_empleado
-                LEFT JOIN tb_empleados e2 ON
-                    d.id_empleado2 = e2.id_empleado
-                LEFT JOIN tb_trabajo_empleado t1 ON
-                    e1.id_empleado = t1.id_empleado
-                LEFT JOIN tb_trabajo_empleado t2 ON
-                    e2.id_empleado = t2.id_empleado
-                ORDER BY d.fecha_actualizacion_dupla DESC';
+                    `tb_duplas` dp
+                INNER JOIN tb_empleados em1 ON
+                    dp.id_empleado1 = em1.id_empleado 
+                INNER JOIN tb_empleados em2 ON
+                    dp.id_empleado2 = em2.id_empleado
+                ORDER BY fecha_actualizacion_dupla DESC';
         return Database::getRows($sql);
     }
 
     public function readByActive()
     {
         $sql = 'SELECT
-                    d.id_dupla,
-                    d.nombre_dupla,
-                    d.telefono_empresa_dupla,
-                    d.id_empleado1,
-                    d.id_empleado2,
-                    d.tipo_dupla,
-                    e1.nombre_empleado AS nombre_empleado1,
-                    e1.apellido_empleado AS apellido_empleado1,
-                    e1.correo_empleado AS correo_empleado1,
-                    e1.imagen_empleado AS imagen_empleado1,
-                    t1.estado_trabajo_empleado AS estado_trabajo_empleado1,
-                    e2.nombre_empleado AS nombre_empleado2,
-                    e2.apellido_empleado AS apellido_empleado2,
-                    e2.correo_empleado AS correo_empleado2,
-                    e2.imagen_empleado AS imagen_empleado2,
-                    t2.estado_trabajo_empleado AS estado_trabajo_empleado2,
-                    CASE
-                        WHEN t1.estado_trabajo_empleado = 1 AND t2.estado_trabajo_empleado = 1 THEN 1
-                        ELSE 0
-                    END AS estado_dupla
+                    dp.`id_dupla`,
+                    dp.`telefono_empresa_dupla`,
+                    dp.`tipo_dupla`,
+                    dp.`usuario_dupla`,
+                    em1.nombre_empleado AS nombre_empleado1,
+                    em1.apellido_empleado AS apellido_empleado1,
+                    em1.telefono_personal_empleado AS telefono_personal_empleado1,
+                    em1.imagen_empleado AS imagen_empleado1,
+                    em2.nombre_empleado AS nombre_empleado2,
+                    em2.apellido_empleado AS apellido_empleado2,
+                    em2.telefono_personal_empleado AS telefono_personal_empleado2,
+                    em2.imagen_empleado AS imagen_empleado2,
+                    1 AS estado_trabajo,
+                    dp.`fecha_actualizacion_dupla`
                 FROM
-                    tb_duplas d
-                LEFT JOIN tb_empleados e1 ON
-                    d.id_empleado1 = e1.id_empleado
-                LEFT JOIN tb_empleados e2 ON
-                    d.id_empleado2 = e2.id_empleado
-                LEFT JOIN tb_trabajo_empleado t1 ON
-                    e1.id_empleado = t1.id_empleado
-                LEFT JOIN tb_trabajo_empleado t2 ON
-                    e2.id_empleado = t2.id_empleado
+                    `tb_duplas` dp
+                INNER JOIN tb_empleados em1 ON
+                    dp.id_empleado1 = em1.id_empleado 
+                LEFT JOIN tb_empleados em2 ON
+                    dp.id_empleado2 = em2.id_empleado
+                INNER JOIN tb_trabajo_duplas td ON
+                    dp.id_dupla = td.id_dupla 
                 WHERE
-                    t1.estado_trabajo_empleado = 1 AND t2.estado_trabajo_empleado = 1; -- Filtra duplas con estado_dupla = 1';
+                    td.estado_trabajo_dupla = 1; -- Filtra duplas con estado_dupla = 1';
         return Database::getRows($sql);
     }
 
     public function readByInactive()
     {
         $sql = 'SELECT
-                    d.id_dupla,
-                    d.nombre_dupla,
-                    d.telefono_empresa_dupla,
-                    d.id_empleado1,
-                    d.id_empleado2,
-                    d.tipo_dupla,
-                    e1.nombre_empleado AS nombre_empleado1,
-                    e1.apellido_empleado AS apellido_empleado1,
-                    e1.correo_empleado AS correo_empleado1,
-                    e1.imagen_empleado AS imagen_empleado1,
-                    t1.estado_trabajo_empleado AS estado_trabajo_empleado1,
-                    e2.nombre_empleado AS nombre_empleado2,
-                    e2.apellido_empleado AS apellido_empleado2,
-                    e2.correo_empleado AS correo_empleado2,
-                    e2.imagen_empleado AS imagen_empleado2,
-                    t2.estado_trabajo_empleado AS estado_trabajo_empleado2,
-                    CASE
-                        WHEN t1.estado_trabajo_empleado = 1 AND t2.estado_trabajo_empleado = 1 THEN 1
-                        ELSE 0
-                    END AS estado_dupla
+                    dp.`id_dupla`,
+                    dp.`telefono_empresa_dupla`,
+                    dp.`tipo_dupla`,
+                    dp.`usuario_dupla`,
+                    em1.nombre_empleado AS nombre_empleado1,
+                    em1.apellido_empleado AS apellido_empleado1,
+                    em1.telefono_personal_empleado AS telefono_personal_empleado1,
+                    em1.imagen_empleado AS imagen_empleado1,
+                    em2.nombre_empleado AS nombre_empleado2,
+                    em2.apellido_empleado AS apellido_empleado2,
+                    em2.telefono_personal_empleado AS telefono_personal_empleado2,
+                    em2.imagen_empleado AS imagen_empleado2,
+                    0 AS estado_trabajo,
+                    dp.`fecha_actualizacion_dupla`
                 FROM
-                    tb_duplas d
-                LEFT JOIN tb_empleados e1 ON
-                    d.id_empleado1 = e1.id_empleado
-                LEFT JOIN tb_empleados e2 ON
-                    d.id_empleado2 = e2.id_empleado
-                LEFT JOIN tb_trabajo_empleado t1 ON
-                    e1.id_empleado = t1.id_empleado
-                LEFT JOIN tb_trabajo_empleado t2 ON
-                    e2.id_empleado = t2.id_empleado
+                    `tb_duplas` dp
+                INNER JOIN tb_empleados em1 ON
+                    dp.id_empleado1 = em1.id_empleado 
+                LEFT JOIN tb_empleados em2 ON
+                    dp.id_empleado2 = em2.id_empleado
+                LEFT JOIN tb_trabajo_duplas td ON
+                    dp.id_dupla = td.id_dupla
                 WHERE
-                    (t1.estado_trabajo_empleado = 0 OR t2.estado_trabajo_empleado = 0) -- Filtra duplas con estado_dupla = 0
-                    OR (t1.estado_trabajo_empleado IS NULL OR t2.estado_trabajo_empleado IS NULL); -- Incluye casos donde falta registro';
+                    td.id_dupla IS NULL OR td.estado_trabajo_dupla = 0;';
         return Database::getRows($sql);
     }
 
     public function readByTypePermanent()
     {
         $sql = 'SELECT
-                    d.id_dupla,
-                    d.nombre_dupla,
-                    d.telefono_empresa_dupla,
-                    d.id_empleado1,
-                    d.id_empleado2,
-                    d.tipo_dupla,
-                    e1.nombre_empleado AS nombre_empleado1,
-                    e1.apellido_empleado AS apellido_empleado1,
-                    e1.correo_empleado AS correo_empleado1,
-                    e1.imagen_empleado AS imagen_empleado1,
-                    t1.estado_trabajo_empleado AS estado_trabajo_empleado1,
-                    e2.nombre_empleado AS nombre_empleado2,
-                    e2.apellido_empleado AS apellido_empleado2,
-                    e2.correo_empleado AS correo_empleado2,
-                    e2.imagen_empleado AS imagen_empleado2,
-                    t2.estado_trabajo_empleado AS estado_trabajo_empleado2,
-                    d.fecha_actualizacion_dupla,
-                    CASE
-                        WHEN t1.estado_trabajo_empleado = 1 AND t2.estado_trabajo_empleado = 1 THEN 1
-                        ELSE 0
-                    END AS estado_dupla
+                    `id_dupla`,
+                    `telefono_empresa_dupla`,
+                    `tipo_dupla`,
+                    `usuario_dupla`,
+                    em1.nombre_empleado AS nombre_empleado1,
+                    em1.apellido_empleado AS apellido_empleado1,
+                    em1.telefono_personal_empleado AS telefono_personal_empleado1,
+                    em1.imagen_empleado AS imagen_empleado1,
+                    em2.nombre_empleado AS nombre_empleado2,
+                    em2.apellido_empleado AS apellido_empleado2,
+                    em2.telefono_personal_empleado AS telefono_personal_empleado2,
+                    em2.imagen_empleado AS imagen_empleado2,
+                    `fecha_actualizacion_dupla`
                 FROM
-                    tb_duplas d
-                LEFT JOIN tb_empleados e1 ON
-                    d.id_empleado1 = e1.id_empleado
-                LEFT JOIN tb_empleados e2 ON
-                    d.id_empleado2 = e2.id_empleado
-                LEFT JOIN tb_trabajo_empleado t1 ON
-                    e1.id_empleado = t1.id_empleado
-                LEFT JOIN tb_trabajo_empleado t2 ON
-                    e2.id_empleado = t2.id_empleado
+                    `tb_duplas` dp
+                INNER JOIN tb_empleados em1 ON
+                    dp.id_empleado1 = em1.id_empleado 
+                INNER JOIN tb_empleados em2 ON
+                    dp.id_empleado2 = em2.id_empleado
                     WHERE tipo_dupla=1';
         return Database::getRows($sql);
     }
@@ -351,76 +321,54 @@ class DuplasHandler
     public function readByTypeTemporal()
     {
         $sql = '    SELECT
-                    d.id_dupla,
-                    d.nombre_dupla,
-                    d.telefono_empresa_dupla,
-                    d.id_empleado1,
-                    d.id_empleado2,
-                    d.tipo_dupla,
-                    e1.nombre_empleado AS nombre_empleado1,
-                    e1.apellido_empleado AS apellido_empleado1,
-                    e1.correo_empleado AS correo_empleado1,
-                    e1.imagen_empleado AS imagen_empleado1,
-                    t1.estado_trabajo_empleado AS estado_trabajo_empleado1,
-                    e2.nombre_empleado AS nombre_empleado2,
-                    e2.apellido_empleado AS apellido_empleado2,
-                    e2.correo_empleado AS correo_empleado2,
-                    e2.imagen_empleado AS imagen_empleado2,
-                    t2.estado_trabajo_empleado AS estado_trabajo_empleado2,
-                    d.fecha_actualizacion_dupla,
-                    CASE
-                        WHEN t1.estado_trabajo_empleado = 1 AND t2.estado_trabajo_empleado = 1 THEN 1
-                        ELSE 0
-                    END AS estado_dupla
+                    `id_dupla`,
+                    `telefono_empresa_dupla`,
+                    `tipo_dupla`,
+                    `usuario_dupla`,
+                    em1.nombre_empleado AS nombre_empleado1,
+                    em1.apellido_empleado AS apellido_empleado1,
+                    em1.telefono_personal_empleado AS telefono_personal_empleado1,
+                    em1.imagen_empleado AS imagen_empleado1,
+                    em2.nombre_empleado AS nombre_empleado2,
+                    em2.apellido_empleado AS apellido_empleado2,
+                    em2.telefono_personal_empleado AS telefono_personal_empleado2,
+                    em2.imagen_empleado AS imagen_empleado2,
+                    `fecha_actualizacion_dupla`
                 FROM
-                    tb_duplas d
-                LEFT JOIN tb_empleados e1 ON
-                    d.id_empleado1 = e1.id_empleado
-                LEFT JOIN tb_empleados e2 ON
-                    d.id_empleado2 = e2.id_empleado
-                LEFT JOIN tb_trabajo_empleado t1 ON
-                    e1.id_empleado = t1.id_empleado
-                LEFT JOIN tb_trabajo_empleado t2 ON
-                    e2.id_empleado = t2.id_empleado
-                    WHERE tipo_dupla=0';
+                    `tb_duplas` dp
+                INNER JOIN tb_empleados em1 ON
+                    dp.id_empleado1 = em1.id_empleado 
+                INNER JOIN tb_empleados em2 ON
+                    dp.id_empleado2 = em2.id_empleado
+                WHERE tipo_dupla=0';
         return Database::getRows($sql);
     }
 
     public function readOne()
     {
         $sql = 'SELECT
-                    d.id_dupla,
-                    d.nombre_dupla,
-                    d.telefono_empresa_dupla,
-                    d.id_empleado1,
-                    d.id_empleado2,
-                    d.tipo_dupla,
-                    e1.nombre_empleado AS nombre_empleado1,
-                    e1.apellido_empleado AS apellido_empleado1,
-                    e1.correo_empleado AS correo_empleado1,
-                    e1.imagen_empleado AS imagen_empleado1,
-                    t1.estado_trabajo_empleado AS estado_trabajo_empleado1,
-                    e2.nombre_empleado AS nombre_empleado2,
-                    e2.apellido_empleado AS apellido_empleado2,
-                    e2.correo_empleado AS correo_empleado2,
-                    e2.imagen_empleado AS imagen_empleado2,
-                    t2.estado_trabajo_empleado AS estado_trabajo_empleado2,
-                    d.fecha_actualizacion_dupla,
-                    CASE
-                        WHEN t1.estado_trabajo_empleado = 1 AND t2.estado_trabajo_empleado = 1 THEN 1
-                        ELSE 0
-                    END AS estado_dupla
+                    `id_dupla`,
+                    `telefono_empresa_dupla`,
+                    `tipo_dupla`,
+                    `usuario_dupla`,
+                    em1.id_empleado AS id_empleado1,
+                    em1.nombre_empleado AS nombre_empleado1,
+                    em1.apellido_empleado AS apellido_empleado1,
+                    em1.telefono_personal_empleado AS telefono_personal_empleado1,
+                    em1.imagen_empleado AS imagen_empleado1,
+                    em2.id_empleado AS id_empleado2,
+                    em2.nombre_empleado AS nombre_empleado2,
+                    em2.apellido_empleado AS apellido_empleado2,
+                    em2.telefono_personal_empleado AS telefono_personal_empleado2,
+                    em2.imagen_empleado AS imagen_empleado2,
+                    `fecha_actualizacion_dupla`
                 FROM
-                    tb_duplas d
-                LEFT JOIN tb_empleados e1 ON
-                    d.id_empleado1 = e1.id_empleado
-                LEFT JOIN tb_empleados e2 ON
-                    d.id_empleado2 = e2.id_empleado
-                LEFT JOIN tb_trabajo_empleado t1 ON
-                    e1.id_empleado = t1.id_empleado
-                LEFT JOIN tb_trabajo_empleado t2 ON
-                    e2.id_empleado = t2.id_empleado
-                    WHERE d.id_dupla = ?;';
+                    `tb_duplas` dp
+                INNER JOIN tb_empleados em1 ON
+                    dp.id_empleado1 = em1.id_empleado
+                INNER JOIN tb_empleados em2 ON
+                    dp.id_empleado2 = em2.id_empleado
+                WHERE dp.id_dupla = ?;';
         $params = array($this->id);
         return Database::getRow($sql, $params);
     }
@@ -430,15 +378,15 @@ class DuplasHandler
         $sql = 'UPDATE
                     `tb_duplas`
                 SET
-                    `nombre_dupla` = ?,
                     `telefono_empresa_dupla` = ?,
                     `tipo_dupla` = ?,
+                    `usuario_dupla` = ?,
                     `id_empleado1` = ?,
                     `id_empleado2` = ?,
                     `fecha_actualizacion_dupla` = ?
                 WHERE
-                    `id_dupla` = ?';
-        $params = array($this->nombre, $this->telefono, $this->tipo, $this->empleado1, $this->empleado2, $this->actualizacion, $this->id);
+                    `id_dupla` =?';
+        $params = array($this->telefono, $this->tipo, $this->usuario, $this->empleado1, $this->empleado2, $this->actualizacion, $this->id);
         return Database::executeRow($sql, $params);
     }
 

@@ -12,12 +12,12 @@ class EmpleadoHandler
     protected $apellido = null;
     protected $dui = null;
     protected $telefono = null;
-    protected $correo = null;
-    protected $clave = null;
+    // protected $correo = null;
+    // protected $clave = null;
     protected $actualizacion = null;
     protected $imagen = null;
-    // protected $departamento = null;
-    // protected $municipio = null;
+    protected $departamento = null;
+    protected $municipio = null;
     // protected $estado = null;
 
     public function __construct()
@@ -36,36 +36,36 @@ class EmpleadoHandler
     /*
      *  Métodos para gestionar la cuenta del empleado.
      */
-    public function checkUser($username, $password)
-    {
-        $sql = 'SELECT `id_empleado`, `correo_empleado`,`clave_empleado` FROM `tb_empleados` WHERE `correo_empleado` =?';
-        $params = array($username);
-        if (!($data = Database::getRow($sql, $params))) {
-            return false;
-        } elseif (password_verify($password, $data['clave_empleado'])) {
-            $_SESSION['idEmpleado'] = $data['id_empleado'];
-            $_SESSION['correoEmpleado'] = $data['correo_empleado'];
-            return true;
-        } else {
-            return false;
-        }
-    }
+    // public function checkUser($username, $password)
+    // {
+    //     $sql = 'SELECT `id_empleado`, `correo_empleado`,`clave_empleado` FROM `tb_empleados` WHERE `correo_empleado` =?';
+    //     $params = array($username);
+    //     if (!($data = Database::getRow($sql, $params))) {
+    //         return false;
+    //     } elseif (password_verify($password, $data['clave_empleado'])) {
+    //         $_SESSION['idEmpleado'] = $data['id_empleado'];
+    //         $_SESSION['correoEmpleado'] = $data['correo_empleado'];
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
 
-    // validación para comprobar si la contraseña es correcta
-    public function checkPassword($password)
-    {
-        $sql = 'SELECT clave_empleado
-                FROM tb_empleados
-                WHERE id_empleado = ?';
-        $params = array($_SESSION['idEmpleado']);
-        if (!($data = Database::getRow($sql, $params))) {
-            return false;
-        } elseif (password_verify($password, $data['clave_empleado'])) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    // * validación para comprobar si la contraseña es correcta
+    // public function checkPassword($password)
+    // {
+    //     $sql = 'SELECT clave_empleado
+    //             FROM tb_empleados
+    //             WHERE id_empleado = ?';
+    //     $params = array($_SESSION['idEmpleado']);
+    //     if (!($data = Database::getRow($sql, $params))) {
+    //         return false;
+    //     } elseif (password_verify($password, $data['clave_empleado'])) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
 
     //* métodos SCRUD (search, create, read, update, and delete) para el manejo de variables 
 
@@ -78,7 +78,6 @@ class EmpleadoHandler
                     `apellido_empleado`,
                     `DUI_empleado`,
                     `telefono_empleado`,
-                    `correo_empleado`,
                     `departamento_empleado`,
                     `municipio_empleado`,
                     `estado_empleado`
@@ -88,13 +87,9 @@ class EmpleadoHandler
                     `nombre_empleado` LIKE ? OR 
                     `apellido_empleado` LIKE ? OR 
                     `DUI_empleado` LIKE ? OR 
-                    `telefono_empleado` LIKE ? OR 
-                    `correo_empleado` LIKE ? OR 
-                    `departamento_empleado` LIKE ? OR 
-                    `municipio_empleado` LIKE ? OR 
-                    `estado_empleado` LIKE ?
+                    `telefono_empleado` LIKE ? 
         ';
-        $params = array($value, $value, $value, $value, $value, $value, $value, $value);
+        $params = array($value, $value, $value, $value);
         return Database::getRows($sql, $params);
     }
 
@@ -105,175 +100,142 @@ class EmpleadoHandler
                     `apellido_empleado`,
                     `DUI_empleado`,
                     `telefono_personal_empleado`,
-                    `correo_empleado`,
-                    `clave_empleado`,
                     `imagen_empleado`,
+                    `departamento_trabajo_empleado`,
+                    `municipio_trabajo_empleado`,
                     `fecha_actualizacion_empleado`
                 )
                 VALUES(
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?)';
-        $params = array($this->nombre, $this->apellido, $this->dui, $this->telefono, $this->correo,  $this->clave, $this->imagen, $this->actualizacion);
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?
+                )';
+        $params = array($this->nombre, $this->apellido, $this->dui, $this->telefono, $this->imagen, $this->departamento, $this->municipio, $this->actualizacion);
         return Database::executeRow($sql, $params);
     }
 
     public function readAll()
     {
         $sql = 'SELECT
-                    e.id_empleado,
-                    e.nombre_empleado,
-                    e.apellido_empleado,
-                    e.DUI_empleado,
-                    e.telefono_personal_empleado,
-                    e.correo_empleado,
-                    e.imagen_empleado,
-                    e.fecha_actualizacion_empleado,
-                    CASE 
-                        WHEN t.id_empleado IS NOT NULL THEN 1 
-                        ELSE 0 
-                    END AS empleado_agregado,
-                    COALESCE(t.estado_trabajo_empleado, 0) AS estado_trabajo_empleado
+                    `id_empleado`,
+                    `nombre_empleado`,
+                    `apellido_empleado`,
+                    `DUI_empleado`,
+                    `telefono_personal_empleado`,
+                    `imagen_empleado`,
+                    `departamento_trabajo_empleado`,
+                    `municipio_trabajo_empleado`,
+                    `fecha_actualizacion_empleado`
                 FROM
-                    tb_empleados e
-                LEFT JOIN 
-                    tb_trabajo_empleado t 
-                ON
-                    e.id_empleado = t.id_empleado;';
+                    `tb_empleados`';
         return Database::getRows($sql);
     }
 
     public function readByName()
     {
         $sql = 'SELECT
-                    e.id_empleado,
-                    e.nombre_empleado,
-                    e.apellido_empleado,
-                    e.DUI_empleado,
-                    e.telefono_personal_empleado,
-                    e.correo_empleado,
-                    e.imagen_empleado,
-                    e.fecha_actualizacion_empleado,
-                    CASE 
-                        WHEN t.id_empleado IS NOT NULL THEN 1 
-                        ELSE 0 
-                    END AS empleado_agregado,
-                    COALESCE(t.estado_trabajo_empleado, 0) AS estado_trabajo_empleado
+                    `id_empleado`,
+                    `nombre_empleado`,
+                    `apellido_empleado`,
+                    `DUI_empleado`,
+                    `telefono_personal_empleado`,
+                    `imagen_empleado`,
+                    `departamento_trabajo_empleado`,
+                    `municipio_trabajo_empleado`,
+                    `fecha_actualizacion_empleado`
                 FROM
-                    tb_empleados e
-                LEFT JOIN 
-                    tb_trabajo_empleado t
-                ON
-                    e.id_empleado = t.id_empleado -- Condición de unión
+                    `tb_empleados
                 ORDER BY
-                    e.nombre_empleado;';
+                    `nombre_empleado`;';
         return Database::getRows($sql);
     }
 
     public function readByNameDesc()
     {
         $sql = 'SELECT
-                    e.id_empleado,
-                    e.nombre_empleado,
-                    e.apellido_empleado,
-                    e.DUI_empleado,
-                    e.telefono_personal_empleado,
-                    e.correo_empleado,
-                    e.imagen_empleado,
-                    e.fecha_actualizacion_empleado,
-                    CASE 
-                        WHEN t.id_empleado IS NOT NULL THEN 1 
-                        ELSE 0 
-                    END AS empleado_agregado,
-                    COALESCE(t.estado_trabajo_empleado, 0) AS estado_trabajo_empleado
+                    `id_empleado`,
+                    `nombre_empleado`,
+                    `apellido_empleado`,
+                    `DUI_empleado`,
+                    `telefono_personal_empleado`,
+                    `imagen_empleado`,
+                    `departamento_trabajo_empleado`,
+                    `municipio_trabajo_empleado`,
+                    `fecha_actualizacion_empleado`
                 FROM
-                    tb_empleados e
-                LEFT JOIN 
-                    tb_trabajo_empleado t
-                ON
-                    e.id_empleado = t.id_empleado -- Condición de unión
+                    `tb_empleados
                 ORDER BY
-                    e.nombre_empleado DESC';
+                    `nombre_empleado` DESC';
         return Database::getRows($sql);
     }
 
     public function readByModify()
     {
         $sql = 'SELECT
-                    e.id_empleado,
-                    e.nombre_empleado,
-                    e.apellido_empleado,
-                    e.DUI_empleado,
-                    e.telefono_personal_empleado,
-                    e.correo_empleado,
-                    e.imagen_empleado,
-                    e.fecha_actualizacion_empleado,
-                    CASE 
-                        WHEN t.id_empleado IS NOT NULL THEN 1 
-                        ELSE 0 
-                    END AS empleado_agregado,
-                    COALESCE(t.estado_trabajo_empleado, 0) AS estado_trabajo_empleado
+                    `id_empleado`,
+                    `nombre_empleado`,
+                    `apellido_empleado`,
+                    `DUI_empleado`,
+                    `telefono_personal_empleado`,
+                    `imagen_empleado`,
+                    `departamento_trabajo_empleado`,
+                    `municipio_trabajo_empleado`,
+                    `fecha_actualizacion_empleado`
                 FROM
-                    tb_empleados e
-                LEFT JOIN 
-                    tb_trabajo_empleado t
-                                    ON
-                    e.id_empleado = t.id_empleado -- Condición de unión
+                    `tb_empleados
                 ORDER BY
-                    e.fecha_actualizacion_empleado DESC';
+                    `fecha_actualizacion_empleado` DESC';
         return Database::getRows($sql);
     }
+    // ! TERMINAR ESTO CON DUPLAS
+    // public function readByInformation()
+    // {
+    //     $sql = 'SELECT
+    //                 e.id_empleado,
+    //                 e.nombre_empleado,
+    //                 e.apellido_empleado,
+    //                 e.DUI_empleado,
+    //                 e.telefono_personal_empleado,
+    //                 e.imagen_empleado,
+    //                 e.fecha_actualizacion_empleado,
+    //                 CASE WHEN t.id_empleado IS NOT NULL THEN 1 ELSE 0
+    //             END AS empleado_agregado,
+    //             COALESCE(t.estado_trabajo_empleado, 0) AS estado_trabajo_empleado
+    //             FROM
+    //                 tb_empleados e
+    //             LEFT JOIN tb_trabajo_empleado t ON
+    //                 e.id_empleado = t.id_empleado
+    //             WHERE
+    //                 t.id_empleado IS NOT NULL; -- Filtra solo los empleados agregados';
+    //     return Database::getRows($sql);
+    // }
 
-    public function readByInformation()
-    {
-        $sql = 'SELECT
-                    e.id_empleado,
-                    e.nombre_empleado,
-                    e.apellido_empleado,
-                    e.DUI_empleado,
-                    e.telefono_personal_empleado,
-                    e.correo_empleado,
-                    e.imagen_empleado,
-                    e.fecha_actualizacion_empleado,
-                    CASE WHEN t.id_empleado IS NOT NULL THEN 1 ELSE 0
-                END AS empleado_agregado,
-                COALESCE(t.estado_trabajo_empleado, 0) AS estado_trabajo_empleado
-                FROM
-                    tb_empleados e
-                LEFT JOIN tb_trabajo_empleado t ON
-                    e.id_empleado = t.id_empleado
-                WHERE
-                    t.id_empleado IS NOT NULL; -- Filtra solo los empleados agregados';
-        return Database::getRows($sql);
-    }
-
-    public function readByNoInformation()
-    {
-        $sql = 'SELECT
-                    e.id_empleado,
-                    e.nombre_empleado,
-                    e.apellido_empleado,
-                    e.DUI_empleado,
-                    e.telefono_personal_empleado,
-                    e.correo_empleado,
-                    e.imagen_empleado,
-                    e.fecha_actualizacion_empleado,
-                    CASE WHEN t.id_empleado IS NOT NULL THEN 1 ELSE 0
-                END AS empleado_agregado,
-                COALESCE(t.estado_trabajo_empleado, 0) AS estado_trabajo_empleado
-                FROM
-                    tb_empleados e
-                LEFT JOIN tb_trabajo_empleado t ON
-                    e.id_empleado = t.id_empleado
-                WHERE
-                    t.id_empleado IS NULL; -- Filtra solo los empleados agregados';
-        return Database::getRows($sql);
-    }
+    // public function readByNoInformation()
+    // {
+    //     $sql = 'SELECT
+    //                 e.id_empleado,
+    //                 e.nombre_empleado,
+    //                 e.apellido_empleado,
+    //                 e.DUI_empleado,
+    //                 e.telefono_personal_empleado,
+    //                 e.imagen_empleado,
+    //                 e.fecha_actualizacion_empleado,
+    //                 CASE WHEN t.id_empleado IS NOT NULL THEN 1 ELSE 0
+    //             END AS empleado_agregado,
+    //             COALESCE(t.estado_trabajo_empleado, 0) AS estado_trabajo_empleado
+    //             FROM
+    //                 tb_empleados e
+    //             LEFT JOIN tb_trabajo_empleado t ON
+    //                 e.id_empleado = t.id_empleado
+    //             WHERE
+    //                 t.id_empleado IS NULL; -- Filtra solo los empleados agregados';
+    //     return Database::getRows($sql);
+    // }
 
     public function readFilename()
     {
@@ -295,31 +257,14 @@ class EmpleadoHandler
                     `apellido_empleado`,
                     `DUI_empleado`,
                     `telefono_personal_empleado`,
-                    `correo_empleado`,
                     `imagen_empleado`,
+                    `departamento_trabajo_empleado`,
+                    `municipio_trabajo_empleado`,
                     `fecha_actualizacion_empleado`
                 FROM
                     `tb_empleados`
                 WHERE `id_empleado` = ?';
         $params = array($this->id);
-        return Database::getRow($sql, $params);
-    }
-
-    public function readProfile()
-    {
-        $sql = 'SELECT
-                    `id_empleado`,
-                    `nombre_empleado`,
-                    `apellido_empleado`,
-                    `DUI_empleado`,
-                    `telefono_personal_empleado`,
-                    `correo_empleado`,
-                    `imagen_empleado`
-                FROM
-                    `tb_empleados`
-                WHERE
-                    `id_empleado`= ?';
-        $params = array($_SESSION['idEmpleado']);
         return Database::getRow($sql, $params);
     }
 
@@ -332,12 +277,13 @@ class EmpleadoHandler
                     `apellido_empleado` = ?,
                     `DUI_empleado` = ?,
                     `telefono_personal_empleado` = ?,
-                    `correo_empleado` = ?,
                     `imagen_empleado` = ?,
+                    `departamento_trabajo_empleado` = ?,
+                    `municipio_trabajo_empleado` = ?,
                     `fecha_actualizacion_empleado` = ?
                 WHERE
                     `id_empleado` = ?';
-        $params = array($this->nombre, $this->apellido, $this->dui, $this->telefono, $this->correo, $this->imagen, $this->actualizacion, $this->id);
+        $params = array($this->nombre, $this->apellido, $this->dui, $this->telefono, $this->imagen, $this->departamento, $this->municipio, $this->actualizacion, $this->id);
         return Database::executeRow($sql, $params);
     }
 
