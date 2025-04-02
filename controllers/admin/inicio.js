@@ -1,10 +1,13 @@
 const CABLES_API = 'services/admin/cables.php'
-const INFO_EMPLEADOS_API = 'services/admin/info_empleado.php'
+const TRABAJO_DUPLA_API = 'services/admin/trabajo_dupla.php'
 
 // ? variables para mostrar a los últimos empleados que iniciaron y terminaron una jornada laboral
 const JORNADAS_EMPLEADOS = document.getElementById('jornadasEmpleados'),
     INICIO_BOTON = document.getElementById('inicioBoton'),
     FINALIZACION_BOTON = document.getElementById('finalizacionBoton');
+
+// ? variables para mostrar la ubicación de la dupla inicial y final de la dupla
+const UBICACION_DUPLA = document.getElementById('ubicacionDupla');
 
 // Método del evento para cuando el documento ha cargado.
 document.addEventListener('DOMContentLoaded', async () => {
@@ -17,9 +20,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 /*
-*   Función asíncrona para mostrar un gráfico de pastel con el porcentaje de productos por categoría.
-*   Parámetros: ninguno.
-*   Retorno: ninguno.
+* Función asíncrona para mostrar un gráfico de pastel con el porcentaje de productos por categoría.
+* Parámetros: ninguno.
+* Retorno: ninguno.
 */
 const graficoBarrasCategorias = async () => {
     // Petición para obtener los datos del gráfico.
@@ -44,9 +47,9 @@ const graficoBarrasCategorias = async () => {
 }
 
 /*
-*   Función asíncrona para mostrar un gráfico de pastel con el porcentaje de productos por categoría.
-*   Parámetros: ninguno.
-*   Retorno: ninguno.
+* Función asíncrona para mostrar un gráfico de pastel con el porcentaje de productos por categoría.
+* Parámetros: ninguno.
+* Retorno: ninguno.
 */
 
 const graficoPastelestadosRollos = async () => {
@@ -72,9 +75,9 @@ const graficoPastelestadosRollos = async () => {
 }
 
 /*
-*   Función asíncrona para mostrar un gráfico de pastel con el porcentaje de productos por categoría.
-*   Parámetros: ninguno.
-*   Retorno: ninguno.
+* Función asíncrona para mostrar un gráfico de pastel con el porcentaje de productos por categoría.
+* Parámetros: ninguno.
+* Retorno: ninguno.
 */
 
 const graficoPastelCategorias = async () => {
@@ -99,39 +102,51 @@ const graficoPastelCategorias = async () => {
     }
 }
 
-// *   función asíncrona para mostrar los últimos 5 inicios de jornada laboral o las finalizaciones.
-// *   Parámetros: ninguno.
-// *   Retorno: ninguno.
+// * función asíncrona para mostrar los últimos 5 inicios de jornada laboral o las finalizaciones.
+// * Parámetros: ninguno.
+// * Retorno: ninguno.
 const inicioJornadas = async () => {
     JORNADAS_EMPLEADOS.innerHTML = '';
     INICIO_BOTON.classList.add('disabled');
     FINALIZACION_BOTON.classList.remove('disabled');
     // Petición para obtener los registros disponibles.
-    const DATA = await fetchData(INFO_EMPLEADOS_API, 'readByActive5');
+    const DATA = await fetchData(TRABAJO_DUPLA_API, 'readByActive5');
     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
     if (DATA.status) {
         // Se recorre el conjunto de registros (dataset) fila por fila a través del objeto row.
         DATA.dataset.forEach(row => {
-            // Se establece un icono para el estado del producto.
-            (parseInt(row.estado_producto)) ? icon = 'bi bi-eye-fill' : icon = 'bi bi-eye-slash-fill';
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
             JORNADAS_EMPLEADOS.innerHTML += `
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#empleadoInformacion${row.id_trabajo_empleado}" aria-expanded="false"
-                            aria-controls="empleadoInformacion${row.id_trabajo_empleado}">
-                            ${row.nombre_empleado} ${row.apellido_empleado}
-                        </button>
-                    </h2>
-                    <div id="empleadoInformacion${row.id_trabajo_empleado}" class="accordion-collapse collapse"
-                        data-bs-parent="#jornadasEmpleados">
-                        <div class="accordion-body">
-                            <button type="button" class="btn btn-info"><h5>Mostrar ubicación</h5></button>
-                        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#empleadoInformacion${row.id_trabajo_dupla}" aria-expanded="false"
+                    aria-controls="empleadoInformacion${row.id_trabajo_dupla}">
+                    <h4>CÓDIGO DUPLA: ${row.usuario_dupla}</h4>
+                </button>
+            </h2>
+            <div id="empleadoInformacion${row.id_trabajo_dupla}" class="accordion-collapse collapse"
+                data-bs-parent="#jornadasEmpleados">
+                <div class="accordion-body">
+                    <div class="my-3">
+                        <h5 class="text-warning">HORA INICIO</h5>
+                        <p>${row.hora_inicio_trabajo_dupla}</p>
+                        <h5>Nombre empleado1: </h5>
+                        <p>
+                            ${row.nombre_empleado1} ${row.apellido_empleado1}
+                        </p>
+                        <h5>Nombre empleado2: </h5>
+                        <p>
+                            ${row.nombre_empleado2} ${row.apellido_empleado2}
+                        </p>
                     </div>
+                    <button type="button" class="btn btn-info" onclick="mostrarInformacion(${row.latitud_inicio_trabajo_dupla}, ${row.longitud_inicio_trabajo_dupla})">
+                        <h5>Mostrar ubicación</h5>
+                    </button>
                 </div>
-            `;
+            </div>
+        </div>
+`;
         });
     } else {
         sweetAlert(4, DATA.error, true);
@@ -143,33 +158,61 @@ const finalizacionJornadas = async () => {
     FINALIZACION_BOTON.classList.add('disabled');
     INICIO_BOTON.classList.remove('disabled');
     // Petición para obtener los registros disponibles.
-    const DATA = await fetchData(INFO_EMPLEADOS_API, 'readByInactive5');
+    const DATA = await fetchData(TRABAJO_DUPLA_API, 'readByInactive5');
     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
     if (DATA.status) {
         // Se recorre el conjunto de registros (dataset) fila por fila a través del objeto row.
         DATA.dataset.forEach(row => {
-            // Se establece un icono para el estado del producto.
-            (parseInt(row.estado_producto)) ? icon = 'bi bi-eye-fill' : icon = 'bi bi-eye-slash-fill';
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
             JORNADAS_EMPLEADOS.innerHTML += `
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#flush-collapseOne" aria-expanded="false"
-                            aria-controls="flush-collapseOne">
-                            Accordion Item #1
-                        </button>
-                    </h2>
-                    <div id="flush-collapseOne" class="accordion-collapse collapse"
-                        data-bs-parent="#accordionFlushExample">
-                        <div class="accordion-body">Placeholder content for this accordion, which is intended to
-                            demonstrate the <code>.accordion-flush</code> class. This is the first item's
-                            accordion body.</div>
-                    </div>
+<div class="accordion-item">
+    <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#empleadoInformacion${row.id_trabajo_dupla}" aria-expanded="false"
+            aria-controls="empleadoInformacion${row.id_trabajo_dupla}">
+            <h4>CÓDIGO DUPLA: ${row.usuario_dupla}</h4>
+        </button>
+    </h2>
+    <div id="empleadoInformacion${row.id_trabajo_dupla}" class="accordion-collapse collapse"
+            data-bs-parent="#jornadasEmpleados">
+            <div class="accordion-body">
+                <div class="my-3">
+                    <h5 class="text-warning">HORA FINAL</h5>
+                    <p>${row.hora_final_trabajo_dupla}</p>
+
+                    <h5>Nombre empleado1: </h5>
+                    <p>
+                        ${row.nombre_empleado1} ${row.apellido_empleado1}
+                    </p>
+                    <h5>Nombre empleado2: </h5>
+                    <p>
+                        ${row.nombre_empleado2} ${row.apellido_empleado2}
+                    </p>
                 </div>
-            `;
+                <button type="button" class="btn btn-info" onclick="mostrarInformacion(${row.latitud_final_trabajo_dupla}, ${row.longitud_final_trabajo_dupla})">
+                    <h5>Mostrar ubicación</h5>
+                </button>
+            </div>
+        </div>
+    </div>
+`;
         });
     } else {
         sweetAlert(4, DATA.error, true);
     }
 }
+
+// ? método para mostrar la ubicacion inicial y final de  
+const mostrarInformacion = (latitud, longitud) => {
+    if (!latitud || !longitud) {
+        console.error("Error: Latitud o longitud no válidas.");
+        return;
+    }
+
+    UBICACION_DUPLA.innerHTML = `
+        <iframe width="600" height="450" style="border:0;" loading="lazy" allowfullscreen
+                referrerpolicy="no-referrer-when-downgrade"
+                src="https://www.google.com/maps?q=${latitud},${longitud}&hl=es&z=15&output=embed">
+        </iframe>
+    `;
+};

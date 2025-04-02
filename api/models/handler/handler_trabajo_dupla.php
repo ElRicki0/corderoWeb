@@ -161,6 +161,49 @@ class TrabajoDuplaHandler
                     `fecha_actualizacion_empleado` DESC';
         return Database::getRows($sql);
     }
+
+    public function readByActive5()
+    {
+        $sql = 'SELECT
+                    tdp.id_trabajo_dupla,
+                    tdp.latitud_inicio_trabajo_dupla,
+                    tdp.longitud_inicio_trabajo_dupla,
+                    tdp.hora_inicio_trabajo_dupla,
+                    dp.usuario_dupla,
+                    e1.nombre_empleado AS nombre_empleado1,
+                    e1.apellido_empleado AS apellido_empleado1,
+                    e2.nombre_empleado AS nombre_empleado2,
+                    e2.apellido_empleado AS apellido_empleado2
+                FROM tb_trabajo_duplas tdp
+                INNER JOIN tb_duplas dp ON tdp.id_dupla = dp.id_dupla
+                INNER JOIN tb_empleados e1 ON dp.id_empleado1 = e1.id_empleado
+                LEFT JOIN tb_empleados e2 ON dp.id_empleado2 = e2.id_empleado
+                ORDER BY tdp.hora_inicio_trabajo_dupla DESC 
+                LIMIT 5;';
+        return Database::getRows($sql);
+    }
+
+    public function readByInactive5()
+    {
+        $sql = 'SELECT
+                    tdp.id_trabajo_dupla,
+                    tdp.latitud_final_trabajo_dupla,
+                    tdp.longitud_final_trabajo_dupla,
+                    tdp.hora_final_trabajo_dupla,
+                    dp.usuario_dupla,
+                    e1.nombre_empleado AS nombre_empleado1,
+                    e1.apellido_empleado AS apellido_empleado1,
+                    e2.nombre_empleado AS nombre_empleado2,
+                    e2.apellido_empleado AS apellido_empleado2
+                FROM tb_trabajo_duplas tdp
+                INNER JOIN tb_duplas dp ON tdp.id_dupla = dp.id_dupla
+                INNER JOIN tb_empleados e1 ON dp.id_empleado1 = e1.id_empleado
+                LEFT JOIN tb_empleados e2 ON dp.id_empleado2 = e2.id_empleado
+                ORDER BY tdp.hora_final_trabajo_dupla DESC 
+                LIMIT 5;';
+        return Database::getRows($sql);
+    }
+
     // ! TERMINAR ESTO CON DUPLAS
     // public function readByInformation()
     // {

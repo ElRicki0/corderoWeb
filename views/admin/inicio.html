@@ -31,15 +31,19 @@
             <div class="mt-2 row justify-content-center text-center">
                 <h1 class="">Jornadas laboral</h1>
                 <div class="my-4">
-                    <button type="button" class="btn btn-secondary" id="inicioBoton" onclick="inicioJornadas()"><h3>Inicios Recientes</h3></button>
-                    <button type="button" class="btn btn-secondary" id="finalizacionBoton" onclick="finalizacionJornadas()"><h3>Finalizaciones Recientes</h3></button>
+                    <button type="button" class="btn btn-secondary" id="inicioBoton" onclick="inicioJornadas()">
+                        <h3>Inicios Recientes</h3>
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="finalizacionBoton"
+                        onclick="finalizacionJornadas()">
+                        <h3>Finalizaciones Recientes</h3>
+                    </button>
                 </div>
                 <div class="col-lg-6 col-12">
                     <div class="accordion" id="jornadasEmpleados">
                     </div>
                 </div>
-                <div class="col-lg-6 col-12">
-
+                <div class="col-lg-6 col-12" id="ubicacionDupla">
                 </div>
             </div>
         </div>
@@ -56,8 +60,8 @@
     <!-- Llamada al controlador del sitio privado -->
     <script type="text/javascript" src="../../controllers/utils/admin.js"></script>
     <!-- Llamada al controlador de la página web -->
-    <script src="../../controllers/admin/inicio.js"></script>
     <!-- ! cambiar el link js para el controntrolador -->
+    <script src="../../controllers/admin/inicio.js"></script>
 </body>
 
 </html>
