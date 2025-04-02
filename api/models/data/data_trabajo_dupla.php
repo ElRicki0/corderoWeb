@@ -2,11 +2,11 @@
 // Se incluye la clase para validar los datos de entrada.
 require_once('../../helpers/validator.php');
 // Se incluye la clase padre.
-require_once('../../models/handler/handler_info_trabajo.php');
+require_once('../../models/handler/handler_trabajo_dupla.php');
 /*
  *  Clase para manejar el encapsulamiento de los datos de la tabla USUARIO.
  */
-class InfoTrabajoData extends InfoTrabajoHandler
+class TrabajoDuplaData extends TrabajoDuplaHandler
 {
     // atributo genérico para manejo de errores
     private $data_error = null;
@@ -131,10 +131,10 @@ class InfoTrabajoData extends InfoTrabajoHandler
         }
     }
 
-    public function setEmpleado($value)
+    public function setDupla($value)
     {
         if (Validator::validateNaturalNumber($value)) {
-            $this->empleado = $value;
+            $this->dupla = $value;
             return true;
         } else {
             $this->data_error = 'El identificador de la información es incorrecto';

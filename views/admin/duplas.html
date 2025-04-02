@@ -261,6 +261,40 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="passwordModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content bg-dark ">
+                    <form id="passwordForm">
+                        <!-- Campo oculto para asignar el id del registro al momento de modificar -->
+                        <input type="number" class="d-none" id="idClaveDupla" name="idClaveDupla">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5 text-white" id="passwordTitle"></h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row text-center">
+                                <div class="col-lg-6 col-12">
+                                    <h3 class="text-white mb-2">Nueva clave</h3>
+                                    <input type="password" name="claveNueva" id="claveNueva"
+                                        placeholder="Clave nueva..." class="form-control">
+                                </div>
+                                <div class="col-lg-6 col-12">
+                                    <h3 class="text-white mb-2">Repetir clave</h3>
+                                    <input type="password" name="claveNueva2" id="claveNueva2"
+                                        placeholder="Repetir clave..." class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Actualizar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- IMPORTACIÓN DE ARCHIVOS JAVASCRIPT -->

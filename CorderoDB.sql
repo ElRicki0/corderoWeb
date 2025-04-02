@@ -41,7 +41,7 @@ CREATE TABLE
         longitud_final_trabajo_dupla varchar(300),
         hora_final_trabajo_dupla TIME,
         estado_trabajo_dupla TINYINT (1) not NULL,
-        id_dupla INT NOT NULL,
+        id_dupla INT NOT NULL UNIQUE,
         FOREIGN KEY (id_dupla) REFERENCES tb_duplas(id_dupla) ON DELETE CASCADE,
         fecha_actualizacion_trabajo_dupla DATETIME 
     );

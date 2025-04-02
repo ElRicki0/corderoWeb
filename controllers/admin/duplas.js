@@ -1,6 +1,13 @@
 // ?constante para trabajar con la api
 const EMPLEADO_API = 'services/admin/empleado.php';
 const DUPLA_API = 'services/admin/duplas.php';
+
+// ? constantes para actualizar las claves de las duplas 
+const PASSWORD_MODAL = new bootstrap.Modal('#passwordModal'),
+    PASSWORD_TITLE = document.getElementById('passwordTitle'),
+    ID_CLAVE_DUPLA = document.getElementById('idClaveDupla'),
+    PASSWORD_FORM = document.getElementById('passwordForm');
+
 // Constantes para establecer los elementos del componente Modal.
 const SAVE_MODAL = new bootstrap.Modal('#saveModal'),
     MODAL_TITLE = document.getElementById('modalTitle');
@@ -73,7 +80,7 @@ const openCreate = async () => {
     SAVE_FORM.reset();
     fillSelect(EMPLEADO_API, 'readAll', 'duplaEmpleado1');
     fillSelect(EMPLEADO_API, 'readAll', 'duplaEmpleado2');
-    CLAVE_DUPLA.innerHTML=`                                               
+    CLAVE_DUPLA.innerHTML = `                                               
     <div class="row justify-content-center">
         <div class="col-6 col-md-3 mb-3">
             <label for="claveDupla" class="form-label">Clave</label>
@@ -170,7 +177,10 @@ const fillTable = async (form = null) => {
             <button class="btn btn-outline-light mb-2 w-75" onclick="openState(${row.id_dupla})">
                 <i class="bi bi-exclamation-octagon"></i> Cambiar tipo dupla
             </button>
-            <h3 class="card-text text-white">Estado: <i class="${icon} text-white h1"></i></h3>
+            <button class="btn btn-outline-light mb-2 w-75" onclick="openPassword(${row.id_dupla})">
+                <i class="bi bi-key"></i> Cambiar clave
+            </button>
+            <h3 class="card-text text-white my-3">Estado: <i class="${icon} text-white h1"></i></h3>
         </div>
     </div>
 </div>
@@ -291,7 +301,13 @@ const readAllTable = async (form = null, buscador) => {
             <button class="btn btn-outline-light mb-2 w-75" onclick="openState(${row.id_dupla})">
                 <i class="bi bi-exclamation-octagon"></i> Cambiar tipo dupla
             </button>
-            <h3 class="card-text text-white">Estado: <i class="${icon} text-white h1"></i></h3>
+            <button class="btn btn-outline-light mb-2 w-75" onclick="openState(${row.id_dupla})">
+                <i class="bi bi-key"></i> Cambiar tipo dupla
+            </button>
+            <button class="btn btn-outline-light mb-2 w-75" onclick="openPassword(${row.id_dupla})">
+                <i class="bi bi-key"></i> Cambiar clave
+            </button>
+            <h3 class="card-text text-white my-3">Estado: <i class="${icon} text-white h1"></i></h3>
         </div>
     </div>
 </div>
@@ -357,7 +373,7 @@ const openUpdate = async (id) => {
         TELEFONO_DUPLA.value = ROW.telefono_empresa_dupla;
         USUARIO_DUPLA.value = ROW.usuario_dupla;
 
-        CLAVE_DUPLA.innerHTML='';
+        CLAVE_DUPLA.innerHTML = '';
 
         // ? Se llena el formulario con información relacionada a los empleados
         CONTENIDO_EMPLEADO1.innerHTML = `
@@ -386,6 +402,53 @@ const openUpdate = async (id) => {
         sweetAlert(2, DATA.error, false);
     }
 }
+
+/*
+*   Función para preparar el formulario al momento de cambiar la constraseña.
+*   Parámetros: ninguno.
+*   Retorno: ninguno.
+*/
+const openPassword = async (id) => {
+    // Se define un objeto con los datos del registro seleccionado.
+    const FORM = new FormData();
+    FORM.append('idDupla', id);
+
+    // Petición para obtener los datos del registro solicitado.
+    const DATA = await fetchData(DUPLA_API, 'readOne', FORM);
+    // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
+    if (DATA.status) {
+        // Se muestra la caja de diálogo con su título.
+        PASSWORD_MODAL.show();
+        // ? preparar el modal para actualizar datos
+        PASSWORD_FORM.reset();
+        PASSWORD_TITLE.textContent = 'Cambiar clave duplas';
+        // Se inicializan los campos con los datos.
+        const ROW = DATA.dataset;
+        ID_CLAVE_DUPLA.value = ROW.id_dupla;
+    }
+}
+
+// Método del evento para cuando se envía el formulario de guardar.
+PASSWORD_FORM.addEventListener('submit', async (event) => {
+    // Se evita recargar la página web después de enviar el formulario.
+    event.preventDefault();
+    // Constante tipo objeto con los datos del formulario.
+    const FORM = new FormData(PASSWORD_FORM);
+    // Petición para guardar los datos del formulario.
+    const DATA = await fetchData(DUPLA_API, 'updatePassword', FORM);
+    // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
+    if (DATA.status) {
+        // Se cierra la caja de diálogo.
+        PASSWORD_MODAL.hide();
+        // Se muestra un mensaje de éxito.
+        sweetAlert(1, DATA.message, true);
+        // Se carga nuevamente la tabla para visualizar los cambios.
+        fillTable();
+    } else {
+        sweetAlert(2, DATA.error, false);
+    }
+})
+
 
 /*
 * Función asíncrona para preparar un modal de confirmacion para una funcion de estado

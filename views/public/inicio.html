@@ -15,7 +15,11 @@
     <main>
         <h1 id="mainTitle"></h1>
         <div class="text-center">
-            <h2>Jornada laboral diaria</h2>
+            <div class="my-4">
+                <h3>CÓDIGO DUPLA: </h3>
+                <p class="h4" id="usuarioDupla"></p>
+
+            </div>
             <form id="saveForm" class="mb-4">
                 <input type="number" class="d-none" id="idInformacion" name="idInformacion">
                 <!-- Campo oculto para obtener la hora actual del empleado -->
@@ -30,14 +34,12 @@
             </form>
             <hr class="border-3">
             <div id="infoEmployee" class="d-flex flex-column gap-3">
-                <h3>Nombre empleado</h3>
-                <p class="h5" id="nombreEmpleado"></p>
-                <h3>Correo empleado</h3>
-                <p class="h5" id="correoEmpleado"></p>
-                <h3>DUI empleado</h3>
-                <p class="h5" id="duiEmpleado"></p>
-                <h3>Teléfono empleado</h3>
-                <p class="h5" id="telefonoEmpleado"></p>
+                <h3>Nombres empleados</h3>
+                <p class="h5" id="nombreEmpleado1"></p>
+                <p class="h5" id="nombreEmpleado2"></p>
+                <h3>Teléfonos empleados</h3>
+                <p class="h5" id="telefonoEmpleado1"></p>
+                <p class="h5" id="telefonoEmpleado2"></p>
             </div>
             <button type="button" class="btn btn-danger" onclick="logOut()">
                 <h4>Cerrar sesión</h4>

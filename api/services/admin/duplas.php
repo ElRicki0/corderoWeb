@@ -60,6 +60,22 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'Error al editar la dupla';
                 }
                 break;
+            case 'updatePassword':
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$duplas->setId($_POST['idClaveDupla']) or
+                    !$duplas->setClave($_POST['claveNueva'])
+                ) {
+                    $result['error'] = $duplas->getDataError();
+                } elseif ($_POST['claveNueva'] != $_POST['claveNueva2']) {
+                    $result['error'] = 'Contraseñas diferentes';
+                } elseif ($duplas->updatePassword()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Clave actualizada correctamente';
+                } else {
+                    $result['error'] = 'Error al actualizar clave la dupla';
+                }
+                break;
             case 'updateStatus':
                 $_POST = Validator::validateForm($_POST);
                 if (

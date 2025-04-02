@@ -1,5 +1,5 @@
 // ?constante para trabajar con la API
-const INFO_EMPLEADO_API = 'services/public/info_empleado.php';
+const TRABAJO_DUPLA_API = 'services/public/trabajo_dupla.php';
 
 // Variables para guardar hora y ubicación de inicio y final de jornada
 const HORA_INICIO = document.getElementById('horaInicio'),
@@ -16,10 +16,12 @@ const SAVE_FORM = document.getElementById('saveForm'),
 
 // variables para mostrar la información del empleado
 const INFO_EMPLOYEE = document.getElementById('infoEmployee'),
-    NOMBRE_EMPLEADO = document.getElementById('nombreEmpleado'),
-    CORREO_EMPLEADO = document.getElementById('correoEmpleado'),
-    DUI_EMPLEADO = document.getElementById('duiEmpleado'),
-    TELEFONO_EMPLEADO = document.getElementById('telefonoEmpleado');
+    USUARIO_DUPLA = document.getElementById('usuarioDupla'),
+    NOMBRE_EMPLEADO1 = document.getElementById('nombreEmpleado1'),
+    NOMBRE_EMPLEADO2 = document.getElementById('nombreEmpleado2'),
+    // CORREO_EMPLEADO = document.getElementById('correoEmpleado'),
+    TELEFONO_EMPLEADO1 = document.getElementById('telefonoEmpleado1'),
+    TELEFONO_EMPLEADO2 = document.getElementById('telefonoEmpleado2');
 
 // Método que se ejecuta al cargar la página web
 document.addEventListener('DOMContentLoaded', async () => {
@@ -65,24 +67,6 @@ function getLocation() {
     }
 }
 
-// // Método del evento para cuando se envía el formulario de guardar.
-// SAVE_FORM.addEventListener('submit', async (event) => {
-//     // Se evita recargar la página web después de enviar el formulario.
-//     event.preventDefault();
-//     // Se define un objeto con los datos del registro seleccionado.
-//     const FORM = new FormData();
-//     // Petición para iniciar la jornada del registro seleccionado.
-//     const DATA = await fetchData(INFO_EMPLEADO_API, 'startWork', FORM);
-//     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
-//     if (DATA.status) {
-//         // Se muestra un mensaje de éxito.
-//         sweetAlert(1, DATA.message, true);
-//         // Se carga nuevamente la tabla para visualizar los cambios.
-//     } else {
-//         sweetAlert(2, DATA.error, false);
-//     }
-// });
-
 const startWork = async (id) => {
     // Llamada a la función para mostrar un mensaje de confirmación, capturando la respuesta en una constante.
     const RESPONSE = await confirmAction('¿Desea iniciar la jornada?');
@@ -92,7 +76,7 @@ const startWork = async (id) => {
         const FORM = new FormData(SAVE_FORM);
         FORM.append('idInformacion', id);
         // Petición para eliminar el registro seleccionado.
-        const DATA = await fetchData(INFO_EMPLEADO_API, 'startWork', FORM);
+        const DATA = await fetchData(TRABAJO_DUPLA_API, 'startWork', FORM);
         // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
         if (DATA.status) {
             // Se muestra un mensaje de éxito.
@@ -132,7 +116,7 @@ const endWork = async (id) => {
         const FORM = new FormData(SAVE_FORM);
         FORM.append('idInformacion', id);
         // Petición para eliminar el registro seleccionado.
-        const DATA = await fetchData(INFO_EMPLEADO_API, 'endWork', FORM);
+        const DATA = await fetchData(TRABAJO_DUPLA_API, 'endWork', FORM);
         // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
         if (DATA.status) {
             // Se muestra un mensaje de éxito.
@@ -148,19 +132,19 @@ const endWork = async (id) => {
 const fillOptions = async () => {
     BUTTONS_OPTIONS.innerHTML = '';
     // Petición para obtener los datos del usuario que ha iniciado sesión.
-    const DATA = await fetchData(INFO_EMPLEADO_API, 'readInformation');
+    const DATA = await fetchData(TRABAJO_DUPLA_API, 'readInformation');
     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
     if (DATA.status) {
         // Se recorre el conjunto de registros (dataset) fila por fila a través del objeto row.
         DATA.dataset.forEach(row => {
-            const jornadaIniciada = parseInt(row.estado_trabajo_empleado);
+            const jornadaIniciada = parseInt(row.estado_trabajo_dupla);
             // Se establece un icono para el estado del producto.
             const estado = jornadaIniciada ? 'text-info">Jornada iniciada' : 'text-warning">Jornada no iniciada';
-            
+
             // Deshabilitar iniciar jornada si ya está iniciada, y terminar jornada si no está iniciada
             const disabledIniciar = jornadaIniciada ? 'disabled' : '';
             const disabledTerminar = !jornadaIniciada ? 'disabled' : '';
-            
+
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
             BUTTONS_OPTIONS.innerHTML += `
                 <div class="col-12 mb-4">
@@ -171,9 +155,9 @@ const fillOptions = async () => {
                 </div>
                 <div class="col-12">
                     <button type="button" class="btn btn-primary" ${disabledIniciar}
-                        onclick="startWork(${row.id_trabajo_empleado})"><h2>Iniciar jornada</h2></button>
+                        onclick="startWork(${row.id_trabajo_dupla})"><h2>Iniciar jornada</h2></button>
                     <button type="button" class="btn btn-warning" ${disabledTerminar}
-                        onclick="endWork(${row.id_trabajo_empleado})"><h2>Terminar jornada</h2></button>
+                        onclick="endWork(${row.id_trabajo_dupla})"><h2>Terminar jornada</h2></button>
                 </div>           
             `;
         });
@@ -182,6 +166,14 @@ const fillOptions = async () => {
         ID_INFORMACION.value = ROW.id_trabajo_empleado;
     } else {
         sweetAlert(2, DATA.error, null);
+        const DATA2 = await fetchData(TRABAJO_DUPLA_API, 'createRow');
+        if (DATA2.status) {
+            sweetAlert(1, DATA2.message, true);
+            // ? recarga el estado del empleado
+            fillOptions();       
+        } else {
+            sweetAlert(2, DATA2.error, false);
+        }
     }
 }
 
@@ -193,12 +185,15 @@ const fillInformation = async () => {
     if (DATA.status) {
         // Se inicializan los campos del formulario con los datos del usuario que ha iniciado sesión.
         const ROW = DATA.dataset;
-        NOMBRE_EMPLEADO.textContent = ROW.nombre_empleado +' '+ ROW.apellido_empleado;
-        CORREO_EMPLEADO.textContent = ROW.correo_empleado;
-        DUI_EMPLEADO.textContent = ROW.DUI_empleado;
-        TELEFONO_EMPLEADO.textContent = ROW.telefono_personal_empleado;
+        USUARIO_DUPLA.textContent= ROW.usuario_dupla;
+        NOMBRE_EMPLEADO1.textContent = 'EMPLEADO 1: ' + ROW.nombre_empleado1 + ' ' + ROW.apellido_empleado1;
+        NOMBRE_EMPLEADO2.textContent = 'EMPLEADO 2: ' + ROW.nombre_empleado2 + ' ' + ROW.apellido_empleado2;
+        // CORREO_EMPLEADO.textContent = ROW.correo_empleado;
+        TELEFONO_EMPLEADO1.textContent = 'EMPLEADO 1: ' + ROW.telefono_personal_empleado1;
+        TELEFONO_EMPLEADO2.textContent = 'EMPLEADO 2: ' + ROW.telefono_personal_empleado2;
     } else {
         sweetAlert(4, DATA.error, true);
+        INFO_EMPLOYEE.innerHTML = '';
     }
 }
 
@@ -220,4 +215,8 @@ const openLocation = () => {
         console.log("La geolocalización no es compatible con este navegador.");
     }
     // Abrir Google Maps en una nueva ventana
+}
+
+const verificationAcount = async () => {
+    const DATA = await fetchData(USER_API,);
 }

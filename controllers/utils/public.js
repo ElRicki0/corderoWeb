@@ -4,7 +4,7 @@
 */
 
 // Constante para completar la ruta de la API.
-const USER_API = 'services/public/empleado.php';
+const USER_API = 'services/public/dupla.php';
 // Constante para establecer el elemento del contenido principal.
 const MAIN = document.querySelector('main');
 MAIN.style.paddingTop = '75px';
