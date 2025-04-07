@@ -47,6 +47,53 @@ CREATE TABLE
     );
 
 CREATE TABLE
+    tb_categorias_cables (
+        id_categoria_cable INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        nombre_categoria_cable VARCHAR(30) NOT NULL,
+        descripcion_categoria_cable VARCHAR(500) NOT NULL,
+        codigo_categoria_cable VARCHAR(10) NOT NULL,
+        imagen_categoria_cable VARCHAR(150),
+        fecha_categoria_cable DATETIME
+    );
+
+CREATE TABLE
+    tb_cables (
+        id_cable INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        nombre_cable VARCHAR(50),
+        descripcion_cable VARCHAR(150),
+        estado_cable TINYINT not NULL,
+        fecha_cable DATE,
+        id_categoria_cable INT,
+        FOREIGN KEY (id_categoria_cable) REFERENCES tb_categorias_cables (id_categoria_cable) ON DELETE CASCADE,
+        id_administrador INT,
+        FOREIGN KEY (id_administrador) REFERENCES tb_administradores (id_administrador) ON DELETE CASCADE
+    );
+
+CREATE TABLE
+    tb_cable_suelto (
+        id_cable_suelto INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        longitud_minima_cable_suelto DECIMAL(20, 2),
+        longitud_cable_suelto DECIMAL(10, 2),
+        fecha_cable_suelto DATETIME,
+        id_cable INT,
+        FOREIGN KEY (id_cable) REFERENCES tb_cables (id_cable) ON DELETE CASCADE,
+        id_administrador INT,
+        FOREIGN KEY (id_administrador) REFERENCES tb_administradores (id_administrador) ON DELETE CASCADE
+    );
+
+CREATE TABLE
+    tb_cable_rollo (
+        id_cable_rollo INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        cantidad_minima_cable_rollo INT NOT NULL,
+        catidad_cable_rollo INT NOT NULL,
+        fecha_cable_rollo INT NOT NULL,
+        id_cable INT,
+        FOREIGN KEY (id_cable) REFERENCES tb_cables (id_cable) ON DELETE CASCADE,
+        id_administrador INT,
+        FOREIGN KEY (id_administrador) REFERENCES tb_administradores (id_administrador) ON DELETE CASCADE
+    );
+
+CREATE TABLE
     tb_herramientas (
         id_herramienta INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
         nombre_herramienta VARCHAR(50) NOT NULL,
@@ -159,30 +206,6 @@ CREATE TABLE
         cantidad_limite_repuesto INT,
         cantidad_repuesto INT NOT NULL,
         imagen_repuesto varchar(200),
-        id_administrador INT,
-        FOREIGN KEY (id_administrador) REFERENCES tb_administradores (id_administrador) ON DELETE CASCADE
-    );
-
-CREATE TABLE
-    tb_categorias_cables (
-        id_categoria_cable INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-        nombre_categoria_cable VARCHAR(30) NOT NULL,
-        descripcion_categoria_cable VARCHAR(500) NOT NULL,
-        imagen_categoria_cable VARCHAR(150),
-        fecha_categoria_cable date
-    );
-
-CREATE TABLE
-    tb_cables (
-        id_cable INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-        nombre_cable VARCHAR(50),
-        descripcion_cable VARCHAR(150),
-        longitud_minima_cable DECIMAL(20, 2),
-        longitud_cable DECIMAL(10, 2),
-        estado_cable TINYINT not NULL,
-        fecha_creacion_cable DATE,
-        id_categoria_cable INT,
-        FOREIGN KEY (id_categoria_cable) REFERENCES tb_categorias_cables (id_categoria_cable) ON DELETE CASCADE,
         id_administrador INT,
         FOREIGN KEY (id_administrador) REFERENCES tb_administradores (id_administrador) ON DELETE CASCADE
     );
