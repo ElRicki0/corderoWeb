@@ -2,11 +2,11 @@
 // Se incluye la clase para validar los datos de entrada.
 require_once('../../helpers/validator.php');
 // Se incluye la clase padre.
-require_once('../../models/handler/handler_info_trabajo.php');
+require_once('../../models/handler/handler_trabajo_dupla.php');
 /*
  *  Clase para manejar el encapsulamiento de los datos de la tabla USUARIO.
  */
-class InfoTrabajoData extends InfoTrabajoHandler
+class TrabajoDuplaData extends TrabajoDuplaHandler
 {
     // atributo genérico para manejo de errores
     private $data_error = null;
@@ -28,8 +28,8 @@ class InfoTrabajoData extends InfoTrabajoHandler
     {
         if (!$value) {
             return true;
-        } elseif (!Validator::validateString($value)) {
-            $this->data_error = 'La latitud contiene caracteres prohibidos';
+        } elseif (!Validator::validateDecimalNumber($value)) {
+            $this->data_error = 'La latitud inicial contiene caracteres prohibidos';
             return false;
         } elseif (Validator::validateLength($value, $min, $max)) {
             $this->latitudInicio = $value;
@@ -44,8 +44,8 @@ class InfoTrabajoData extends InfoTrabajoHandler
     {
         if (!$value) {
             return true;
-        } elseif (!Validator::validateString($value)) {
-            $this->data_error = 'La longitud contiene caracteres prohibidos';
+        } elseif (!Validator::validateDecimalNumber($value)) {
+            $this->data_error = 'La longitud inicial contiene caracteres prohibidos';
             return false;
         } elseif (Validator::validateLength($value, $min, $max)) {
             $this->longitudInicio = $value;
@@ -61,7 +61,7 @@ class InfoTrabajoData extends InfoTrabajoHandler
         if (!$value) {
             return true;
         } elseif (!Validator::validateString($value)) {
-            $this->data_error = 'La hora contiene caracteres prohibidos';
+            $this->data_error = 'La hora inicio contiene caracteres prohibidos';
             return false;
         } elseif (Validator::validateLength($value, $min, $max)) {
             $this->horaInicio = $value;
@@ -76,7 +76,7 @@ class InfoTrabajoData extends InfoTrabajoHandler
     {
         if (!$value) {
             return true;
-        } elseif (!Validator::validateString($value)) {
+        } elseif (!Validator::validateDecimalNumber($value)) {
             $this->data_error = 'La latitud Final contiene caracteres prohibidos';
             return false;
         } elseif (Validator::validateLength($value, $min, $max)) {
@@ -92,7 +92,7 @@ class InfoTrabajoData extends InfoTrabajoHandler
     {
         if (!$value) {
             return true;
-        } elseif (!Validator::validateString($value)) {
+        } elseif (!Validator::validateDecimalNumber($value)) {
             $this->data_error = 'La longitud Final contiene caracteres prohibidos';
             return false;
         } elseif (Validator::validateLength($value, $min, $max)) {
@@ -131,38 +131,10 @@ class InfoTrabajoData extends InfoTrabajoHandler
         }
     }
 
-    public function setDepartamento($value, $min = 2, $max = 50)
-    {
-        if (!Validator::validateAlphabetic($value)) {
-            $this->data_error = 'El departamento debe ser un valor alfabético';
-            return false;
-        } elseif (Validator::validateLength($value, $min, $max)) {
-            $this->departamento = $value;
-            return true;
-        } else {
-            $this->data_error = 'El departamento debe tener una longitud entre ' . $min . ' y ' . $max;
-            return false;
-        }
-    }
-
-    public function setMunicipio($value, $min = 2, $max = 50)
-    {
-        if (!Validator::validateAlphabetic($value)) {
-            $this->data_error = 'El municipio debe ser un valor alfabético';
-            return false;
-        } elseif (Validator::validateLength($value, $min, $max)) {
-            $this->municipio = $value;
-            return true;
-        } else {
-            $this->data_error = 'El municipio debe tener una longitud entre ' . $min . ' y ' . $max;
-            return false;
-        }
-    }
-
-    public function setEmpleado($value)
+    public function setDupla($value)
     {
         if (Validator::validateNaturalNumber($value)) {
-            $this->empleado = $value;
+            $this->dupla = $value;
             return true;
         } else {
             $this->data_error = 'El identificador de la información es incorrecto';

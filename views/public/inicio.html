@@ -15,11 +15,35 @@
     <main>
         <h1 id="mainTitle"></h1>
         <div class="text-center">
-            <h2>Jornada laboral diaria</h2>
-            <h4>Horas-Minutos-Segundos</h4>
-            <h3>00:00:00</h3>
+            <div class="my-4">
+                <h3>CÓDIGO DUPLA: </h3>
+                <p class="h4" id="usuarioDupla"></p>
 
-            <button type="button" class="btn btn-primary">guardar hora actual</button>
+            </div>
+            <form id="saveForm" class="mb-4">
+                <input type="number" class="d-none" id="idInformacion" name="idInformacion">
+                <!-- Campo oculto para obtener la hora actual del empleado -->
+                <input type="text" class="d-none" id="latitud" name="latitud">
+                <input type="text" class="d-none" id="longitud" name="longitud">
+                <!-- campo oculto para obtener la ubicación actual del usuario -->
+                <input type="text" class="d-none" id="horaInicio" name="horaInicio">
+                <input type="text" class="d-none" id="horaFinal" name="horaFinal">
+                <!-- <button type="button" class="btn btn-primary" onclick="openLocation()">ubicación actual</button> -->
+                <div class="mt-5 row" id="buttonsOptions">
+                </div>
+            </form>
+            <hr class="border-3">
+            <div id="infoEmployee" class="d-flex flex-column gap-3">
+                <h3>Nombres empleados</h3>
+                <p class="h5" id="nombreEmpleado1"></p>
+                <p class="h5" id="nombreEmpleado2"></p>
+                <h3>Teléfonos empleados</h3>
+                <p class="h5" id="telefonoEmpleado1"></p>
+                <p class="h5" id="telefonoEmpleado2"></p>
+            </div>
+            <button type="button" class="btn btn-danger" onclick="logOut()">
+                <h4>Cerrar sesión</h4>
+            </button>
         </div>
     </main>
 

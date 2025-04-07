@@ -25,20 +25,6 @@ class DuplaData extends DuplasHandler
         }
     }
 
-    public function setNombre($value, $min = 2, $max = 250)
-    {
-        if (!Validator::validateAlphanumeric($value)) {
-            $this->data_error = 'El nombre debe ser un valor alfanumérico';
-            return false;
-        } elseif (Validator::validateLength($value, $min, $max)) {
-            $this->nombre = $value;
-            return true;
-        } else {
-            $this->data_error = 'El nombre debe tener una longitud entre ' . $min . ' y ' . $max;
-            return false;
-        }
-    }
-
     public function setTelefono($value)
     {
         if (Validator::validatePhone($value)) {
@@ -57,6 +43,31 @@ class DuplaData extends DuplasHandler
             return true;
         } else {
             $this->data_error = 'tipo dupla incorrecto';
+            return false;
+        }
+    }
+
+    public function setUsuario($value, $min = 6, $max = 25)
+    {
+        if (!Validator::validateAlphanumeric($value)) {
+            $this->data_error = 'El alias debe ser un valor alfanumérico';
+            return false;
+        } elseif (Validator::validateLength($value, $min, $max)) {
+            $this->usuario = $value;
+            return true;
+        } else {
+            $this->data_error = 'El nombre del usuario debe tener una longitud entre ' . $min . ' y ' . $max;
+            return false;
+        }
+    }
+
+    public function setClave($value)
+    {
+        if (Validator::validatePassword($value)) {
+            $this->clave = password_hash($value, PASSWORD_DEFAULT);
+            return true;
+        } else {
+            $this->data_error = Validator::getPasswordError();
             return false;
         }
     }

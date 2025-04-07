@@ -1,31 +1,31 @@
 <?php
 // Se incluye la clase del modelo.
-require_once('../../models/data/data_empleado.php');
+require_once('../../models/data/data_dupla.php');
 
 // Se comprueba si existe una acción a realizar, de lo contrario se finaliza el script con un mensaje de error.
 if (isset($_GET['action'])) {
     // Se crea una sesión o se reanuda la actual para poder utilizar variables de sesión en el script.
     session_start();
     // Se instancia la clase correspondiente.
-    $empleado = new EmpleadoData;
+    $dupla = new DuplaData;
     // Se declara e inicializa un arreglo para guardar el resultado que retorna la API.
     // $result = array('status' => 0, 'message' => null, 'dataset' => null, 'error' => null, 'exception' => null);
     $result = array('status' => 0, 'session' => 0, 'message' => null, 'dataset' => null, 'error' => null, 'exception' => null, 'username' => null, 'fileStatus' => null);
     // ? se verifica si hay un session iniciada como administrador, de lo contrario el código termina con un error
-    if (isset($_SESSION['idEmpleado'])) {
+    if (isset($_SESSION['idDupla'])) {
         $result['session'] = 1;
         //? se realiza una acción cuando el administrador tiene la sesión iniciada
         switch ($_GET['action']) {
             case 'getUser':
-                if (isset($_SESSION['correoEmpleado'])) {
+                if (isset($_SESSION['usuarioDupla'])) {
                     $result['status'] = 1;
-                    $result['username'] = $_SESSION['correoEmpleado'];
+                    $result['username'] = $_SESSION['usuarioDupla'];
                 } else {
-                    $result['error'] = 'Correo del empleado indefinido';
+                    $result['error'] = 'Correo del dupla indefinido';
                 }
                 break;
             case 'readProfile':
-                if ($result['dataset'] = $empleado->readProfile()) {
+                if ($result['dataset'] = $dupla->readProfile()) {
                     $result['status'] = 1;
                 } else {
                     $result['error'] = 'Ocurrió un problema al leer el perfil';
@@ -42,20 +42,20 @@ if (isset($_GET['action'])) {
             default:
                 $result['error'] = 'Acción no disponible dentro de la sesión';
                 break;
-            }
+        }
     } else {
         switch ($_GET['action']) {
             case 'readUsers':
-                if ($empleado->readAll()) {
+                if ($dupla->readAll()) {
                     $result['status'] = 1;
                     $result['message'] = 'Debe autenticarse para ingresar';
                 } else {
-                    $result['error'] = 'Espere a que un administrador creer un empleado';
+                    $result['error'] = 'Espere a que un administrador creer un dupla';
                 }
                 break;
             case 'logIn':
                 $_POST = Validator::validateForm($_POST);
-                if ($empleado->checkUser($_POST['alias'], $_POST['clave'])) {
+                if ($dupla->checkUser($_POST['alias'], $_POST['clave'])) {
                     $result['status'] = 1;
                     $result['message'] = 'Autenticación correcta';
                 } else {

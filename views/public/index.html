@@ -13,33 +13,43 @@
 <body>
     <!-- Contenido principal del documento -->
     <main class="d-flex justify-content-center align-items-center vh-100">
-        <div class="card col-4">
-            <div class="card-body">
-                <ul class="list-group list-group-flush">
-                    <form  autocomplete="off" id="loginForm">
-                        <li class="list-group-item">
-                            <h2 id="mainTitle"></h2>
-                            <h5 for="inputPassword5" class="form-label">Correo electrónico</h5>
-                            <input class="form-control form-control-md" type="email" placeholder="Correo electrónico" name="alias" required>
-                            
-                            <h5 for="inputPassword5" class="form-label mt-4">Clave</h5>
-                            <input class="form-control form-control-md" type="password" placeholder="Clave" name="clave" required>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary"><i class="bi bi-send"></i> Enviar</button>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="text-center">
-                                <a class="btn btn-warning" href="">Olvidases tu clave? Click aquí</a>
-                            </div>
-                        </li>
-                    </form>
-                </ul>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-sm-8 col-md-6 col-lg-4">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <form autocomplete="off" id="loginForm">
+                                <h2 id="mainTitle" class="text-center mb-4">Iniciar Sesión</h2>
+
+                                <div class="mb-3">
+                                    <label for="usuario" class="form-label">Usuario</label>
+                                    <input id="usuario" class="form-control" type="text" placeholder="Usuario"
+                                        name="alias" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="clave" class="form-label">Clave</label>
+                                    <input id="clave" class="form-control" type="password" placeholder="Clave"
+                                        name="clave" required>
+                                </div>
+
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-send"></i> Enviar
+                                    </button>
+                                </div>
+
+                                <div class="text-center mt-3">
+                                    <a class="btn btn-warning btn-sm" href="#">¿Olvidaste tu clave? Click aquí</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
+
 
     <!-- IMPORTACIÓN DE ARCHIVOS JAVASCRIPT -->
     <!-- Llamada al framework y librería de mensajes -->

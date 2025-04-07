@@ -4,18 +4,20 @@ require_once('../../helpers/database.php');
 /*
  *  Clase para manejar el comportamiento de los datos de la tabla administrador.
  */
-class EmpleadoHandler
+class TrabajoDuplaHandler
 {
     // ? declaración de variables de la base ded datos
     protected $id = null;
-    protected $nombre = null;
-    protected $apellido = null;
-    protected $dui = null;
-    protected $telefono = null;
+    protected $latitudInicio = null;
+    protected $longitudInicio = null;
+    protected $horaInicio = null;
+    protected $latitudFinal = null;
+    protected $longitudFinal = null;
+    protected $horaFinal = null;
+    protected $estado = null;
+    protected $dupla = null;
     protected $actualizacion = null;
-    protected $imagen = null;
-    protected $departamento = null;
-    protected $municipio = null;
+    // protected $estado = null;
 
     public function __construct()
     {
@@ -28,41 +30,6 @@ class EmpleadoHandler
     }
 
     const RUTA_IMAGEN = '../../images/empleados/';
-
-
-    /*
-     *  Métodos para gestionar la cuenta del empleado.
-     */
-    // public function checkUser($username, $password)
-    // {
-    //     $sql = 'SELECT `id_empleado`, `correo_empleado`,`clave_empleado` FROM `tb_empleados` WHERE `correo_empleado` =?';
-    //     $params = array($username);
-    //     if (!($data = Database::getRow($sql, $params))) {
-    //         return false;
-    //     } elseif (password_verify($password, $data['clave_empleado'])) {
-    //         $_SESSION['idEmpleado'] = $data['id_empleado'];
-    //         $_SESSION['correoEmpleado'] = $data['correo_empleado'];
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }
-
-    // * validación para comprobar si la contraseña es correcta
-    // public function checkPassword($password)
-    // {
-    //     $sql = 'SELECT clave_empleado
-    //             FROM tb_empleados
-    //             WHERE id_empleado = ?';
-    //     $params = array($_SESSION['idEmpleado']);
-    //     if (!($data = Database::getRow($sql, $params))) {
-    //         return false;
-    //     } elseif (password_verify($password, $data['clave_empleado'])) {
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }
 
     //* métodos SCRUD (search, create, read, update, and delete) para el manejo de variables 
 
@@ -92,7 +59,39 @@ class EmpleadoHandler
 
     public function createRow()
     {
-        $sql = 'INSERT INTO `tb_empleados`(
+        $sql = 'INSERT INTO `tb_trabajo_duplas`(
+                    `estado_trabajo_dupla`,
+                    `id_dupla`,
+                    `fecha_actualizacion_trabajo_dupla`
+                )
+                VALUES(
+                    0,
+                    ?,
+                    ?
+                )';
+        $params = array($_SESSION['idDupla'], $this->actualizacion);
+        return Database::executeRow($sql, $params);
+    }
+
+    public function readInformation()
+    {
+        $sql = 'SELECT
+                    `id_trabajo_dupla`,
+                    `estado_trabajo_dupla`
+                FROM
+                    `tb_trabajo_duplas` tdp
+                INNER JOIN tb_duplas dp ON
+                    tdp.id_dupla = dp.id_dupla
+                WHERE
+                    dp.id_dupla = ?';
+        $params = array($_SESSION['idDupla']);
+        return Database::getRows($sql, $params);
+    }
+
+    public function readAll()
+    {
+        $sql = 'SELECT
+                    `id_empleado`,
                     `nombre_empleado`,
                     `apellido_empleado`,
                     `DUI_empleado`,
@@ -101,45 +100,8 @@ class EmpleadoHandler
                     `departamento_trabajo_empleado`,
                     `municipio_trabajo_empleado`,
                     `fecha_actualizacion_empleado`
-                )
-                VALUES(
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    ?
-                )';
-        $params = array($this->nombre, $this->apellido, $this->dui, $this->telefono, $this->imagen, $this->departamento, $this->municipio, $this->actualizacion);
-        return Database::executeRow($sql, $params);
-    }
-
-    public function readAll()
-    {
-        $sql = 'SELECT
-                    e.`id_empleado`,
-                    e.`nombre_empleado`,
-                    e.`apellido_empleado`,
-                    e.`DUI_empleado`,
-                    e.`telefono_personal_empleado`,
-                    e.`imagen_empleado`,
-                    e.`departamento_trabajo_empleado`,
-                    e.`municipio_trabajo_empleado`,
-                    e.`fecha_actualizacion_empleado`,
-                    CASE 
-                        WHEN d1.id_empleado1 IS NOT NULL OR d2.id_empleado2 IS NOT NULL THEN 1
-                        ELSE 0
-                    END AS `empleado_agregado`
                 FROM
-                    `tb_empleados` e
-                LEFT JOIN
-                    `tb_duplas` d1 ON e.`id_empleado` = d1.`id_empleado1`
-                LEFT JOIN
-                    `tb_duplas` d2 ON e.`id_empleado` = d2.`id_empleado2`
-                GROUP BY
-                    e.`id_empleado`';
+                    `tb_empleados`';
         return Database::getRows($sql);
     }
 
@@ -199,6 +161,51 @@ class EmpleadoHandler
                     `fecha_actualizacion_empleado` DESC';
         return Database::getRows($sql);
     }
+
+    public function readByActive5()
+    {
+        $sql = 'SELECT
+                    tdp.id_trabajo_dupla,
+                    tdp.latitud_inicio_trabajo_dupla,
+                    tdp.longitud_inicio_trabajo_dupla,
+                    tdp.hora_inicio_trabajo_dupla,
+                    dp.usuario_dupla,
+                    e1.nombre_empleado AS nombre_empleado1,
+                    e1.apellido_empleado AS apellido_empleado1,
+                    e2.nombre_empleado AS nombre_empleado2,
+                    e2.apellido_empleado AS apellido_empleado2,
+                    dp.id_dupla
+                FROM tb_trabajo_duplas tdp
+                INNER JOIN tb_duplas dp ON tdp.id_dupla = dp.id_dupla
+                INNER JOIN tb_empleados e1 ON dp.id_empleado1 = e1.id_empleado
+                LEFT JOIN tb_empleados e2 ON dp.id_empleado2 = e2.id_empleado
+                ORDER BY tdp.hora_inicio_trabajo_dupla DESC 
+                LIMIT 5;';
+        return Database::getRows($sql);
+    }
+
+    public function readByInactive5()
+    {
+        $sql = 'SELECT
+                    tdp.id_trabajo_dupla,
+                    tdp.latitud_final_trabajo_dupla,
+                    tdp.longitud_final_trabajo_dupla,
+                    tdp.hora_final_trabajo_dupla,
+                    dp.usuario_dupla,
+                    e1.nombre_empleado AS nombre_empleado1,
+                    e1.apellido_empleado AS apellido_empleado1,
+                    e2.nombre_empleado AS nombre_empleado2,
+                    e2.apellido_empleado AS apellido_empleado2,
+                    dp.id_dupla
+                FROM tb_trabajo_duplas tdp
+                INNER JOIN tb_duplas dp ON tdp.id_dupla = dp.id_dupla
+                INNER JOIN tb_empleados e1 ON dp.id_empleado1 = e1.id_empleado
+                LEFT JOIN tb_empleados e2 ON dp.id_empleado2 = e2.id_empleado
+                ORDER BY tdp.hora_final_trabajo_dupla DESC 
+                LIMIT 5;';
+        return Database::getRows($sql);
+    }
+
     // ! TERMINAR ESTO CON DUPLAS
     // public function readByInformation()
     // {
@@ -242,63 +249,35 @@ class EmpleadoHandler
     //             WHERE
     //                 t.id_empleado IS NULL; -- Filtra solo los empleados agregados';
     //     return Database::getRows($sql);
-    // }
+    // }eturn Database::executeRow($sql, $params);
 
-    public function readFilename()
-    {
-        $sql = 'SELECT
-                    `imagen_empleado`
-                FROM
-                    `tb_empleados`
-                WHERE
-                    `id_empleado` = ?';
-        $params = array($this->id);
-        return Database::getRow($sql, $params);
-    }
-
-    public function readOne()
-    {
-        $sql = 'SELECT
-                    `id_empleado`,
-                    `nombre_empleado`,
-                    `apellido_empleado`,
-                    `DUI_empleado`,
-                    `telefono_personal_empleado`,
-                    `imagen_empleado`,
-                    `departamento_trabajo_empleado`,
-                    `municipio_trabajo_empleado`,
-                    `fecha_actualizacion_empleado`
-                FROM
-                    `tb_empleados`
-                WHERE `id_empleado` = ?';
-        $params = array($this->id);
-        return Database::getRow($sql, $params);
-    }
-
-    public function updateRow()
+    public function startWork()
     {
         $sql = 'UPDATE
-                    `tb_empleados`
+                    `tb_trabajo_duplas`
                 SET
-                    `nombre_empleado` = ?,
-                    `apellido_empleado` = ?,
-                    `DUI_empleado` = ?,
-                    `telefono_personal_empleado` = ?,
-                    `imagen_empleado` = ?,
-                    `departamento_trabajo_empleado` = ?,
-                    `municipio_trabajo_empleado` = ?,
-                    `fecha_actualizacion_empleado` = ?
+                    `latitud_inicio_trabajo_dupla` = ?,
+                    `longitud_inicio_trabajo_dupla` = ?,
+                    `hora_inicio_trabajo_dupla` = ?,
+                    `estado_trabajo_dupla` = 1
                 WHERE
-                    `id_empleado` = ?';
-        $params = array($this->nombre, $this->apellido, $this->dui, $this->telefono, $this->imagen, $this->departamento, $this->municipio, $this->actualizacion, $this->id);
+                `id_trabajo_dupla` = ?';
+        $params = array($this->latitudInicio, $this->longitudInicio, $this->actualizacion, $_SESSION['idDupla']);
         return Database::executeRow($sql, $params);
     }
 
-    public function deleteRow()
+    public function endWork()
     {
-        $sql = '  DELETE FROM `tb_empleados` 
-                WHERE `id_empleado` = ?';
-        $params = array($this->id);
+        $sql = 'UPDATE
+                    `tb_trabajo_duplas`
+                SET
+                    `latitud_final_trabajo_dupla` = ?,
+                    `longitud_final_trabajo_dupla` = ?,
+                    `hora_final_trabajo_dupla` = ?,
+                    `estado_trabajo_dupla` = 0
+                WHERE
+                    `id_trabajo_dupla` = ?';
+        $params = array($this->latitudFinal, $this->longitudFinal, $this->actualizacion, $_SESSION['idDupla']);
         return Database::executeRow($sql, $params);
     }
 }

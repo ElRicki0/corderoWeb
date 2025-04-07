@@ -26,18 +26,67 @@ if (isset($_GET['action'])) {
             case 'createRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
-                    !$duplas->setNombre($_POST['nombreDupla']) or
                     !$duplas->setTelefono($_POST['telefonoDupla']) or
                     !$duplas->setTipo($_POST['tipoDupla']) or
+                    !$duplas->setUsuario($_POST['usuarioDupla']) or
+                    !$duplas->setClave($_POST['claveDupla']) or
                     !$duplas->setEmpleado1($_POST['duplaEmpleado1']) or
                     !$duplas->setEmpleado2($_POST['duplaEmpleado2'])
                 ) {
                     $result['error'] = $duplas->getDataError();
+                } elseif ($_POST['claveDupla'] != $_POST['claveDupla2']) {
+                    $result['error'] = 'Contraseñas diferentes';
                 } elseif ($duplas->createRow()) {
                     $result['status'] = 1;
                     $result['message'] = 'Dupla creado correctamente';
                 } else {
                     $result['error'] = 'Ocurrió un problema al crear el cable';
+                }
+                break;
+            case 'updateRow':
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$duplas->setId($_POST['idDupla']) or
+                    !$duplas->setTelefono($_POST['telefonoDupla']) or
+                    !$duplas->setUsuario($_POST['usuarioDupla']) or
+                    !$duplas->setEmpleado1($_POST['duplaEmpleado1']) or
+                    !$duplas->setEmpleado2($_POST['duplaEmpleado2'])
+                ) {
+                    $result['error'] = $duplas->getDataError();
+                } elseif ($duplas->updateRow()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Dupla actualizado correctamente';
+                } else {
+                    $result['error'] = 'Error al editar la dupla';
+                }
+                break;
+            case 'updatePassword':
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$duplas->setId($_POST['idClaveDupla']) or
+                    !$duplas->setClave($_POST['claveNueva'])
+                ) {
+                    $result['error'] = $duplas->getDataError();
+                } elseif ($_POST['claveNueva'] != $_POST['claveNueva2']) {
+                    $result['error'] = 'Contraseñas diferentes';
+                } elseif ($duplas->updatePassword()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Clave actualizada correctamente';
+                } else {
+                    $result['error'] = 'Error al actualizar clave la dupla';
+                }
+                break;
+            case 'updateStatus':
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$duplas->setId($_POST['idDupla'])
+                ) {
+                    $result['error'] = $duplas->getDataError();
+                } elseif ($duplas->updateStatus()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Tipo dupla actualizado correctamente';
+                } else {
+                    $result['error'] = 'Ocurrió un problema al actualizar el tipo dupla';
                 }
                 break;
             case 'readAll':
@@ -67,23 +116,6 @@ if (isset($_GET['action'])) {
                     $result['status'] = 1;
                 } else {
                     $result['error'] = 'Dupla inexistente';
-                }
-                break;
-            case 'updateRow':
-                $_POST = Validator::validateForm($_POST);
-                if (
-                    !$duplas->setId($_POST['idDupla']) or
-                    !$duplas->setNombre($_POST['nombreDupla']) or
-                    !$duplas->setTelefono($_POST['telefonoDupla']) or
-                    !$duplas->setEmpleado1($_POST['duplaEmpleado1']) or
-                    !$duplas->setEmpleado2($_POST['duplaEmpleado2'])
-                ) {
-                    $result['error'] = $duplas->getDataError();
-                } elseif ($duplas->updateRow()) {
-                    $result['status'] = 1;
-                    $result['message'] = 'Dupla actualizado correctamente';
-                } else {
-                    $result['error'] = 'Error al editar la dupla';
                 }
                 break;
             case 'readByName':

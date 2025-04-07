@@ -8,11 +8,11 @@ const SAVE_FORM = document.getElementById('saveForm'),
     APELLIDO_EMPLEADO = document.getElementById('apellidoEmpleado'),
     DUI_EMPLEADO = document.getElementById('duiEmpleado'),
     TELEFONO_EMPLEADO = document.getElementById('telefonoEmpleado'),
-    // DEPARTAMENTO_EMPLEADO = document.getElementById('departamentoEmpleado'),
-    // MUNICIPIO_EMPLEADO = document.getElementById('municipioEmpleado'),
-    CORREO_EMPLEADO = document.getElementById('correoEmpleado'),
-    CLAVE_EMPLEADO = document.getElementById('clavesEmpleado');
-// ESTADO_EMPLEADO = document.getElementById('estadoEmpleado'),
+    DEPARTAMENTO_EMPLEADO = document.getElementById('departamentoEmpleado'),
+    MUNICIPIO_EMPLEADO = document.getElementById('municipioEmpleado');
+// CORREO_EMPLEADO = document.getElementById('correoEmpleado'),
+// ESTADO_TRABAJO = document.getElementById('estadoTrabajo'),
+// CLAVE_EMPLEADO = document.getElementById('clavesEmpleado');
 // ESTADO_CONTENIDO = document.getElementById('estadoContenido'),
 
 
@@ -89,6 +89,41 @@ SAVE_FORM.addEventListener('submit', async (event) => {
     }
 });
 
+function actualizarMunicipios() {
+    let departamento = document.getElementById("departamentoEmpleado").value;
+
+    // Limpiar opciones previas
+    MUNICIPIO_EMPLEADO.innerHTML = '<option value="">Seleccione un municipio</option>';
+
+    // Definir los municipios por departamento
+    let municipios = {
+        "Ahuachapan": ["Ahuachapán", "Apaneca", "Atiquizaya", "Concepción de Ataco", "El Refugio"],
+        "Cabañas": ["Sensuntepeque", "Victoria", "Guacotecti", "Dolores", "Cinquera"],
+        "Chalatenango": ["Chalatenango", "La Palma", "San Ignacio", "Nueva Concepción", "Tejutla"],
+        "La Libertad": ["Santa Tecla", "Antiguo Cuscatlán", "Colón", "San Juan Opico", "Quezaltepeque"],
+        "La Paz": ["Zacatecoluca", "San Juan Nonualco", "San Pedro Masahuat", "San Rafael Obrajuelo"],
+        "San Salvador": ["San Salvador", "Soyapango", "Mejicanos", "Apopa", "Ilopango"],
+        "San Vicente": ["San Vicente", "Tecoluca", "Apastepeque", "San Ildefonso", "San Esteban Catarina"],
+        "Santa Ana": ["Santa Ana", "Metapán", "Chalchuapa", "Coatepeque", "Candelaria de la Frontera"],
+        "Sonsonate": ["Sonsonate", "Izalco", "Nahuizalco", "Juayúa", "Sonzacate"],
+        "Usulután": ["Usulután", "Jiquilisco", "Santa María", "Puerto El Triunfo", "Jucuapa"],
+        "Morazán": ["San Francisco Gotera", "Cacaopera", "Joateca", "Perquín", "Sociedad"],
+        "La Unión": ["La Unión", "Conchagua", "El Carmen", "Santa Rosa de Lima", "Intipucá"],
+        "San Miguel": ["San Miguel", "Chinameca", "Quelepa", "Moncagua", "Nuevo Edén de San Juan"],
+        // "Tecapa": ["Tecapa 1", "Tecapa 2", "Tecapa 3"] // Agrega municipios si es un departamento válido
+    };
+
+    // Agregar opciones según el departamento seleccionado
+    if (departamento && municipios[departamento]) {
+        municipios[departamento].forEach(municipio => {
+            let opcion = document.createElement("option");
+            opcion.value = municipio;
+            opcion.textContent = municipio;
+            MUNICIPIO_EMPLEADO.appendChild(opcion);
+        });
+    }
+}
+
 /*
 *   Función asíncrona para llenar la tabla con los registros disponibles.
 *   Parámetros: form (objeto opcional con los datos de búsqueda).
@@ -107,10 +142,14 @@ const fillTable = async (form = null) => {
         // Se recorre el conjunto de registros fila por fila.
         DATA.dataset.forEach(row => {
             // Se establece un icono para el estado del empleado.
-            (row.estado_empleado) ? icon = 'bi bi-check-circle-fill' : icon = 'bi bi-pause-circle-fill';
+            (row.empleado_agregado) ? estado = 'info text-center mt-3">Empleado registrado' : estado = 'warning text-center mt-3">Empleado no registrado';
+            (row.estado_trabajo_empleado) ? icon = 'bi bi-check-circle-fill' : icon = 'bi bi-pause-circle-fill';
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
             TABLE_BODY.innerHTML += `
                 <div class="col-12 card mt-2 text-bg-dark" id="searchForm">
+                <div id="estadoTrabajo">
+                    <h3 class="text-${estado}</h3>
+                </div>
                     <div class="row justify-content-center align-items-center">
                         <div class="col-12 mt-3 d-flex justify-content-center align-items-center"
                             style="height: 300px; width: 300px;">
@@ -127,12 +166,14 @@ const fillTable = async (form = null) => {
                                     <p class="card-title text-white">${row.nombre_empleado} ${row.apellido_empleado}</p>
                                     <h5 class="text-white">DUI Empleado</h5>
                                     <p class="card-text text-white">${row.DUI_empleado}</p>
-                                    <h5 class="text-white">Correo Empleado</h5>
-                                    <p class="card-text text-white">${row.correo_empleado}</p>
                                 </div>
                                 <div class="col-lg-6 col-md-12 col-sm-12">
                                     <h5 class="text-white">Teléfono empleado</h5>
                                     <p class="card-title text-white">${row.telefono_personal_empleado}
+                                    <h5 class="text-white">Departamento</h5>
+                                    <p class="card-title text-white">${row.departamento_trabajo_empleado}
+                                    <h5 class="text-white">Municipio</h5>
+                                    <p class="card-title text-white">${row.municipio_trabajo_empleado}
                                     <h5 class="text-white">Estado empleado</h5>
                                     <p class="card-text text-white">Estado: <i class="${icon} text-white h1"></i></p>
                                 </div>
@@ -140,15 +181,12 @@ const fillTable = async (form = null) => {
                         </div>
 
                         <div class="col-sm-12 col-md-12 col-lg-3 text-center my-5">
-                            <div class="d-flex flex-column">
+                            <div class="d-flex       flex-column">
                                 <button class="btn btn-outline-light mb-2" onclick="openDelete(${row.id_empleado})">
                                     <i class="bi bi-trash3-fill"></i> Eliminar
                                 </button>
                                 <button class="btn btn-outline-light mb-2" onclick="openUpdate(${row.id_empleado})">
                                     <i class="bi bi-pencil-fill"></i>Actualizar
-                                </button>
-                                <button class="btn btn-outline-light mb-2" onclick="openState(${row.id_empleado})">
-                                    <i class="bi bi-exclamation-octagon"></i> Cambiar Estado
                                 </button>
                             </div>
                         </div>
@@ -159,7 +197,7 @@ const fillTable = async (form = null) => {
         ROWS_FOUND.textContent = DATA.message;
     } else {
         TABLE_BODY.innerHTML = `
-        <div class="col-5    justify-content-center align-items-center">
+            <div class="col-5    justify-content-center align-items-center">
                 <img src="../../resources/images/error/404iNFORMACION.png" class="card-img-top" alt="ERROR CARGAR IMAGEN">
             </div>
         `
@@ -188,6 +226,12 @@ const readAllTable = async (form = null, buscador) => {
         case 5:
             action = 'readByInactive';
             break;
+        case 6:
+            action = 'readByInformation';
+            break;
+        case 7:
+            action = 'readByNoInformation';
+            break;
         default:
             break;
     }
@@ -198,49 +242,56 @@ const readAllTable = async (form = null, buscador) => {
         // Se recorre el conjunto de registros fila por fila.
         DATA.dataset.forEach(row => {
             // Se establece un icono para el estado del empleado.
-            (row.estado_empleado) ? icon = 'bi bi-check-circle-fill' : icon = 'bi bi-pause-circle-fill';
+            (row.empleado_agregado) ? estado = 'info text-center mt-3">Empleado registrado' : estado = 'warning text-center mt-3">Empleado no registrado';
+            (row.estado_trabajo_empleado) ? icon = 'bi bi-check-circle-fill' : icon = 'bi bi-pause-circle-fill';
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
             TABLE_BODY.innerHTML += `
-                    <div class="col-12 card mt-2 text-bg-dark" id="searchForm">
-                        <div class="row justify-content-center align-items-center">
-                            <div class="col-12 mt-3 d-flex justify-content-center align-items-center"
-                                style="height: 300px; width: 300px;">
-                                <img src="${SERVER_URL}images/empleados/${row.imagen_empleado}" class="rounded border border-primary" alt="..."
-                                    onerror="this.onerror=null; this.src='../../resources/images/error/404Empleado.png';"
-                                    style="max-width: 100%; max-height: 100%; object-fit: contain;">
-                            </div>
-    
-                            <div class=" col-md-12 col-lg-3 card-body d-flex flex-column align-items-center text-center">
-                                <div class="row">
-                                    <div class="col-lg-6 col-md-12 col-sm-12">
-                                        <h5 class="text-white">Nombre empleado</h5>
-                                        <p class="card-title text-white">${row.nombre_empleado} ${row.apellido_empleado}</p>
-                                        <h5 class="text-white">DUI Empleado</h5>
-                                        <p class="card-text text-white">${row.DUI_empleado}</p>
-                                        <h5 class="text-white">Correo Empleado</h5>
-                                        <p class="card-text text-white">${row.correo_empleado}</p>
-                                    </div>
-                                    <div class="col-lg-6 col-md-12 col-sm-12">
-                                        <h5 class="text-white">Teléfono empleado</h5>
-                                        <p class="card-title text-white">${row.telefono_personal_empleado}
-                                    </div>
+                <div class="col-12 card mt-2 text-bg-dark" id="searchForm">
+                <div id="estadoTrabajo">
+                    <h3 class="text-${estado}</h3>
+                </div>
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-12 mt-3 d-flex justify-content-center align-items-center"
+                            style="height: 300px; width: 300px;">
+                            <img src="${SERVER_URL}images/empleados/${row.imagen_empleado}" class="rounded border border-primary" alt="..."
+                                onerror="this.onerror=null; this.src='../../resources/images/error/404Empleado.png';"
+                                style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                        </div>
+
+                        <div class=" col-md-12 col-lg-3 card-body d-flex flex-column align-items-center text-center">
+                            <div class="row">
+
+                                <div class="col-lg-6 col-md-12 col-sm-12">
+                                    <h5 class="text-white">Nombre empleado</h5>
+                                    <p class="card-title text-white">${row.nombre_empleado} ${row.apellido_empleado}</p>
+                                    <h5 class="text-white">DUI Empleado</h5>
+                                    <p class="card-text text-white">${row.DUI_empleado}</p>
                                 </div>
-                            </div>
-                            <div class="col-sm-12 col-md-12 col-lg-3 text-center my-5">
-                                <div class="d-flex flex-column">
-                                    <button class="btn btn-outline-light mb-2" onclick="openDelete(${row.id_empleado})">
-                                        <i class="bi bi-trash3-fill"></i> Eliminar
-                                    </button>
-                                    <button class="btn btn-outline-light mb-2" onclick="openUpdate(${row.id_empleado})">
-                                        <i class="bi bi-pencil-fill"></i>Actualizar
-                                    </button>
-                                    <button class="btn btn-outline-light mb-2" onclick="openState(${row.id_empleado})">
-                                        <i class="bi bi-exclamation-octagon"></i> Cambiar Estado
-                                    </button>
+                                <div class="col-lg-6 col-md-12 col-sm-12">
+                                    <h5 class="text-white">Teléfono empleado</h5>
+                                    <p class="card-title text-white">${row.telefono_personal_empleado}
+                                    <h5 class="text-white">Departamento</h5>
+                                    <p class="card-title text-white">${row.departamento_trabajo_empleado}
+                                    <h5 class="text-white">Municipio</h5>
+                                    <p class="card-title text-white">${row.municipio_trabajo_empleado}
+                                    <h5 class="text-white">Estado empleado</h5>
+                                    <p class="card-text text-white">Estado: <i class="${icon} text-white h1"></i></p>
                                 </div>
                             </div>
                         </div>
-                    </div>          `;
+
+                        <div class="col-sm-12 col-md-12 col-lg-3 text-center my-5">
+                            <div class="d-flex flex-column">
+                                <button class="btn btn-outline-light mb-2" onclick="openDelete(${row.id_empleado})">
+                                    <i class="bi bi-trash3-fill"></i> Eliminar
+                                </button>
+                                <button class="btn btn-outline-light mb-2" onclick="openUpdate(${row.id_empleado})">
+                                    <i class="bi bi-pencil-fill"></i>Actualizar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>          `;
         });
         // Se muestra un mensaje de acuerdo con el resultado.
         ROWS_FOUND.textContent = DATA.message;
@@ -254,83 +305,6 @@ const readAllTable = async (form = null, buscador) => {
     }
 }
 
-// BUSCADOR_DEPARTAMENTO.addEventListener ('submit' ,async (event, form = null) => {
-//     // Se evita recargar la página web después de enviar el formulario.
-//     event.preventDefault();
-//     // ? Se inicia el contenido de la tabla 
-//     ROWS_FOUND.textContent = '';
-//     TABLE_BODY.innerHTML = '';
-//     // Petición para obtener los registros disponibles.
-//     const DATA = await fetchData(EMPLADO_API, 'readByDepartamento', form);
-//     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
-//     if (DATA.status) {
-//         // Se recorre el conjunto de registros fila por fila.
-//         DATA.dataset.forEach(row => {
-//             // Se establece un icono para el estado del empleado.
-//             (row.estado_empleado) ? icon = 'bi bi-check-circle-fill' : icon = 'bi bi-pause-circle-fill';
-//             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
-//             TABLE_BODY.innerHTML += `
-//                     <div class="col-12 card mt-2 text-bg-dark" id="searchForm">
-//                         <div class="row justify-content-center align-items-center">
-//                             <div class="col-12 mt-3 d-flex justify-content-center align-items-center"
-//                                 style="height: 300px; width: 300px;">
-//                                 <img src="${SERVER_URL}images/empleados/${row.imagen_empleado}" class="rounded border border-primary" alt="..."
-//                                     onerror="this.onerror=null; this.src='../../resources/images/error/404Empleado.png';"
-//                                     style="max-width: 100%; max-height: 100%; object-fit: contain;">
-//                             </div>
-
-//                             <div class=" col-md-12 col-lg-3 card-body d-flex flex-column align-items-center text-center">
-//                                 <div class="row">
-
-//                                     <div class="col-lg-6 col-md-12 col-sm-12">
-//                                         <h5 class="text-white">Nombre empleado</h5>
-//                                         <p class="card-title text-white">${row.nombre_empleado} ${row.apellido_empleado}</p>
-//                                         <h5 class="text-white">DUI Empleado</h5>
-//                                         <p class="card-text text-white">${row.DUI_empleado}</p>
-//                                         <h5 class="text-white">Correo Empleado</h5>
-//                                         <p class="card-text text-white">${row.correo_empleado}</p>
-//                                     </div>
-//                                     <div class="col-lg-6 col-md-12 col-sm-12">
-//                                         <h5 class="text-white">Teléfono empleado</h5>
-//                                         <p class="card-title text-white">${row.telefono_personal_empleado}
-//                                         <h5 class="text-white">Departamento Empleado</h5>
-//                                         <p class="card-text text-white">${row.departamento_empleado}</p>
-//                                         <h5 class="text-white">Municipio Empleado</h5>
-//                                         <p class="card-text text-white">${row.municipio_empleado}</p>
-//                                         <h5 class="text-white">Estado empleado</h5>
-//                                         <p class="card-text text-white">Estado: <i class="${icon} text-white h1"></i></p>
-//                                     </div>
-//                                 </div>
-//                             </div>
-
-//                             <div class="col-sm-12 col-md-12 col-lg-3 text-center my-5">
-//                                 <div class="d-flex flex-column">
-//                                     <button class="btn btn-outline-light mb-2" onclick="openDelete(${row.id_empleado})">
-//                                         <i class="bi bi-trash3-fill"></i> Eliminar
-//                                     </button>
-//                                     <button class="btn btn-outline-light mb-2" onclick="openUpdate(${row.id_empleado})">
-//                                         <i class="bi bi-pencil-fill"></i>Actualizar
-//                                     </button>
-//                                     <button class="btn btn-outline-light mb-2" onclick="openState(${row.id_empleado})">
-//                                         <i class="bi bi-exclamation-octagon"></i> Cambiar Estado
-//                                     </button>
-//                                 </div>
-//                             </div>
-//                         </div>
-//                     </div>          `;
-//         });
-//         // Se muestra un mensaje de acuerdo con el resultado.
-//         ROWS_FOUND.textContent = DATA.message;
-//     } else {
-//         TABLE_BODY.innerHTML = `
-//             <div class="col-5    justify-content-center align-items-center">
-//                     <img src="../../resources/images/error/404iNFORMACION.png" class="card-img-top" alt="ERROR CARGAR IMAGEN">
-//                 </div>
-//             `
-//         sweetAlert(4, DATA.error, true);
-//     }
-// });
-
 /*
 *   Función para preparar el formulario al momento de insertar un registro.
 *   Parámetros: ninguno.
@@ -342,31 +316,6 @@ const openCreate = () => {
     MODAL_TITLE.textContent = 'Agregar Empleado';
     // Se prepara el formulario.
     SAVE_FORM.reset();
-    CLAVE_EMPLEADO.innerHTML = `
-    <div class="col-lg-6">
-        <label for="" class="form-label">Clave</label>
-        <input type="password" id="claveEmpleado" name="claveEmpleado"
-            autocomplete="off" class="form-control" required
-            oninput="formatPassword(this)">
-    </div>
-    <div class="col-lg-6">
-        <label for="" class="form-label">Repetir Clave</label>
-        <input type="password" id="claveEmpleado2" name="claveEmpleado2"
-            autocomplete="off" class="form-control" required
-            oninput="formatPassword(this)">
-    </div>
-    `;
-    // ESTADO_CONTENIDO.innerHTML = `
-    // <h3 class=" mt-5 text-center form-label">Estado
-    //     Empleado</h3>
-    // <div class="col-lg-12 d-flex justify-content-center">
-    //     <div class="form-check form-switch">
-    //         <input class="form-check-input" type="checkbox" id="estadoEmpleado"
-    //             name="estadoEmpleado" checked>
-    //         <label class="form-check-label" for="estadoEmpleado">Estado</label>
-    //     </div>
-    // </div>
-    // `;
 }
 
 /*
@@ -421,12 +370,8 @@ const openUpdate = async (id) => {
         APELLIDO_EMPLEADO.value = ROW.apellido_empleado;
         DUI_EMPLEADO.value = ROW.DUI_empleado;
         TELEFONO_EMPLEADO.value = ROW.telefono_personal_empleado;
-        // DEPARTAMENTO_EMPLEADO.value = ROW.departamento_empleado;
-        // MUNICIPIO_EMPLEADO.value = ROW.municipio_empleado;
-        CORREO_EMPLEADO.value = ROW.correo_empleado;
-        // ESTADO_EMPLEADO.checked = ROW.estado_producto;
-        CLAVE_EMPLEADO.innerHTML = '';
-        // ESTADO_CONTENIDO.innerHTML = '';
+        DEPARTAMENTO_EMPLEADO.value = ROW.departamento_trabajo_empleado;
+        MUNICIPIO_EMPLEADO.value = ROW.municipio_trabajo_empleado;
     } else {
         sweetAlert(2, DATA.error, false);
     }

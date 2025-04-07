@@ -136,6 +136,9 @@ class Validator
     */
     public static function validateString($value)
     {
+        // Normalizar la cadena: reemplazar espacios de no separación con espacios normales.
+        $value = str_replace("\xC2\xA0", ' ', $value);
+
         // Se verifica el contenido y la longitud de acuerdo con la base de datos.
         if (preg_match('/^[a-zA-Z0-9ñÑáÁéÉíÍóÓúÚ\s\,\;\.\:]+$/', $value)) {
             return true;
@@ -168,6 +171,19 @@ class Validator
     {
         // Se verifica el contenido y la longitud de acuerdo con la base de datos.
         if (preg_match('/^[a-zA-Z0-9ñÑáÁéÉíÍóÓúÚ\s]+$/', $value)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    // * método para validar un dato numero/decimal (números, caracteres y signo)
+    // * Parámetros: $value (dato a validar).
+    // * Retorno: booleano (true si el valor es correcto o false en caso contrario).
+
+    public static function validateDecimalNumber($value)
+    {
+        // Expresión regular para números decimales (positivos o negativos).
+        if (preg_match('/^\-?\d+(\.\d+)?$/', $value)) {
             return true;
         } else {
             return false;
