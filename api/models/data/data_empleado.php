@@ -89,7 +89,7 @@ class EmpleadoData extends EmpleadoHandler
             $this->imagen = $filename;
             return true;
         } else {
-            $this->imagen = '404Administrador.png';
+            $this->imagen = '404Empleado.png';
             return true;
         }
     }
@@ -128,7 +128,7 @@ class EmpleadoData extends EmpleadoHandler
             $this->filename = $data['imagen_empleado'];
             return true;
         } else {
-            $this->data_error = 'Administrador inexistente';
+            $this->data_error = 'Empleado inexistente';
             return false;
         }
     }

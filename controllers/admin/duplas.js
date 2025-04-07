@@ -32,6 +32,9 @@ const SEARCH_FORM = document.getElementById('searchForm');
 const TABLE_BODY = document.getElementById('duplas'),
     ROWS_FOUND = document.getElementById('rowsFound');
 
+// Constante tipo objeto para obtener los parámetros disponibles en la URL.
+const PARAMS = new URLSearchParams(location.search);
+
 // ? Método del evento para cuando el documento ha cargado.
 document.addEventListener('DOMContentLoaded', async () => {
     // Llamada a la función para mostrar el encabezado y pie del documento.
@@ -120,8 +123,7 @@ const fillTable = async (form = null) => {
         DATA.dataset.forEach(row => {
             // Se establece un icono para el estado del empleado.
             (row.tipo_dupla) ? type = 'Permanente' : type = 'Temporal';
-            (row.estado_dupla) ? icon = 'bi bi-check-circle-fill' : icon = 'bi bi-pause-circle-fill';
-
+            (row.estado_dupla) ? icon = 'text-info">Estado: Jornada iniciada' : icon = 'text-warning">Estado: Jornada terminada';
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
             TABLE_BODY.innerHTML += `
                 <div class="col-12 card mt-2 text-bg-dark" >
@@ -179,8 +181,11 @@ const fillTable = async (form = null) => {
             </button>
             <button class="btn btn-outline-light mb-2 w-75" onclick="openPassword(${row.id_dupla})">
                 <i class="bi bi-key"></i> Cambiar clave
-            </button>
-            <h3 class="card-text text-white my-3">Estado: <i class="${icon} text-white h1"></i></h3>
+            </button>            
+            <h3 class="card-text my-3 ${icon}</h3>
+            <a href="detalle_dupla.html?id=${row.id_dupla}" class="btn btn-success mb-2 w-75">
+                <i class="bi bi-info-circle-fill"></i> Detalles de dupla
+            </a> 
         </div>
     </div>
 </div>
@@ -241,10 +246,9 @@ const readAllTable = async (form = null, buscador) => {
         DATA.dataset.forEach(row => {
             // Se establece un icono para el estado del empleado.
             (row.tipo_dupla) ? type = 'Permanente' : type = 'Temporal';
-            (row.estado_trabajo) ? icon = 'bi bi-check-circle-fill' : icon = 'bi bi-pause-circle-fill';
-
-
+            (row.estado_dupla) ? icon = 'text-warning">Estado: Jornada terminada' : icon = 'text-info">Estado: Jornada iniciada';
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
+            // console.log(row.estado_dupla);
             TABLE_BODY.innerHTML += `
 <div class="col-12 card mt-2 text-bg-dark" >
     <div class="row justify-content-center align-items-center gx-0">
@@ -307,7 +311,10 @@ const readAllTable = async (form = null, buscador) => {
             <button class="btn btn-outline-light mb-2 w-75" onclick="openPassword(${row.id_dupla})">
                 <i class="bi bi-key"></i> Cambiar clave
             </button>
-            <h3 class="card-text text-white my-3">Estado: <i class="${icon} text-white h1"></i></h3>
+            <h3 class="card-text my-3 ${icon}</h3>
+            <a href="detalle_dupla.html?id=${row.id_dupla}" class="btn btn-success mb-2 w-75">
+                <i class="bi bi-info-circle-fill"></i> Detalles de dupla
+            </a>
         </div>
     </div>
 </div>

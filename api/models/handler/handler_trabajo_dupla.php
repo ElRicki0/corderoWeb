@@ -173,7 +173,8 @@ class TrabajoDuplaHandler
                     e1.nombre_empleado AS nombre_empleado1,
                     e1.apellido_empleado AS apellido_empleado1,
                     e2.nombre_empleado AS nombre_empleado2,
-                    e2.apellido_empleado AS apellido_empleado2
+                    e2.apellido_empleado AS apellido_empleado2,
+                    dp.id_dupla
                 FROM tb_trabajo_duplas tdp
                 INNER JOIN tb_duplas dp ON tdp.id_dupla = dp.id_dupla
                 INNER JOIN tb_empleados e1 ON dp.id_empleado1 = e1.id_empleado
@@ -194,7 +195,8 @@ class TrabajoDuplaHandler
                     e1.nombre_empleado AS nombre_empleado1,
                     e1.apellido_empleado AS apellido_empleado1,
                     e2.nombre_empleado AS nombre_empleado2,
-                    e2.apellido_empleado AS apellido_empleado2
+                    e2.apellido_empleado AS apellido_empleado2,
+                    dp.id_dupla
                 FROM tb_trabajo_duplas tdp
                 INNER JOIN tb_duplas dp ON tdp.id_dupla = dp.id_dupla
                 INNER JOIN tb_empleados e1 ON dp.id_empleado1 = e1.id_empleado
@@ -260,7 +262,7 @@ class TrabajoDuplaHandler
                     `estado_trabajo_dupla` = 1
                 WHERE
                 `id_trabajo_dupla` = ?';
-        $params = array($this->latitudInicio, $this->longitudInicio, $this->horaInicio, $_SESSION['idDupla']);
+        $params = array($this->latitudInicio, $this->longitudInicio, $this->actualizacion, $_SESSION['idDupla']);
         return Database::executeRow($sql, $params);
     }
 
@@ -275,7 +277,7 @@ class TrabajoDuplaHandler
                     `estado_trabajo_dupla` = 0
                 WHERE
                     `id_trabajo_dupla` = ?';
-        $params = array($this->latitudFinal, $this->longitudFinal, $this->horaFinal, $_SESSION['idDupla']);
+        $params = array($this->latitudFinal, $this->longitudFinal, $this->actualizacion, $_SESSION['idDupla']);
         return Database::executeRow($sql, $params);
     }
 }

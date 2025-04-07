@@ -149,9 +149,10 @@ class DuplasHandler
                     em2.telefono_personal_empleado AS telefono_personal_empleado2,
                     em2.imagen_empleado AS imagen_empleado2,
                     CASE 
-                        WHEN td.estado_trabajo_dupla IS NULL OR td.estado_trabajo_dupla = 0 THEN 0
-                        ELSE 1
-                    END AS estado_trabajo,
+                        WHEN td.id_dupla IS NULL THEN 0  -- No existe registro en tb_trabajo_duplas
+                        WHEN td.estado_trabajo_dupla = 1 THEN 1  -- Estado activo
+                        ELSE 0  -- Cualquier otro caso (incluyendo estado 0)
+                    END AS estado_dupla,
                     dp.`fecha_actualizacion_dupla`
                 FROM
                     `tb_duplas` dp
@@ -160,8 +161,8 @@ class DuplasHandler
                 LEFT JOIN tb_empleados em2 ON
                     dp.id_empleado2 = em2.id_empleado
                 LEFT JOIN tb_trabajo_duplas td ON
-                    dp.id_dupla = td.id_dupla AND td.estado_trabajo_dupla = 1;';
-        return Database::getRows($sql);
+                    dp.id_dupla = td.id_dupla;';
+                        return Database::getRows($sql);
     }
 
     public function readProfile()
@@ -200,10 +201,10 @@ class DuplasHandler
     public function readByName()
     {
         $sql = ' SELECT
-                    `id_dupla`,
-                    `telefono_empresa_dupla`,
-                    `tipo_dupla`,
-                    `usuario_dupla`,
+                    dp.`id_dupla`,
+                    dp.`telefono_empresa_dupla`,
+                    dp.`tipo_dupla`,
+                    dp.`usuario_dupla`,
                     em1.nombre_empleado AS nombre_empleado1,
                     em1.apellido_empleado AS apellido_empleado1,
                     em1.telefono_personal_empleado AS telefono_personal_empleado1,
@@ -212,13 +213,20 @@ class DuplasHandler
                     em2.apellido_empleado AS apellido_empleado2,
                     em2.telefono_personal_empleado AS telefono_personal_empleado2,
                     em2.imagen_empleado AS imagen_empleado2,
-                    `fecha_actualizacion_dupla`
+                    CASE 
+                        WHEN td.id_dupla IS NULL THEN 0  -- No existe registro en tb_trabajo_duplas
+                        WHEN td.estado_trabajo_dupla = 1 THEN 1  -- Estado activo
+                        ELSE 0  -- Cualquier otro caso (incluyendo estado 0)
+                    END AS estado_dupla,
+                    dp.`fecha_actualizacion_dupla`
                 FROM
                     `tb_duplas` dp
                 INNER JOIN tb_empleados em1 ON
                     dp.id_empleado1 = em1.id_empleado 
-                INNER JOIN tb_empleados em2 ON
+                LEFT JOIN tb_empleados em2 ON
                     dp.id_empleado2 = em2.id_empleado
+                LEFT JOIN tb_trabajo_duplas td ON
+                    dp.id_dupla = td.id_dupla
                 ORDER BY `usuario_dupla`';
         return Database::getRows($sql);
     }
@@ -226,10 +234,10 @@ class DuplasHandler
     public function readByNameDesc()
     {
         $sql = ' SELECT
-                    `id_dupla`,
-                    `telefono_empresa_dupla`,
-                    `tipo_dupla`,
-                    `usuario_dupla`,
+                    dp.`id_dupla`,
+                    dp.`telefono_empresa_dupla`,
+                    dp.`tipo_dupla`,
+                    dp.`usuario_dupla`,
                     em1.nombre_empleado AS nombre_empleado1,
                     em1.apellido_empleado AS apellido_empleado1,
                     em1.telefono_personal_empleado AS telefono_personal_empleado1,
@@ -238,13 +246,20 @@ class DuplasHandler
                     em2.apellido_empleado AS apellido_empleado2,
                     em2.telefono_personal_empleado AS telefono_personal_empleado2,
                     em2.imagen_empleado AS imagen_empleado2,
-                    `fecha_actualizacion_dupla`
+                    CASE 
+                        WHEN td.id_dupla IS NULL THEN 0  -- No existe registro en tb_trabajo_duplas
+                        WHEN td.estado_trabajo_dupla = 1 THEN 1  -- Estado activo
+                        ELSE 0  -- Cualquier otro caso (incluyendo estado 0)
+                    END AS estado_dupla,
+                    dp.`fecha_actualizacion_dupla`
                 FROM
                     `tb_duplas` dp
                 INNER JOIN tb_empleados em1 ON
                     dp.id_empleado1 = em1.id_empleado 
-                INNER JOIN tb_empleados em2 ON
+                LEFT JOIN tb_empleados em2 ON
                     dp.id_empleado2 = em2.id_empleado
+                LEFT JOIN tb_trabajo_duplas td ON
+                    dp.id_dupla = td.id_dupla                
                 ORDER BY usuario_dupla DESC';
         return Database::getRows($sql);
     }
@@ -252,10 +267,10 @@ class DuplasHandler
     public function readByModify()
     {
         $sql = 'SELECT
-                    `id_dupla`,
-                    `telefono_empresa_dupla`,
-                    `tipo_dupla`,
-                    `usuario_dupla`,
+                    dp.`id_dupla`,
+                    dp.`telefono_empresa_dupla`,
+                    dp.`tipo_dupla`,
+                    dp.`usuario_dupla`,
                     em1.nombre_empleado AS nombre_empleado1,
                     em1.apellido_empleado AS apellido_empleado1,
                     em1.telefono_personal_empleado AS telefono_personal_empleado1,
@@ -264,13 +279,20 @@ class DuplasHandler
                     em2.apellido_empleado AS apellido_empleado2,
                     em2.telefono_personal_empleado AS telefono_personal_empleado2,
                     em2.imagen_empleado AS imagen_empleado2,
-                    `fecha_actualizacion_dupla`
+                    CASE 
+                        WHEN td.id_dupla IS NULL THEN 0  -- No existe registro en tb_trabajo_duplas
+                        WHEN td.estado_trabajo_dupla = 1 THEN 1  -- Estado activo
+                        ELSE 0  -- Cualquier otro caso (incluyendo estado 0)
+                    END AS estado_dupla,
+                    dp.`fecha_actualizacion_dupla`
                 FROM
                     `tb_duplas` dp
                 INNER JOIN tb_empleados em1 ON
                     dp.id_empleado1 = em1.id_empleado 
-                INNER JOIN tb_empleados em2 ON
+                LEFT JOIN tb_empleados em2 ON
                     dp.id_empleado2 = em2.id_empleado
+                LEFT JOIN tb_trabajo_duplas td ON
+                    dp.id_dupla = td.id_dupla
                 ORDER BY fecha_actualizacion_dupla DESC';
         return Database::getRows($sql);
     }
@@ -390,10 +412,10 @@ class DuplasHandler
     public function readOne()
     {
         $sql = 'SELECT
-                    `id_dupla`,
-                    `telefono_empresa_dupla`,
-                    `tipo_dupla`,
-                    `usuario_dupla`,
+                    dp.`id_dupla`,
+                    dp.`telefono_empresa_dupla`,
+                    dp.`tipo_dupla`,
+                    dp.`usuario_dupla`,
                     em1.id_empleado AS id_empleado1,
                     em1.nombre_empleado AS nombre_empleado1,
                     em1.apellido_empleado AS apellido_empleado1,
@@ -404,14 +426,25 @@ class DuplasHandler
                     em2.apellido_empleado AS apellido_empleado2,
                     em2.telefono_personal_empleado AS telefono_personal_empleado2,
                     em2.imagen_empleado AS imagen_empleado2,
-                    `fecha_actualizacion_dupla`
+                    CASE 
+                        WHEN td.id_dupla IS NULL THEN 0
+                        WHEN td.estado_trabajo_dupla = 1 THEN 1
+                        ELSE 0
+                    END AS estado_dupla,
+                    td.latitud_inicio_trabajo_dupla AS latitud_inicio,
+                    td.longitud_inicio_trabajo_dupla AS longitud_inicio,
+                    td.latitud_final_trabajo_dupla AS latitud_final,
+                    td.longitud_final_trabajo_dupla AS longitud_final,
+                    dp.`fecha_actualizacion_dupla`
                 FROM
                     `tb_duplas` dp
                 INNER JOIN tb_empleados em1 ON
-                    dp.id_empleado1 = em1.id_empleado
-                INNER JOIN tb_empleados em2 ON
+                    dp.id_empleado1 = em1.id_empleado 
+                LEFT JOIN tb_empleados em2 ON
                     dp.id_empleado2 = em2.id_empleado
-                WHERE dp.id_dupla = ?;';
+                LEFT JOIN tb_trabajo_duplas td ON
+                    dp.id_dupla = td.id_dupla
+                WHERE dp.id_dupla = ?;;';
         $params = array($this->id);
         return Database::getRow($sql, $params);
     }

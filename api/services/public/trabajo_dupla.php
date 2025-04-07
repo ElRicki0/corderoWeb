@@ -19,7 +19,6 @@ if (isset($_GET['action'])) {
                 // echo($_POST['latitudInicio']);
                 // die;
                 if (
-                    !$trabajoDP->setHoraInicio($_POST['horaInicio']) or
                     !$trabajoDP->setLatitudInicio($_POST['latitud']) or
                     !$trabajoDP->setLongitudInicio($_POST['longitud'])
                 ) {
@@ -32,8 +31,7 @@ if (isset($_GET['action'])) {
                 }
                 break;
             case 'endWork':
-            if (
-                !$trabajoDP->setHoraFinal($_POST['horaFinal']) or
+            if (    
                 !$trabajoDP->setLatitudFinal($_POST['latitud']) or
                 !$trabajoDP->setLongitudFinal($_POST['longitud'])
             ) {

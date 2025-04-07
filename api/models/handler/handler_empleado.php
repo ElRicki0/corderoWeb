@@ -12,13 +12,10 @@ class EmpleadoHandler
     protected $apellido = null;
     protected $dui = null;
     protected $telefono = null;
-    // protected $correo = null;
-    // protected $clave = null;
     protected $actualizacion = null;
     protected $imagen = null;
     protected $departamento = null;
     protected $municipio = null;
-    // protected $estado = null;
 
     public function __construct()
     {
@@ -122,17 +119,27 @@ class EmpleadoHandler
     public function readAll()
     {
         $sql = 'SELECT
-                    `id_empleado`,
-                    `nombre_empleado`,
-                    `apellido_empleado`,
-                    `DUI_empleado`,
-                    `telefono_personal_empleado`,
-                    `imagen_empleado`,
-                    `departamento_trabajo_empleado`,
-                    `municipio_trabajo_empleado`,
-                    `fecha_actualizacion_empleado`
+                    e.`id_empleado`,
+                    e.`nombre_empleado`,
+                    e.`apellido_empleado`,
+                    e.`DUI_empleado`,
+                    e.`telefono_personal_empleado`,
+                    e.`imagen_empleado`,
+                    e.`departamento_trabajo_empleado`,
+                    e.`municipio_trabajo_empleado`,
+                    e.`fecha_actualizacion_empleado`,
+                    CASE 
+                        WHEN d1.id_empleado1 IS NOT NULL OR d2.id_empleado2 IS NOT NULL THEN 1
+                        ELSE 0
+                    END AS `empleado_agregado`
                 FROM
-                    `tb_empleados`';
+                    `tb_empleados` e
+                LEFT JOIN
+                    `tb_duplas` d1 ON e.`id_empleado` = d1.`id_empleado1`
+                LEFT JOIN
+                    `tb_duplas` d2 ON e.`id_empleado` = d2.`id_empleado2`
+                GROUP BY
+                    e.`id_empleado`';
         return Database::getRows($sql);
     }
 

@@ -11,7 +11,7 @@ CREATE TABLE
         apellido_empleado VARCHAR(50),
         DUI_empleado VARCHAR(15) NOT NULL UNIQUE,
         telefono_personal_empleado varchar(10) NOT NULL,
-		  imagen_empleado VARCHAR(500),
+        imagen_empleado VARCHAR(500),
         departamento_trabajo_empleado VARCHAR(100),
         municipio_trabajo_empleado VARCHAR(100),
         fecha_actualizacion_empleado DATETIME
@@ -36,14 +36,14 @@ CREATE TABLE
         id_trabajo_dupla INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
         latitud_inicio_trabajo_dupla varchar(300),
         longitud_inicio_trabajo_dupla varchar(300),
-        hora_inicio_trabajo_dupla TIME,
+        hora_inicio_trabajo_dupla DATETIME,
         latitud_final_trabajo_dupla varchar(300),
         longitud_final_trabajo_dupla varchar(300),
-        hora_final_trabajo_dupla TIME,
+        hora_final_trabajo_dupla DATETIME,
         estado_trabajo_dupla TINYINT (1) not NULL,
         id_dupla INT NOT NULL UNIQUE,
-        FOREIGN KEY (id_dupla) REFERENCES tb_duplas(id_dupla) ON DELETE CASCADE,
-        fecha_actualizacion_trabajo_dupla DATETIME 
+        FOREIGN KEY (id_dupla) REFERENCES tb_duplas (id_dupla) ON DELETE CASCADE,
+        fecha_actualizacion_trabajo_dupla DATETIME
     );
 
 CREATE TABLE

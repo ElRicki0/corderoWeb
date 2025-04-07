@@ -143,6 +143,9 @@ const inicioJornadas = async () => {
                     <button type="button" class="btn btn-info" onclick="mostrarInformacion(${row.latitud_inicio_trabajo_dupla}, ${row.longitud_inicio_trabajo_dupla})">
                         <h5>Mostrar ubicación</h5>
                     </button>
+                    <a href="detalle_dupla.html?id=${row.id_dupla}" class="btn btn-success mt-2">
+                        <h5><i class="bi bi-info-circle-fill"></i> Detalles de dupla</h5>
+                    </a>
                 </div>
             </div>
         </div>
@@ -210,7 +213,7 @@ const mostrarInformacion = (latitud, longitud) => {
     }
 
     UBICACION_DUPLA.innerHTML = `
-        <iframe width="600" height="450" style="border:0;" loading="lazy" allowfullscreen
+        <iframe width="450" height="450" style="border:0;" loading="lazy" allowfullscreen
                 referrerpolicy="no-referrer-when-downgrade"
                 src="https://www.google.com/maps?q=${latitud},${longitud}&hl=es&z=15&output=embed">
         </iframe>
