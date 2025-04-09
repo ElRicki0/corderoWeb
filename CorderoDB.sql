@@ -5,6 +5,19 @@ CREATE DATABASE CorderoDB;
 USE CorderoDB;
 
 CREATE TABLE
+    tb_administradores (
+        id_administrador INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        nombre_administrador VARCHAR(50) NOt NULL,
+        apellido_administrador VARCHAR(50) NOT NULL,
+        correo_administrador VARCHAR(60) NOT NULL UNIQUE,
+        telefono_administrador VARCHAR(10),
+        clave_administrador VARCHAR(500) NOT NULL,
+        fecha_clave DATE NOT NULL,
+        codigo_clave VARCHAR(6) NOT NULL,
+        imagen_administrador VARCHAR(300)
+    );
+
+CREATE TABLE
     tb_empleados (
         id_empleado INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
         nombre_empleado VARCHAR(50) NOT NULL,
@@ -47,48 +60,21 @@ CREATE TABLE
     );
 
 CREATE TABLE
-    tb_categorias_cables (
-        id_categoria_cable INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-        nombre_categoria_cable VARCHAR(30) NOT NULL,
-        descripcion_categoria_cable VARCHAR(500) NOT NULL,
-        codigo_categoria_cable VARCHAR(10) NOT NULL,
-        imagen_categoria_cable VARCHAR(150),
-        fecha_categoria_cable DATETIME
-    );
-
-CREATE TABLE
-    tb_cables (
-        id_cable INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-        nombre_cable VARCHAR(50),
-        descripcion_cable VARCHAR(150),
-        estado_cable TINYINT not NULL,
-        fecha_cable DATE,
-        id_categoria_cable INT,
-        FOREIGN KEY (id_categoria_cable) REFERENCES tb_categorias_cables (id_categoria_cable) ON DELETE CASCADE,
-        id_administrador INT,
-        FOREIGN KEY (id_administrador) REFERENCES tb_administradores (id_administrador) ON DELETE CASCADE
-    );
-
-CREATE TABLE
-    tb_cable_suelto (
-        id_cable_suelto INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-        longitud_minima_cable_suelto DECIMAL(20, 2),
-        longitud_cable_suelto DECIMAL(10, 2),
-        fecha_cable_suelto DATETIME,
-        id_cable INT,
-        FOREIGN KEY (id_cable) REFERENCES tb_cables (id_cable) ON DELETE CASCADE,
-        id_administrador INT,
-        FOREIGN KEY (id_administrador) REFERENCES tb_administradores (id_administrador) ON DELETE CASCADE
-    );
-
-CREATE TABLE
-    tb_cable_rollo (
-        id_cable_rollo INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-        cantidad_minima_cable_rollo INT NOT NULL,
-        catidad_cable_rollo INT NOT NULL,
-        fecha_cable_rollo INT NOT NULL,
-        id_cable INT,
-        FOREIGN KEY (id_cable) REFERENCES tb_cables (id_cable) ON DELETE CASCADE,
+    tb_materiales (
+        id_material INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        nombre_material VARCHAR(50) NOT NULL,
+        descripcion_material VARCHAR(300),
+        categoria ENUM (
+            'Uso habitual',
+            'Material para CL200',
+            'Acometida especial',
+            'Subterráneo',
+            'Antihurto y telegestión'
+        ) NOT NULL,
+        codigo_material VARCHAR(6),
+        cantidad_minima_material INT,
+        cantidad_material INT NOT NULL,
+        fecha_material DATETIME NOT NULL,
         id_administrador INT,
         FOREIGN KEY (id_administrador) REFERENCES tb_administradores (id_administrador) ON DELETE CASCADE
     );
@@ -102,19 +88,6 @@ CREATE TABLE
         categoria_electrica VARCHAR(10),
         estado_herramienta TINYINT (1) NULL NULL,
         imagen_herramienta VARCHAR(300)
-    );
-
-CREATE TABLE
-    tb_administradores (
-        id_administrador INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-        nombre_administrador VARCHAR(50) NOt NULL,
-        apellido_administrador VARCHAR(50) NOT NULL,
-        correo_administrador VARCHAR(60) NOT NULL UNIQUE,
-        telefono_administrador VARCHAR(10),
-        clave_administrador VARCHAR(500) NOT NULL,
-        fecha_clave DATE NOT NULL,
-        codigo_clave VARCHAR(6) NOT NULL,
-        imagen_administrador VARCHAR(300)
     );
 
 CREATE TABLE
