@@ -47,36 +47,37 @@ CREATE TABLE
     );
 
 CREATE TABLE
-    tb_categorias_cables (
-        id_categoria_cable INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-        nombre_categoria_cable VARCHAR(30) NOT NULL,
-        descripcion_categoria_cable VARCHAR(500) NOT NULL,
-        codigo_categoria_cable VARCHAR(10) NOT NULL,
-        imagen_categoria_cable VARCHAR(150),
-        fecha_categoria_cable DATETIME
-    );
-
-CREATE TABLE
-    tb_cables (
-        id_cable INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-        nombre_cable VARCHAR(50),
-        descripcion_cable VARCHAR(150),
-        estado_cable TINYINT not NULL,
-        fecha_cable DATE,
-        id_categoria_cable INT,
-        FOREIGN KEY (id_categoria_cable) REFERENCES tb_categorias_cables (id_categoria_cable) ON DELETE CASCADE,
+    tb_conectores (
+        id_conector INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        nombre_conector VARCHAR(30) NOT NULL,
+        descripcion_conector VARCHAR(300),
+        codigo_conetor VARCHAR(6),
+        categoria_conector ENUM (
+            'Uso habitual',
+            'Material para CL200',
+            'Acometida espacial'
+        ) NOT NULL,
+        cantidad_minima_conector INT,
+        cantidad_conector INT,
+        fecha_conector DATETIME,
         id_administrador INT,
         FOREIGN KEY (id_administrador) REFERENCES tb_administradores (id_administrador) ON DELETE CASCADE
     );
 
 CREATE TABLE
-    tb_cable_suelto (
-        id_cable_suelto INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-        longitud_minima_cable_suelto DECIMAL(20, 2),
-        longitud_cable_suelto DECIMAL(10, 2),
-        fecha_cable_suelto DATETIME,
-        id_cable INT,
-        FOREIGN KEY (id_cable) REFERENCES tb_cables (id_cable) ON DELETE CASCADE,
+    tb_medidores (
+        id_medidor INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        nombre_medidor VARCHAR(30) NOT NULL,
+        descripcion_medidor VARCHAR(300),
+        codigo_medidor VARCHAR(6) NOT NULL,
+        categoria_medidor ENUM (
+            'Uso habitual',
+            'Material para CL200',
+            'Patron antihurto y telegestion'
+        ) NOT NULL,
+        cantidad_minima_medidor INT,
+        cantidad_medidor INT,
+        fecha_medidor DATETIME,
         id_administrador INT,
         FOREIGN KEY (id_administrador) REFERENCES tb_administradores (id_administrador) ON DELETE CASCADE
     );
@@ -84,11 +85,32 @@ CREATE TABLE
 CREATE TABLE
     tb_cable_rollo (
         id_cable_rollo INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        nombre_cable_rollo VARCHAR(30) NOT NULL,
+        descripcion_cable_rollo VARCHAR(300),
+        codigo_cable_rollo VARCHAR(6) NOT NULL,
+        categoria_cable_rollo ENUM ('Uso habitual') NOT NULL,
         cantidad_minima_cable_rollo INT NOT NULL,
         catidad_cable_rollo INT NOT NULL,
         fecha_cable_rollo INT NOT NULL,
-        id_cable INT,
-        FOREIGN KEY (id_cable) REFERENCES tb_cables (id_cable) ON DELETE CASCADE,
+        id_administrador INT,
+        FOREIGN KEY (id_administrador) REFERENCES tb_administradores (id_administrador) ON DELETE CASCADE
+    );
+
+CREATE TABLE
+    tb_cable_suelto (
+        id_cable_suelto INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        nombre_cable_suelto VARCHAR(30) NOT NULL,
+        descripcion_cable_suelto VARCHAR(300),
+        codigo_cable_suelto VARCHAR(6) NOT NULL,
+        categoria_cable_suelto ENUM (
+            'Material para CL200',
+            'Acometida especial',
+            'Subterráneo',
+            'Patron antihurto y telegestión'
+        ) NOT NULL,
+        cantidad_minima_cable_suelto INT NOT NULL,
+        catidad_cable_suelto INT NOT NULL,
+        fecha_cable_suelto INT NOT NULL,
         id_administrador INT,
         FOREIGN KEY (id_administrador) REFERENCES tb_administradores (id_administrador) ON DELETE CASCADE
     );
