@@ -1,6 +1,5 @@
 // ? constantes para completar las rutas api
-const CABLE_API = 'services/admin/cables.php';
-const CATEGORIA_CABLE_API = 'services/admin/categoria_cable.php';
+const MATERIALES_API = 'services/admin/materiales.php';
 
 // ? Constante para establecer el formulario de buscar.
 const SEARCH_FORM = document.getElementById('searchForm');
@@ -15,19 +14,20 @@ const SAVE_MODAL = new bootstrap.Modal('#saveModal'),
 
 // constantes para guardar o editar un registro
 const SAVE_FORM = document.getElementById('saveForm'),
-    ID_CABLE = document.getElementById('idCable'),
-    NOMBRE_CABLE = document.getElementById('nombreCable'),
-    DESCRIPCION_CABLE = document.getElementById('descripcionCable'),
-    ESTADO_CABLE = document.getElementById('estadoCable'),
-    LONGITUD_CABLE = document.getElementById('longitudCable'),
-    LONGITUD_MINIMA_CABLE = document.getElementById('longitudMinimaCable');
+    ID_MATERIAL = document.getElementById('idMaterial'),
+    NOMBRE_MATERIAL = document.getElementById('nombreMaterial'),
+    DESCRIPCION_MATERIAL = document.getElementById('descripcionMaterial'),
+    CATEGORIA_MATERIAL = document.getElementById('CategoriaMaterial'),
+    CODIGO_MATERIAL = document.getElementById('codigoMaterial'),
+    CANTIDAD_MINIMA_MATERIAL = document.getElementById('cantidadMinimaMaterial'),
+    CANTIDAD_MATERIAL = document.getElementById('cantidadMaterial');
 
 // ? método cuando el documento ha cargado con éxito 
 document.addEventListener('DOMContentLoaded', () => {
     // ? llama la función para llamar a traer el encabezado del documento
     loadTemplate();
     // ? llama la función para cargar la tabla de contenido
-    fillTable();
+    // fillTable();
 });
 
 // Método del evento para cuando se envía el formulario de buscar.
@@ -133,32 +133,51 @@ const fillTable = async (form = null, buscador) => {
 const openCreate = () => {
     // Se muestra la caja de diálogo con su título.
     SAVE_MODAL.show();
-    MODAL_TITLE.textContent = 'Agregar Cables';
+    MODAL_TITLE.textContent = 'Agregar Material';
     // Se prepara el formulario.
     SAVE_FORM.reset();
-    fillSelect(CATEGORIA_CABLE_API, 'readAll', 'categoriaCable');
 }
 
 // Método del evento para cuando se envía el formulario de guardar.
 SAVE_FORM.addEventListener('submit', async (event) => {
-    // Se evita recargar la página web después de enviar el formulario.
-    event.preventDefault();
-    // Se verifica la acción a realizar.
-    (ID_CABLE.value) ? action = 'updateRow' : action = 'createRow';
-    // Constante tipo objeto con los datos del formulario.
-    const FORM = new FormData(SAVE_FORM);
-    // Petición para guardar los datos del formulario.
-    const DATA = await fetchData(CABLE_API, action, FORM);
-    // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
-    if (DATA.status) {
-        // Se cierra la caja de diálogo.
-        SAVE_MODAL.hide();
-        // Se muestra un mensaje de éxito.
-        sweetAlert(1, DATA.message, true);
-        // Se carga nuevamente la tabla para visualizar los cambios.
-        fillTable();
-    } else {
-        sweetAlert(2, DATA.error, false);
+    event.preventDefault(); // Siempre prevenir el comportamiento por defecto primero
+    
+    // Obtener valores como números
+    const cantidad = parseInt(CANTIDAD_MATERIAL.value);
+    const cantidadMinima = parseInt(CANTIDAD_MINIMA_MATERIAL.value);
+    
+    // Validación en el cliente
+    if (isNaN(cantidad) || cantidad <= 0) {
+        sweetAlert(2, 'La cantidad debe ser un número entero positivo', false);
+        return;
+    }
+    
+    if (cantidad <= cantidadMinima) {
+        sweetAlert(2, `La cantidad debe ser mayor a la cantidad minima: (${cantidadMinima})`, false);
+        return;
+    }
+
+    // Verificar la acción a realizar
+    const action = ID_MATERIAL.value ? 'updateRow' : 'createRow';
+    
+    try {
+        // Constante tipo objeto con los datos del formulario
+        const FORM = new FormData(SAVE_FORM);
+        
+        // Petición para guardar los datos del formulario
+        const DATA = await fetchData(MATERIALES_API, action, FORM);
+        
+        // Manejar la respuesta
+        if (DATA.status) {
+            SAVE_MODAL.hide();
+            sweetAlert(1, DATA.message, true);
+            // fillTable(); // Descomentar si necesitas recargar la tabla
+        } else {
+            sweetAlert(2, DATA.error || 'Error desconocido', false);
+        }
+    } catch (error) {
+        console.error('Error en la solicitud:', error);
+        sweetAlert(2, 'Error al procesar la solicitud', false);
     }
 });
 
@@ -194,32 +213,32 @@ const openUpdate = async (id) => {
     }
 }
 
-    /*
-    *   Función asíncrona para eliminar un registro.
-    *   Parámetros: id (identificador del registro seleccionado).
-    *   Retorno: ninguno.
-    */
-    const openDelete = async (id) => {
-        // Llamada a la función para mostrar un mensaje de confirmación, capturando la respuesta en una constante.
-        const RESPONSE = await confirmAction('¿Desea eliminar el cable de forma permanente?');
-        // Se verifica la respuesta del mensaje.
-        if (RESPONSE) {
-            // Se define una constante tipo objeto con los datos del registro seleccionado.
-            const FORM = new FormData();
-            FORM.append('idCable', id);
-            // Petición para eliminar el registro seleccionado.
-            const DATA = await fetchData(CABLE_API, 'deleteRow', FORM);
-            // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
-            if (DATA.status) {
-                // Se muestra un mensaje de éxito.
-                await sweetAlert(1, DATA.message, true);
-                // Se carga nuevamente la tabla para visualizar los cambios.
-                fillTable();
-            } else {
-                sweetAlert(2, DATA.error, false);
-            }
+/*
+*   Función asíncrona para eliminar un registro.
+*   Parámetros: id (identificador del registro seleccionado).
+*   Retorno: ninguno.
+*/
+const openDelete = async (id) => {
+    // Llamada a la función para mostrar un mensaje de confirmación, capturando la respuesta en una constante.
+    const RESPONSE = await confirmAction('¿Desea eliminar el cable de forma permanente?');
+    // Se verifica la respuesta del mensaje.
+    if (RESPONSE) {
+        // Se define una constante tipo objeto con los datos del registro seleccionado.
+        const FORM = new FormData();
+        FORM.append('idCable', id);
+        // Petición para eliminar el registro seleccionado.
+        const DATA = await fetchData(CABLE_API, 'deleteRow', FORM);
+        // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
+        if (DATA.status) {
+            // Se muestra un mensaje de éxito.
+            await sweetAlert(1, DATA.message, true);
+            // Se carga nuevamente la tabla para visualizar los cambios.
+            fillTable();
+        } else {
+            sweetAlert(2, DATA.error, false);
         }
     }
+}
 
 // ? función asíncrona para ordenar los registros de diferentes formas que el  usuario  requiera
 
@@ -227,7 +246,7 @@ const readAllTable = async (form = null, buscador) => {
     // Se inicializa el contenido de la tabla.
     ROWS_FOUND.textContent = '';
     TABLE_BODY.innerHTML = '';
-    
+
     switch (buscador) {
         case 1:
             action = 'readByName';

@@ -2,22 +2,22 @@
 // se incluye la clase para  trabaja con la base de datos 
 require_once('../../helpers/database.php');
 // ? clase para controlar el comportamiento de la tabla de la base de datos
-class CablesHandler
+class MaterialHandler
 {
     // ? declaración de atributos para el manejo de la base de datos  
     protected $id = null;
     protected $nombre = null;
     protected $descripcion = null;
-    protected $cantidad = null;
-    protected $minima = null;
-    protected $estado = null;
     protected $categoria = null;
-    protected $administrador = null;
+    protected $codigo = null;
+    protected $minima = null;
+    protected $cantidad = null;
     protected $fecha = null;
+    protected $administrador = null;
 
     public function __construct()
     {
-        $this->fecha = date('Y-m-d'); // Formato año-mes-día
+        $this->fecha = date('Y-m-d H:i:s'); // Formato año-mes-día
     }
 
     public function getFecha()
@@ -54,9 +54,27 @@ class CablesHandler
 
     public function createRow()
     {
-        $sql = 'INSERT INTO `tb_cables`(`nombre_cable`, `descripcion_cable`, `longitud_minima_cable`, `longitud_cable`, `estado_cable`, `id_categoria_cable`, `fecha_creacion_cable`, `id_administrador`) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-        $params = array($this->nombre, $this->descripcion, $this->minima, $this->cantidad, $this->estado, $this->categoria, $this->fecha,  $_SESSION['idAdministrador']);
+        $sql = 'INSERT INTO `tb_materiales`(
+                    `nombre_material`,
+                    `descripcion_material`,
+                    `categoria_material`,
+                    `codigo_material`,
+                    `cantidad_minima_material`,
+                    `cantidad_material`,
+                    `fecha_material`,
+                    `id_administrador`
+                )
+                VALUES(
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?,
+                    ?
+                )';
+        $params = array($this->nombre, $this->descripcion, $this->categoria, $this->codigo, $this->minima, $this->cantidad, $this->fecha,  $_SESSION['idAdministrador']);
         return Database::executeRow($sql, $params);
     }
 
@@ -244,8 +262,8 @@ class CablesHandler
                     `fecha_creacion_cable` =?
                 WHERE
                     `id_cable` = ?';
-        $params = array($this->nombre, $this->descripcion, $this->minima, $this->cantidad, $this->estado, $this->categoria, $this->categoria, $this->id);
-        return database::executeRow($sql, $params);
+        // $params = array($this->nombre, $this->descripcion, $this->minima, $this->cantidad, $this->estado, $this->categoria, $this->categoria, $this->id);
+        // return database::executeRow($sql, $params);
     }
 
     public function DeleteRow()

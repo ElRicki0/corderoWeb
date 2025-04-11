@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../resources/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../resources/css/general.css">
+    <link rel="stylesheet" href="../../resources/css/bootstrap-icons.min.css">
+</head>
+
+<body>
+    <main>
+        <h2 id="mainTitle"></h2>
+        <!-- ? titulo principal -->
+        <div class="container-fluid">
+            <div class="row py-4">
+                <h3 class="fw-bold"> <i class="bi bi-box-seam-fill"></i> Control material
+                </h3>
+                <h6 class="fw-medium text-secondary">Bienvenido a la sección de gestión de la material. Aquí puedes
+                    administrar, agregar o modificar la información sobre el tipo de unidades y las cantidades que se
+                    poseen. <br>
+                    La tabla te permite eliminar, dar de baja, editar, ver las cantidades y clasificar por categorías
+                </h6>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="row justify-content-center g-4 px-2">
+                    <!-- Added g-4 for gap, py-3 for vertical padding, px-2 for horizontal padding -->
+                    <div class="col-auto"> <!-- Changed to col-auto for automatic width based on content -->
+                        <button type="button" class="py-4 btn btn-success" id="botongeneral">
+                            <h5 class="mb-0">Ver todas las categorías</h5> <!-- Added mb-0 to remove margin -->
+                        </button>
+                    </div>
+                    <div class="col-auto">
+                        <button type="button" class="py-4 btn btn-secondary" id="botonUsoCotidiano">
+                            <h5 class="mb-0">Uso cotidiano</h5>
+                        </button>
+                    </div>
+                    <div class="col-auto">
+                        <button type="button" class="py-4 btn btn-secondary" id="botonCL200">
+                            <h5 class="mb-0">Material para CL200</h5>
+                        </button>
+                    </div>
+                    <div class="col-auto">
+                        <button type="button" class="py-4 btn btn-secondary" id="botonAcomedidaEspecial">
+                            <h5 class="mb-0">Acometida especial</h5>
+                        </button>
+                    </div>
+                    <div class="col-auto">
+                        <button type="button" class="py-4 btn btn-secondary" id="botonSubterraneo">
+                            <h5 class="mb-0">Subterráneo</h5>
+                        </button>
+                    </div>
+                    <div class="col-auto">
+                        <button type="button" class="py-4 btn btn-secondary" id="botonAntiTele">
+                            <h5 class="mb-0">Patron antihurto y telegestión</h5>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ? Formulario de búsqueda -->
+        <div class="row">
+            <form class="col-sm-12 col-md-12 col-lg-10" id="searchForm">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 col-sm-12 mt-5">
+                        <input type="search" class="form-control custom-input border-2" id="search" name="search"
+                            placeholder="Buscador..." required>
+                    </div>
+                    <div class="col-lg-5 col-md-9 col-sm-9 d-flex flex-row align-items-center gap-2 mt-5">
+                        <!-- Grupo de botones -->
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-search"></i>
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="fillTable()">
+                                <i class="bi bi-arrow-counterclockwise"></i>
+                            </button>
+                            <button type="button" class="btn btn-warning" onclick="openCreate()">
+                                <i class="bi bi-clipboard-plus"></i>
+                            </button>
+                        </div>
+
+                        <!-- Dropdown -->
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                ordenar registros
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 1)">Alfabético</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 2)">Mayor
+                                        cantidad</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 3)">Menor
+                                        cantidad</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="readAllTable(null, 4)">Actualizado
+                                        recientemente</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <p id="rowsFound" class="text-white fw-bold mt-3"></p>
+        <!-- Contenedor para la tabla con scroll-->
+        <div id="cables" class="container justify-content-center row">
+        </div>
+        <!-- Modal agregar material -->
+        <div class="modal fade" id="saveModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content bg-dark text-white">
+                    <!-- Formulario saveForm -->
+                    <form id="saveForm">
+                        <!-- Campo oculto para asignar el id del registro al momento de modificar -->
+                        <input type="number" class="d-none" id="idMaterial" name="idMaterial">
+                        <form class="needs-validation">
+
+                            <!-- Body del modal -->
+                            <div class="modal-body">
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                    aria-label="Close"></button> <!-- Cambiar color del botón de cerrar -->
+                                <h1 class="fs-4 fw-bold text-center mb-4" id="modalTitle"> </h1>
+
+                                <!-- Inputs -->
+                                <div class="row gy-3">
+                                    <div class="col-6">
+                                        <label class="form-label">Nombre material</label>
+                                        <input id="nombreMaterial" name="nombreMaterial" class="form-control"
+                                            autocomplete="off" required placeholder="Ingrese el nombre del material...">
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Descripción material</label>
+                                        <textarea id="descripcionMaterial" name="descripcionMaterial" autocomplete="off"
+                                            class="form-control" required
+                                            placeholder="ingrese la descripción del material..."></textarea>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label">Categoría material</label>
+                                        <select id="CategoriaMaterial" name="CategoriaMaterial" class="form-select"
+                                            autocomplete="off" required>
+                                            <option selected>seleccione una categoría</option>
+                                            <option value="Uso habitual">Uso habitual</option>
+                                            <option value="Material para CL200">Material para CL200</option>
+                                            <option value="Acometida especial">Acometida Especial</option>
+                                            <option value="Subterráneo">Subterráneo</option>
+                                            <option value="Antihurto y telegestión">Antihurto y telegestión</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="codigoMaterial" class="form-label">Código material</label>
+                                        <input type="text" class="form-control" name="codigoMaterial"
+                                            id="codigoMaterial" placeholder="ingrese un código de 5 o 6 dígitos..."
+                                            oninput="formatCode(this)">
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label" for="codigoMaterial">Cantidad materiales
+                                        </label>
+                                        <input type="number" class="form-control" id="cantidadMaterial"
+                                            name="cantidadMaterial" placeholder="ingrese cantidad material...">
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label" for="cantidadMinimaMaterial">cantidad minima
+                                            material</label>
+                                        <input type="number" class="form-control" id="cantidadMinimaMaterial"
+                                            name="cantidadMinimaMaterial"
+                                            placeholder="ingrese cantidad minima material...">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3 p-3">
+                                <div class="col-12 text-end">
+                                    <button type="submit" class="btn btn-primary ps-4 pe-4">
+                                        <i class="bi bi-person-fill-add me-1"></i> Aceptar
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- IMPORTACIÓN DE ARCHIVOS JAVASCRIPT -->
+    <!-- Llamada al framework y librería de mensajes -->
+    <script src="../../resources/js/bootstrap.bundle.min.js"></script>
+    <script src="../../resources/js/sweetalert.min.js"></script>
+    <!-- Llamada al controlador general de la aplicación -->
+    <script type="text/javascript" src="../../controllers/utils/components.js"></script>
+    <!-- Llamada al controlador del sitio privado -->
+    <script type="text/javascript" src="../../controllers/utils/admin.js"></script>
+    <!-- Llamada al controlador de la página web -->
+    <script src="../../controllers/admin/bodega.js"></script>
+    <!-- ? Llama al validador de textos -->
+    <script src="../../controllers/utils/inputValidator.js"></script>
+    <!-- ! cambiar el link js para el controntrolador -->
+
+</body>
+
+</html>
