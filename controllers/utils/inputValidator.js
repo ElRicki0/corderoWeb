@@ -96,7 +96,7 @@ function formatPhoneNumber(input) {
     // codigo de validacion campo codigo
     function formatCode(input) {
         // 1. Remover caracteres no permitidos (números y guiones)
-        let cleanValue = input.value.replace(/[^0-9-]/g, '');
+        let cleanValue = input.value.replace(/[^0-9a-zA-Z-]/g, '');
         
         // 2. Eliminar guiones para contar dígitos
         let digitsOnly = cleanValue.replace(/-/g, '');

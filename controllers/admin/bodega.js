@@ -5,7 +5,7 @@ const MATERIALES_API = 'services/admin/materiales.php';
 const SEARCH_FORM = document.getElementById('searchForm');
 
 // Constantes para establecer los elementos de la tabla.
-const TABLE_BODY = document.getElementById('cables'),
+const TABLE_BODY = document.getElementById('registrosMaterial'),
     ROWS_FOUND = document.getElementById('rowsFound');
 
 // Constantes para establecer los elementos del componente Modal.
@@ -22,13 +22,46 @@ const SAVE_FORM = document.getElementById('saveForm'),
     CANTIDAD_MINIMA_MATERIAL = document.getElementById('cantidadMinimaMaterial'),
     CANTIDAD_MATERIAL = document.getElementById('cantidadMaterial');
 
+// constantes para los botones de categoría de bodega
+const BOTON_GENERAL = document.getElementById('botonGeneral'),
+    BOTON_USO_COTIDIANO = document.getElementById('botonUsoCotidiano'),
+    BOTON_CL200 = document.getElementById('botonCL200'),
+    BOTON_ACOMETIDA_ESPECIAL = document.getElementById('botonAcomedidaEspecial'),
+    BOTON_SUBTERRANEO = document.getElementById('botonSubterraneo'),
+    BOTON_ANTI_TELE = document.getElementById('botonAntiTele');
+
+// Obtener todos los botones relevantes
+const botones = [
+    BOTON_GENERAL,
+    BOTON_USO_COTIDIANO,
+    BOTON_CL200,
+    BOTON_ACOMETIDA_ESPECIAL,
+    BOTON_SUBTERRANEO,
+    BOTON_ANTI_TELE
+];
+
 // ? método cuando el documento ha cargado con éxito 
 document.addEventListener('DOMContentLoaded', () => {
     // ? llama la función para llamar a traer el encabezado del documento
     loadTemplate();
     // ? llama la función para cargar la tabla de contenido
-    // fillTable();
+    fillTable();
 });
+
+// Función para resetear todos los botones a 'btn-secondary'
+function resetearBotones() {
+    botones.forEach(boton => {
+        boton.classList.remove('btn-success', 'disabled');
+        boton.classList.add('btn-secondary');
+    });
+}
+
+// Función para activar un botón específico
+function activarBoton(boton) {
+    resetearBotones();
+    boton.classList.remove('btn-secondary');
+    boton.classList.add('btn-success', 'disabled');
+}
 
 // Método del evento para cuando se envía el formulario de buscar.
 SEARCH_FORM.addEventListener('submit', (event) => {
@@ -45,65 +78,71 @@ SEARCH_FORM.addEventListener('submit', (event) => {
 *   Parámetros: form (objeto opcional con los datos de búsqueda).
 *   Retorno: ninguno.
 */
-const fillTable = async (form = null, buscador) => {
+const fillTable = async (form = null) => {
     // Se inicializa el contenido de la tabla.
     ROWS_FOUND.textContent = '';
     TABLE_BODY.innerHTML = '';
     // Se verifica la acción a realizar.
     (form) ? action = 'searchRows' : action = 'readAll';
     // Petición para obtener los registros disponibles.
-    const DATA = await fetchData(CABLE_API, action, form);
+    const DATA = await fetchData(MATERIALES_API, action, form);
     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
     if (DATA.status) {
         // Se recorre el conjunto de registros (dataset) fila por fila a través del objeto row.
         DATA.dataset.forEach(row => {
-            // Se establece un icono para el estado del producto.
-            let icon;
-
-            switch (parseInt(row.estado_cable)) {
-                case 0:
-                    icon = 'bi bi-bookmark-star'; // Estado 0
+            let info;
+            // ? icono y texto para clasificar la categoría
+            switch (row.categoria_material) {
+                case 'Uso habitual':
+                    info = '<i class="bi bi-house-door"></i> Uso habitual';
                     break;
-                case 1:
-                    icon = 'bi bi-bookmark-star-fill'; // Estado 1
+                case 'Material para CL200':
+                    info = '<i class="bi bi-lightning-charge"></i> Material para CL200';
                     break;
-                case 2:
-                    icon = 'bi bi-truck'; // Estado 2
+                case 'Acometida especial':
+                    info = '<i class="bi bi-lightning-fill"></i> Acometida especial';
+                    break;
+                case 'Subterráneo':
+                    info = '<i class="bi bi-minecart-loaded"></i> Subterráneo';
+                    break;
+                case 'Antihurto y telegestión':
+                    info = '<i class="bi bi-shield-lock"></i> Antihurto y telegestión';
                     break;
                 default:
-                    icon = 'bi bi-question-circle-fill'; // Para estados no contemplados
+                    break;
             }
 
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
             TABLE_BODY.innerHTML += `
-                <div class="card text-bg-dark mb-5">
+            <div class="card text-bg-dark mb-5">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
-                            <img src="${SERVER_URL}images/cables/${row.imagen_categoria_cable}" width="200"
-                                class="rounded border border-primary" alt="Imagen de error"
-                                onerror="this.onerror=null; this.src='../../resources/images/error/404Cable.png';">
+                        <div class="col-lg-5 col-md-8 col-sm-12 text-center">
+                            <h5 class="text-white">Nombre del material</h5>
+                            <p class="card-title text-white">${row.nombre_material}</p>
+                            <h5 class="text-white">Descripción del material</h5>
+                            <p class="card-text text-white">${row.descripcion_material}</p>
+                            <h5 class="text-white">Código Material</h5>
+                            <p class="card-text text-white">${row.codigo_material} Unidades</p>
                         </div>
-                        <div class="col-lg-7 col-md-8 col-sm-12 text-center">
-                            <h5 class="text-white">Nombre del cable</h5>
-                            <p class="card-title text-white">${row.nombre_cable}</p>
-                            <h5 class="text-white">Descripción del cable</h5>
-                            <p class="card-text text-white">${row.descripcion_cable}</p>
-                            <h5 class="text-white">Longitud cable</h5>
-                            <p class="card-text text-white">${row.longitud_cable} Metros MT.</p>
-                            <h5 class="text-white">Longitud minima del cable</h5>
-                            <p class="card-text text-white">${row.longitud_minima_cable} Metros MT.</p>
-                            <h5 class="text-white">Estado del cable</h5>
-                            <p class="card-text text-white"><i class="${icon}"></i></p>
+                        <div class="col-lg-5 col-md-8 col-sm-12 text-center">
+                            <h5 class="text-white">Cantidad actual material</h5>
+                            <p class="card-text text-white">${row.cantidad_material} Metros MT.</p>
+                            <h5 class="text-white">Cantidad minima material</h5>
+                            <p class="card-text text-white">${row.cantidad_minima_material} Metros MT.</p>
                             <h5 class="text-white">Registro alterado por:</h5>
-                            <p class="card-text text-white">${row.nombre_administrador} ${row.apellido_administrador}</p>
+                            <p class="card-text text-white">${row.nombre_administrador} ${row.apellido_administrador}
+                            </p>
                         </div>
                         <div class="col-lg-2 col-md-12 col-sm-12 text-center mt-3">
-                            <div class="d-flex flex-column">
-                                <button class="btn btn-outline-light mb-2" onclick="openUpdate(${row.id_cable})">
+                            <div class="d-flex flex-column ">
+                                <div class="round bg-info rounded-3 text-dark mb-2">
+                                    <h5 class="card-text ">${info}</h5>
+                                </div>
+                                <button class="btn btn-outline-light mb-2" onclick="openUpdate(${row.id_material})">
                                     <i class="bi bi-pencil-square"></i> Editar Registro
                                 </button>
-                                <button class="btn btn-outline-light mb-2" onclick="openDelete(${row.id_cable})">
+                                <button class="btn btn-outline-light mb-2" onclick="openDelete(${row.id_material})">
                                     <i class="bi bi-trash"></i> Eliminar Registro
                                 </button>
                             </div>
@@ -141,17 +180,17 @@ const openCreate = () => {
 // Método del evento para cuando se envía el formulario de guardar.
 SAVE_FORM.addEventListener('submit', async (event) => {
     event.preventDefault(); // Siempre prevenir el comportamiento por defecto primero
-    
+
     // Obtener valores como números
     const cantidad = parseInt(CANTIDAD_MATERIAL.value);
     const cantidadMinima = parseInt(CANTIDAD_MINIMA_MATERIAL.value);
-    
+
     // Validación en el cliente
     if (isNaN(cantidad) || cantidad <= 0) {
         sweetAlert(2, 'La cantidad debe ser un número entero positivo', false);
         return;
     }
-    
+
     if (cantidad <= cantidadMinima) {
         sweetAlert(2, `La cantidad debe ser mayor a la cantidad minima: (${cantidadMinima})`, false);
         return;
@@ -159,19 +198,19 @@ SAVE_FORM.addEventListener('submit', async (event) => {
 
     // Verificar la acción a realizar
     const action = ID_MATERIAL.value ? 'updateRow' : 'createRow';
-    
+
     try {
         // Constante tipo objeto con los datos del formulario
         const FORM = new FormData(SAVE_FORM);
-        
+
         // Petición para guardar los datos del formulario
         const DATA = await fetchData(MATERIALES_API, action, FORM);
-        
+
         // Manejar la respuesta
         if (DATA.status) {
             SAVE_MODAL.hide();
             sweetAlert(1, DATA.message, true);
-            // fillTable(); // Descomentar si necesitas recargar la tabla
+            fillTable();
         } else {
             sweetAlert(2, DATA.error || 'Error desconocido', false);
         }
@@ -189,9 +228,9 @@ SAVE_FORM.addEventListener('submit', async (event) => {
 const openUpdate = async (id) => {
     // Se define un objeto con los datos del registro seleccionado.
     const FORM = new FormData();
-    FORM.append('idCable', id);
+    FORM.append('idMaterial', id);
     // Petición para obtener los datos del registro solicitado.
-    const DATA = await fetchData(CABLE_API, 'readOne', FORM);
+    const DATA = await fetchData(MATERIALES_API, 'readOne', FORM);
     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
     if (DATA.status) {
         // Se muestra la caja de diálogo con su título.
@@ -201,13 +240,13 @@ const openUpdate = async (id) => {
         SAVE_FORM.reset();
         // Se inicializan los campos con los datos.
         const ROW = DATA.dataset;
-        ID_CABLE.value = ROW.id_cable;
-        NOMBRE_CABLE.value = ROW.nombre_cable;
-        DESCRIPCION_CABLE.value = ROW.descripcion_cable;
-        LONGITUD_CABLE.value = ROW.longitud_cable;
-        LONGITUD_MINIMA_CABLE.value = ROW.longitud_minima_cable;
-        ESTADO_CABLE.value = ROW.estado_cable;
-        fillSelect(CATEGORIA_CABLE_API, 'readAll', 'categoriaCable', parseInt(ROW.id_categoria_cable));
+        ID_MATERIAL.value = ROW.id_material;
+        NOMBRE_MATERIAL.value = ROW.nombre_material;
+        DESCRIPCION_MATERIAL.value = ROW.descripcion_material;
+        CATEGORIA_MATERIAL.value = ROW.categoria_material;
+        CODIGO_MATERIAL.value = ROW.codigo_material;
+        CANTIDAD_MINIMA_MATERIAL.value = ROW.cantidad_minima_material;
+        CANTIDAD_MATERIAL.value = ROW.cantidad_material;
     } else {
         sweetAlert(2, DATA.error, false);
     }
@@ -220,14 +259,14 @@ const openUpdate = async (id) => {
 */
 const openDelete = async (id) => {
     // Llamada a la función para mostrar un mensaje de confirmación, capturando la respuesta en una constante.
-    const RESPONSE = await confirmAction('¿Desea eliminar el cable de forma permanente?');
+    const RESPONSE = await confirmAction('¿Desea eliminar el materia de forma permanente?');
     // Se verifica la respuesta del mensaje.
     if (RESPONSE) {
         // Se define una constante tipo objeto con los datos del registro seleccionado.
         const FORM = new FormData();
-        FORM.append('idCable', id);
+        FORM.append('idMaterial', id);
         // Petición para eliminar el registro seleccionado.
-        const DATA = await fetchData(CABLE_API, 'deleteRow', FORM);
+        const DATA = await fetchData(MATERIALES_API, 'deleteRow', FORM);
         // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
         if (DATA.status) {
             // Se muestra un mensaje de éxito.
@@ -240,8 +279,131 @@ const openDelete = async (id) => {
     }
 }
 
-// ? función asíncrona para ordenar los registros de diferentes formas que el  usuario  requiera
+// *función asíncrona para mostrar una categoría especifica o mostrar todos los registros 
+const showCategory = async (category, form) => {
+    let info;
+    switch (category) {
+        case 1:
+            info = 'readAll';
+            estado = 1;
+            activarBoton(BOTON_GENERAL);
+            break;
+        case 2:
+            info = 'readByCategory1';
+            estado = 2;
+            activarBoton(BOTON_USO_COTIDIANO);
+            break;
+        case 3:
+            info = 'readByCategory2';
+            estado = 3;
+            activarBoton(BOTON_CL200);
+            break;
+        case 4:
+            info = 'readByCategory3';
+            estado = 4;
+            activarBoton(BOTON_ACOMETIDA_ESPECIAL);
+            break;
+        case 5:
+            info = 'readByCategory4';
+            estado = 5;
+            activarBoton(BOTON_SUBTERRANEO);
+            break;
+        case 6:
+            info = 'readByCategory5';
+            estado = 6;
+            activarBoton(BOTON_ANTI_TELE);
+            break;
+        default:
+            // Opcional: Resetear todos si no hay coincidencia
+            resetearBotones();
+            BOTON_GENERAL.classList.add('btn-success'); // Por defecto
+            break;
+    }
+    // Se inicializa el contenido de la tabla.
+    TABLE_BODY.innerHTML = '';
+    // Petición para obtener los registros disponibles.
+    const DATA = await fetchData(MATERIALES_API, info, form);
+    // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
+    if (DATA.status) {
+        // Se recorre el conjunto de registros (dataset) fila por fila a través del objeto row.
+        DATA.dataset.forEach(row => {
+            let info;
+            // ? icono y texto para clasificar la categoría
+            switch (row.categoria_material) {
+                case 'Uso habitual':
+                    info = '<i class="bi bi-house-door"></i> Uso habitual';
+                    break;
+                case 'Material para CL200':
+                    info = '<i class="bi bi-lightning-charge"></i> Material para CL200';
+                    break;
+                case 'Acometida especial':
+                    info = '<i class="bi bi-lightning-fill"></i> Acometida especial';
+                    break;
+                case 'Subterráneo':
+                    info = '<i class="bi bi-minecart-loaded"></i> Subterráneo';
+                    break;
+                case 'Antihurto y telegestión':
+                    info = '<i class="bi bi-shield-lock"></i> Antihurto y telegestión';
+                    break;
+                default:
+                    break;
+            }
 
+            // Se crean y concatenan las filas de la tabla con los datos de cada registro.
+            TABLE_BODY.innerHTML += `
+            <div class="card text-bg-dark mb-5">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-5 col-md-8 col-sm-12 text-center">
+                            <h5 class="text-white">Nombre del material</h5>
+                            <p class="card-title text-white">${row.nombre_material}</p>
+                            <h5 class="text-white">Descripción del material</h5>
+                            <p class="card-text text-white">${row.descripcion_material}</p>
+                            <h5 class="text-white">Código Material</h5>
+                            <p class="card-text text-white">${row.codigo_material} Unidades</p>
+                        </div>
+                        <div class="col-lg-5 col-md-8 col-sm-12 text-center">
+                            <h5 class="text-white">Cantidad actual material</h5>
+                            <p class="card-text text-white">${row.cantidad_material} Metros MT.</p>
+                            <h5 class="text-white">Cantidad minima material</h5>
+                            <p class="card-text text-white">${row.cantidad_minima_material} Metros MT.</p>
+                            <h5 class="text-white">Registro alterado por:</h5>
+                            <p class="card-text text-white">${row.nombre_administrador} ${row.apellido_administrador}
+                            </p>
+                        </div>
+                        <div class="col-lg-2 col-md-12 col-sm-12 text-center mt-3">
+                            <div class="d-flex flex-column ">
+                                <div class="round bg-info rounded-3 text-dark mb-2">
+                                    <h5 class="card-text ">${info}</h5>
+                                </div>
+                                <button class="btn btn-outline-light mb-2" onclick="openUpdate(${row.id_material})">
+                                    <i class="bi bi-pencil-square"></i> Editar Registro
+                                </button>
+                                <button class="btn btn-outline-light mb-2" onclick="openDelete(${row.id_material})">
+                                    <i class="bi bi-trash"></i> Eliminar Registro
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+        });
+        // Se muestra un mensaje de acuerdo con el resultado.
+        ROWS_FOUND.textContent = DATA.message;
+    } else {
+        sweetAlert(4, DATA.error, true);
+        TABLE_BODY.innerHTML += `
+        <div class="col-5 justify-content-center align-items-center">
+                <img src="../../resources/images/error/404iNFORMACION.png" class="card-img-top" alt="ERROR CARGAR IMAGEN">
+            </div>
+        `
+    }
+}
+
+
+// ? función asíncrona para ordenar los registros de diferentes formas que el  usuario  requiera
+// ! terminar esto para clasificar los datos
 const readAllTable = async (form = null, buscador) => {
     // Se inicializa el contenido de la tabla.
     ROWS_FOUND.textContent = '';
@@ -249,13 +411,13 @@ const readAllTable = async (form = null, buscador) => {
 
     switch (buscador) {
         case 1:
-            action = 'readByName';
+            action = 'readAll';
             break;
         case 2:
-            action = 'readByLengthDesc';
+            action = 'readByMax';
             break;
         case 3:
-            action = 'readByLengthAsc';
+            action = 'readByMin';
             break;
         case 4:
             action = 'readByModify';
@@ -263,66 +425,72 @@ const readAllTable = async (form = null, buscador) => {
         default:
     }
     // Petición para obtener los registros disponibles.
-    const DATA = await fetchData(CABLE_API, action, form);
+    const DATA = await fetchData(MATERIALES_API, action, form);
 
 
     if (DATA.status) {
-        // Se recorre el conjunto de registros (dataset) fila por fila a través del objeto row.
-        DATA.dataset.forEach(row => {
-            // Se establece un icono para el estado del producto.
-            let icon;
-
-            switch (parseInt(row.estado_cable)) {
-                case 0:
-                    icon = 'bi bi-bookmark-star'; // Estado 0
+         // Se recorre el conjunto de registros (dataset) fila por fila a través del objeto row.
+         DATA.dataset.forEach(row => {
+            let info;
+            // ? icono y texto para clasificar la categoría
+            switch (row.categoria_material) {
+                case 'Uso habitual':
+                    info = '<i class="bi bi-house-door"></i> Uso habitual';
                     break;
-                case 1:
-                    icon = 'bi bi-bookmark-star-fill'; // Estado 1
+                case 'Material para CL200':
+                    info = '<i class="bi bi-lightning-charge"></i> Material para CL200';
                     break;
-                case 2:
-                    icon = 'bi bi-truck'; // Estado 2
+                case 'Acometida especial':
+                    info = '<i class="bi bi-lightning-fill"></i> Acometida especial';
+                    break;
+                case 'Subterráneo':
+                    info = '<i class="bi bi-minecart-loaded"></i> Subterráneo';
+                    break;
+                case 'Antihurto y telegestión':
+                    info = '<i class="bi bi-shield-lock"></i> Antihurto y telegestión';
                     break;
                 default:
-                    icon = 'bi bi-question-circle-fill'; // Para estados no contemplados
+                    break;
             }
+
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
             TABLE_BODY.innerHTML += `
-<div class="card text-bg-dark mb-5">
-    <div class="card-body">
-        <div class="row">
-                <div class="col-lg-3 col-md-4 col-sm-12 d-flex justify-content-center align-items-center">
-                    <img src="${SERVER_URL}images/cables/${row.imagen_categoria_cable}" width="200"
-                        class="rounded border border-primary" alt="Imagen de error"
-                        onerror="this.onerror=null; this.src='../../resources/images/error/404Cable.png';">
-                </div>
-                <div class="col-lg-7 col-md-8 col-sm-12 text-center">
-                    <h5 class="text-white">Nombre del cable</h5>
-                    <p class="card-title text-white">${row.nombre_cable}</p>
-                    <h5 class="text-white">Descripción del cable</h5>
-                    <p class="card-text text-white">${row.descripcion_cable}</p>
-                    <h5 class="text-white">Longitud cable</h5>
-                    <p class="card-text text-white">${row.longitud_cable} Metros MT.</p>
-                    <h5 class="text-white">Longitud minima del cable</h5>
-                    <p class="card-text text-white">${row.longitud_minima_cable} Metros MT.</p>
-                    <h5 class="text-white">Estado del cable</h5>
-                    <p class="card-text text-white"><i class="${icon}"></i></p>
-                    <h5 class="text-white">Registro alterado por:</h5>
-                    <p class="card-text text-white">${row.nombre_administrador} ${row.apellido_administrador}</p>
-                </div>
-                <div class="col-lg-2 col-md-12 col-sm-12 text-center mt-3">
-                    <div class="d-flex flex-column">
-                        <button class="btn btn-outline-light mb-2" onclick="openUpdate(${row.id_cable})">
-                            <i class="bi bi-pencil-square"></i> Editar Registro
-                        </button>
-                        <button class="btn btn-outline-light mb-2" onclick="openDelete(${row.id_cable})">
-                            <i class="bi bi-trash"></i> Eliminar Registro
-                        </button>
+            <div class="card text-bg-dark mb-5">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-5 col-md-8 col-sm-12 text-center">
+                            <h5 class="text-white">Nombre del material</h5>
+                            <p class="card-title text-white">${row.nombre_material}</p>
+                            <h5 class="text-white">Descripción del material</h5>
+                            <p class="card-text text-white">${row.descripcion_material}</p>
+                            <h5 class="text-white">Código Material</h5>
+                            <p class="card-text text-white">${row.codigo_material} Unidades</p>
+                        </div>
+                        <div class="col-lg-5 col-md-8 col-sm-12 text-center">
+                            <h5 class="text-white">Cantidad actual material</h5>
+                            <p class="card-text text-white">${row.cantidad_material} Metros MT.</p>
+                            <h5 class="text-white">Cantidad minima material</h5>
+                            <p class="card-text text-white">${row.cantidad_minima_material} Metros MT.</p>
+                            <h5 class="text-white">Registro alterado por:</h5>
+                            <p class="card-text text-white">${row.nombre_administrador} ${row.apellido_administrador}
+                            </p>
+                        </div>
+                        <div class="col-lg-2 col-md-12 col-sm-12 text-center mt-3">
+                            <div class="d-flex flex-column ">
+                                <div class="round bg-info rounded-3 text-dark mb-2">
+                                    <h5 class="card-text ">${info}</h5>
+                                </div>
+                                <button class="btn btn-outline-light mb-2" onclick="openUpdate(${row.id_material})">
+                                    <i class="bi bi-pencil-square"></i> Editar Registro
+                                </button>
+                                <button class="btn btn-outline-light mb-2" onclick="openDelete(${row.id_material})">
+                                    <i class="bi bi-trash"></i> Eliminar Registro
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
             `;
         });
         // Se muestra un mensaje de acuerdo con el resultado.

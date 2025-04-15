@@ -64,7 +64,7 @@ CREATE TABLE
         id_material INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
         nombre_material VARCHAR(50) NOT NULL,
         descripcion_material VARCHAR(300),
-        categoria ENUM (
+        categoria_material ENUM (
             'Uso habitual',
             'Material para CL200',
             'Acometida especial',

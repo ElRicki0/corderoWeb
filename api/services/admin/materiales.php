@@ -31,7 +31,7 @@ if (isset($_GET['action'])) {
                     !$material->setNombre($_POST['nombreMaterial']) or
                     !$material->setDescripcion($_POST['descripcionMaterial']) or
                     !$material->setCategoria($_POST['CategoriaMaterial']) or
-                    !$material->setCodigo($_POST['codigoMaterial'])or
+                    !$material->setCodigo($_POST['codigoMaterial']) or
                     !$material->setCantidad($_POST['cantidadMaterial']) or
                     !$material->setMinimo($_POST['cantidadMinimaMaterial'])
                 ) {
@@ -48,31 +48,63 @@ if (isset($_GET['action'])) {
                     $result['status'] = 1;
                     $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
                 } else {
-                    $result['error'] = 'No existen cables registrados';
+                    $result['error'] = 'No existen  materiales registrados';
                 }
                 break;
-            case 'readByName':
-                if ($result['dataset'] = $material->readByName()) {
+            case 'readByCategory1':
+                if ($result['dataset'] = $material->readByCategory1()) {
                     $result['status'] = 1;
                     $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
                 } else {
-                    $result['error'] = 'No existen cables registrados';
+                    $result['error'] = 'No existen  materiales registrados';
                 }
                 break;
-            case 'readByLengthDesc':
-                if ($result['dataset'] = $material->readByLengthDesc()) {
+            case 'readByCategory2':
+                if ($result['dataset'] = $material->readByCategory2()) {
                     $result['status'] = 1;
                     $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
                 } else {
-                    $result['error'] = 'No existen cables registrados';
+                    $result['error'] = 'No existen  materiales registrados';
                 }
                 break;
-            case 'readByLengthAsc':
-                if ($result['dataset'] = $material->readByLengthAsc()) {
+            case 'readByCategory3':
+                if ($result['dataset'] = $material->readByCategory3()) {
                     $result['status'] = 1;
                     $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
                 } else {
-                    $result['error'] = 'No existen cables registrados';
+                    $result['error'] = 'No existen  materiales registrados';
+                }
+                break;
+            case 'readByCategory4':
+                if ($result['dataset'] = $material->readByCategory4()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen  materiales registrados';
+                }
+                break;
+            case 'readByCategory5':
+                if ($result['dataset'] = $material->readByCategory5()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen  materiales registrados';
+                }
+                break;
+            case 'readByMax':
+                if ($result['dataset'] = $material->readByMax()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen  materiales registrados';
+                }
+                break;
+            case 'readByMin':
+                if ($result['dataset'] = $material->readByMin()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen  materiales registrados';
                 }
                 break;
             case 'readByModify':
@@ -80,11 +112,11 @@ if (isset($_GET['action'])) {
                     $result['status'] = 1;
                     $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
                 } else {
-                    $result['error'] = 'No existen cables registrados';
+                    $result['error'] = 'No existen  materiales registrados';
                 }
                 break;
             case 'readOne':
-                if (!$material->setId($_POST['idCable'])) {
+                if (!$material->setId($_POST['idMaterial'])) {
                     $result['error'] = $material->getDataError();
                 } elseif ($result['dataset'] = $material->readOne()) {
                     $result['status'] = 1;
@@ -93,57 +125,41 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'Cable inexistente';
                 }
                 break;
-            case 'readAllOne':
-                if ($result['dataset'] = $material->readAllOne()) {
+            case 'updateRow':
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$material->setId($_POST['idMaterial']) or
+                    !$material->setNombre($_POST['nombreMaterial']) or
+                    !$material->setDescripcion($_POST['descripcionMaterial']) or
+                    !$material->setCategoria($_POST['CategoriaMaterial']) or
+                    !$material->setCodigo($_POST['codigoMaterial']) or
+                    !$material->setCantidad($_POST['cantidadMaterial']) or
+                    !$material->setMinimo($_POST['cantidadMinimaMaterial'])
+                ) {
+                    $result['error'] = $material->getDataError();
+                } elseif ($material->UpdateRow()) {
                     $result['status'] = 1;
-                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                    $result['message'] = 'Material editado correctamente';
                 } else {
-                    $result['error'] = 'No existen cables registrados';
+                    $result['error'] = 'Error al editar el material';
                 }
                 break;
-            case 'cantidadRollosCategoria':
-                if ($result['dataset'] = $material->cantidadRollosCategoria()) {
+            case 'SubtractRow':
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$material->setCategoria($_POST['CategoriaMaterial'])
+                ) {
+                    $result['error'] = $material->getDataError();
+                } elseif ($material->SubtractRow()) {
                     $result['status'] = 1;
+                    $result['message'] = 'Material restado correctamente';
                 } else {
-                    $result['error'] = 'No hay datos disponibles';
+                    $result['error'] = 'Error al restar el material';
                 }
                 break;
-            case 'estadoCantidadesCables':
-                if ($result['dataset'] = $material->estadoCantidadesCables()) {
-                    $result['status'] = 1;
-                } else {
-                    $result['error'] = 'No hay datos disponibles';
-                }
-                break;
-            case 'estadoRolloscables':
-                if ($result['dataset'] = $material->estadoRolloscables()) {
-                    $result['status'] = 1;
-                } else {
-                    $result['error'] = 'No hay datos disponibles';
-                }
-                break;
-            // case 'updateRow':
-            //     $_POST = Validator::validateForm($_POST);
-            //     if (
-            //         !$material->setId($_POST['idCable']) or
-            //         !$material->setNombre($_POST['nombreCable']) or
-            //         !$material->setDescripcion($_POST['descripcionCable']) or
-            //         !$material->setLongitud($_POST['longitudCable']) or
-            //         !$material->setMinimo($_POST['longitudMinimaCable']) or
-            //         !$material->setCategoria($_POST['categoriaCable']) or
-            //         !$material->setEstado($_POST['estadoCable'])
-            //     ) {
-            //         $result['error'] = $material->getDataError();
-            //     } elseif ($material->UpdateRow()) {
-            //         $result['status'] = 1;
-            //         $result['message'] = 'Cable editado correctamente';
-            //     } else {
-            //         $result['error'] = 'Error al editar la unidad';
-            //     }
-            //     break;
             case 'deleteRow':
                 if (
-                    !$material->setId($_POST['idCable'])
+                    !$material->setId($_POST['idMaterial'])
                 ) {
                     $result['error'] = $material->getDataError();
                 } elseif ($material->deleteRow()) {

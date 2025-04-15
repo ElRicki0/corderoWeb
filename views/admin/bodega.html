@@ -30,33 +30,39 @@
                 <div class="row justify-content-center g-4 px-2">
                     <!-- Added g-4 for gap, py-3 for vertical padding, px-2 for horizontal padding -->
                     <div class="col-auto"> <!-- Changed to col-auto for automatic width based on content -->
-                        <button type="button" class="py-4 btn btn-success" id="botongeneral">
-                            <h5 class="mb-0">Ver todas las categorías</h5> <!-- Added mb-0 to remove margin -->
+                        <button type="button" class="py-4 btn btn-success disabled" onclick="showCategory(1)"
+                            id="botonGeneral">
+                            <h5 class="mb-0" onclick="fillTable()">Ver todas las categorías</h5>
+                            <!-- Added mb-0 to remove margin -->
                         </button>
                     </div>
                     <div class="col-auto">
-                        <button type="button" class="py-4 btn btn-secondary" id="botonUsoCotidiano">
-                            <h5 class="mb-0">Uso cotidiano</h5>
+                        <button type="button" class="py-4 btn btn-secondary" onclick="showCategory(2)"
+                            id="botonUsoCotidiano">
+                            <h5 class="mb-0"><i class="bi bi-house-door"></i> Uso cotidiano</h5>
                         </button>
                     </div>
                     <div class="col-auto">
-                        <button type="button" class="py-4 btn btn-secondary" id="botonCL200">
-                            <h5 class="mb-0">Material para CL200</h5>
+                        <button type="button" class="py-4 btn btn-secondary" onclick="showCategory(3)" id="botonCL200">
+                            <h5 class="mb-0"><i class="bi bi-lightning-charge"></i> Material para CL200</h5>
                         </button>
                     </div>
                     <div class="col-auto">
-                        <button type="button" class="py-4 btn btn-secondary" id="botonAcomedidaEspecial">
-                            <h5 class="mb-0">Acometida especial</h5>
+                        <button type="button" class="py-4 btn btn-secondary" onclick="showCategory(4)"
+                            id="botonAcomedidaEspecial">
+                            <h5 class="mb-0"><i class="bi bi-lightning-fill"></i> Acometida especial</h5>
                         </button>
                     </div>
                     <div class="col-auto">
-                        <button type="button" class="py-4 btn btn-secondary" id="botonSubterraneo">
-                            <h5 class="mb-0">Subterráneo</h5>
+                        <button type="button" class="py-4 btn btn-secondary" onclick="showCategory(5)"
+                            id="botonSubterraneo">
+                            <h5 class="mb-0"><i class="bi bi-minecart-loaded"></i> Subterráneo</h5>
                         </button>
                     </div>
                     <div class="col-auto">
-                        <button type="button" class="py-4 btn btn-secondary" id="botonAntiTele">
-                            <h5 class="mb-0">Patron antihurto y telegestión</h5>
+                        <button type="button" class="py-4 btn btn-secondary" onclick="showCategory(6)"
+                            id="botonAntiTele">
+                            <h5 class="mb-0"> <i class="bi bi-shield-lock"></i> Patron antihurto y telegestión</h5>
                         </button>
                     </div>
                 </div>
@@ -105,10 +111,13 @@
                 </div>
             </form>
         </div>
+
         <p id="rowsFound" class="text-white fw-bold mt-3"></p>
         <!-- Contenedor para la tabla con scroll-->
-        <div id="cables" class="container justify-content-center row">
+        <div id="registrosMaterial" class="container justify-content-center row">
+
         </div>
+
         <!-- Modal agregar material -->
         <div class="modal fade" id="saveModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -183,6 +192,11 @@
                 </div>
             </div>
         </div>
+
+        <!-- modal para alterar la cantidad del material -->
+        <div class="modal fade" id="materialModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog"></div>
+        </div>
     </main>
     <!-- IMPORTACIÓN DE ARCHIVOS JAVASCRIPT -->
     <!-- Llamada al framework y librería de mensajes -->
@@ -192,11 +206,10 @@
     <script type="text/javascript" src="../../controllers/utils/components.js"></script>
     <!-- Llamada al controlador del sitio privado -->
     <script type="text/javascript" src="../../controllers/utils/admin.js"></script>
-    <!-- Llamada al controlador de la página web -->
-    <script src="../../controllers/admin/bodega.js"></script>
     <!-- ? Llama al validador de textos -->
     <script src="../../controllers/utils/inputValidator.js"></script>
-    <!-- ! cambiar el link js para el controntrolador -->
+    <!-- Llamada al controlador de la página web -->
+    <script src="../../controllers/admin/bodega.js"></script>
 
 </body>
 
