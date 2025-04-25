@@ -12,9 +12,22 @@ const TABLE_BODY = document.getElementById('registrosMaterial'),
 const SAVE_MODAL = new bootstrap.Modal('#saveModal'),
     MODAL_TITLE = document.getElementById('modalTitle');
 
+// Constantes para mostrar el modal para actualizar la cantidad de los materiales.
+const MATERIAL_MODAL = new bootstrap.Modal('#materialModal'),
+    TIPO_MATERIAL_MODAL = new bootstrap.Modal('#TipoMaterialModal'),
+    MATERIAL_TITTLE = document.getElementById('TipoAltMaterial');
+
+// constantes para mostrar y preparar los datos del modal
+const ID_CANTIDAD_TIPO_MATERIAL = document.getElementById('idTipoMaterialCantidad'),
+    QUANTITY_FORM = document.getElementById('updateQuantityForm'),
+    CANTIDAD_ACTUAL_MATERIAL = document.getElementById('cantidadActualMaterial'),
+    CANTIDAD_ACTUALIZADA_MATERIAL = document.getElementById('cantidadActualizadaMaterial'),
+    ACTUALIZAR_MATERIAL = document.getElementById('actualizarMaterial');
+
 // constantes para guardar o editar un registro
 const SAVE_FORM = document.getElementById('saveForm'),
     ID_MATERIAL = document.getElementById('idMaterial'),
+    ID_MATERIAL_CONTENIDO = document.getElementById('idMaterialCantidad'),
     NOMBRE_MATERIAL = document.getElementById('nombreMaterial'),
     DESCRIPCION_MATERIAL = document.getElementById('descripcionMaterial'),
     CATEGORIA_MATERIAL = document.getElementById('CategoriaMaterial'),
@@ -40,12 +53,14 @@ const botones = [
     BOTON_ANTI_TELE
 ];
 
+let TIPO_CANTIDAD_MATERIAL, CANTIDAD_Mt;
+
 // ? método cuando el documento ha cargado con éxito 
 document.addEventListener('DOMContentLoaded', () => {
     // ? llama la función para llamar a traer el encabezado del documento
     loadTemplate();
     // ? llama la función para cargar la tabla de contenido
-    fillTable();
+    readAllTable(null, 1);
 });
 
 // Función para resetear todos los botones a 'btn-secondary'
@@ -70,112 +85,8 @@ SEARCH_FORM.addEventListener('submit', (event) => {
     // Constante tipo objeto con los datos del formulario.
     const FORM = new FormData(SEARCH_FORM);
     // Llamada a la función para llenar la tabla con los resultados de la búsqueda.
-    fillTable(FORM);
+    readAllTable(FORM);
 });
-
-/*
-*   Función asíncrona para llenar la tabla con los registros disponibles.
-*   Parámetros: form (objeto opcional con los datos de búsqueda).
-*   Retorno: ninguno.
-*/
-const fillTable = async (form = null) => {
-    // Se inicializa el contenido de la tabla.
-    ROWS_FOUND.textContent = '';
-    TABLE_BODY.innerHTML = '';
-    // Se verifica la acción a realizar.
-    (form) ? action = 'searchRows' : action = 'readAll';
-    // Petición para obtener los registros disponibles.
-    const DATA = await fetchData(MATERIALES_API, action, form);
-    // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
-    if (DATA.status) {
-        // Se recorre el conjunto de registros (dataset) fila por fila a través del objeto row.
-        DATA.dataset.forEach(row => {
-            let info;
-            // ? icono y texto para clasificar la categoría
-            switch (row.categoria_material) {
-                case 'Uso habitual':
-                    info = '<i class="bi bi-house-door"></i> Uso habitual';
-                    break;
-                case 'Material para CL200':
-                    info = '<i class="bi bi-lightning-charge"></i> Material para CL200';
-                    break;
-                case 'Acometida especial':
-                    info = '<i class="bi bi-lightning-fill"></i> Acometida especial';
-                    break;
-                case 'Subterráneo':
-                    info = '<i class="bi bi-minecart-loaded"></i> Subterráneo';
-                    break;
-                case 'Antihurto y telegestión':
-                    info = '<i class="bi bi-shield-lock"></i> Antihurto y telegestión';
-                    break;
-                default:
-                    break;
-            }
-
-            // Se crean y concatenan las filas de la tabla con los datos de cada registro.
-            TABLE_BODY.innerHTML += `
-            <div class="card text-bg-dark mb-5">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-5 col-md-8 col-sm-12 text-center">
-                            <h5 class="text-white">Nombre del material</h5>
-                            <p class="card-title text-white">${row.nombre_material}</p>
-                            <h5 class="text-white">Descripción del material</h5>
-                            <p class="card-text text-white">${row.descripcion_material}</p>
-                            <h5 class="text-white">Código Material</h5>
-                            <p class="card-text text-white">${row.codigo_material} Unidades</p>
-                        </div>
-                        <div class="col-lg-5 col-md-8 col-sm-12 text-center">
-                            <h5 class="text-white">Cantidad actual material</h5>
-                            <p class="card-text text-white">${row.cantidad_material} Metros MT.</p>
-                            <h5 class="text-white">Cantidad minima material</h5>
-                            <p class="card-text text-white">${row.cantidad_minima_material} Metros MT.</p>
-                            <h5 class="text-white">Registro alterado por:</h5>
-                            <p class="card-text text-white">${row.nombre_administrador} ${row.apellido_administrador}
-                            </p>
-                        </div>
-                        <div class="col-lg-2 col-md-12 col-sm-12 text-center mt-3">
-                            <div class="d-flex flex-column ">
-                                <div class="round bg-info rounded-3 text-dark mb-2">
-                                    <h5 class="card-text ">${info}</h5>
-                                </div>
-                                <button class="btn btn-outline-light mb-2" onclick="openUpdate(${row.id_material})">
-                                    <i class="bi bi-pencil-square"></i> Editar Registro
-                                </button>
-                                <button class="btn btn-outline-light mb-2" onclick="openDelete(${row.id_material})">
-                                    <i class="bi bi-trash"></i> Eliminar Registro
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            `;
-        });
-        // Se muestra un mensaje de acuerdo con el resultado.
-        ROWS_FOUND.textContent = DATA.message;
-    } else {
-        sweetAlert(4, DATA.error, true);
-        TABLE_BODY.innerHTML += `
-        <div class="col-5 justify-content-center align-items-center">
-                <img src="../../resources/images/error/404iNFORMACION.png" class="card-img-top" alt="ERROR CARGAR IMAGEN">
-            </div>
-        `
-    }
-}
-
-/*
-*   Función para preparar el formulario al momento de insertar un registro.
-*   Parámetros: ninguno.
-*   Retorno: ninguno.
-*/
-const openCreate = () => {
-    // Se muestra la caja de diálogo con su título.
-    SAVE_MODAL.show();
-    MODAL_TITLE.textContent = 'Agregar Material';
-    // Se prepara el formulario.
-    SAVE_FORM.reset();
-}
 
 // Método del evento para cuando se envía el formulario de guardar.
 SAVE_FORM.addEventListener('submit', async (event) => {
@@ -210,7 +121,7 @@ SAVE_FORM.addEventListener('submit', async (event) => {
         if (DATA.status) {
             SAVE_MODAL.hide();
             sweetAlert(1, DATA.message, true);
-            fillTable();
+            readAllTable(null, 1);
         } else {
             sweetAlert(2, DATA.error || 'Error desconocido', false);
         }
@@ -219,6 +130,50 @@ SAVE_FORM.addEventListener('submit', async (event) => {
         sweetAlert(2, 'Error al procesar la solicitud', false);
     }
 });
+
+QUANTITY_FORM.addEventListener('submit', async (event) => {
+    event.preventDefault(); // Siempre prevenir el comportamiento por defecto primero 
+    // Constante tipo objeto con los datos del formulario
+    let action;
+
+    switch (TIPO_CANTIDAD_MATERIAL) {
+        case 1:
+            action = 'addQuantity';
+            break;
+        case 2:
+            action = 'restQuantity';
+            break;
+        default:
+            action = 'null'; // Si no es 1 ni 2 (o está vacío)
+    }
+    const FORM = new FormData(QUANTITY_FORM);
+
+    // Petición para guardar los datos del formulario
+    const DATA = await fetchData(MATERIALES_API, action, FORM);
+
+    // Manejar la respuesta
+    if (DATA.status) {
+        TIPO_MATERIAL_MODAL.hide();
+        sweetAlert(1, DATA.message, true);
+        readAllTable(null, 1);
+    } else {
+        sweetAlert(2, DATA.error || 'Error desconocido', false);
+    }
+})
+
+
+/*
+*   Función para preparar el formulario al momento de insertar un registro.
+*   Parámetros: ninguno.
+*   Retorno: ninguno.
+*/
+const openCreate = () => {
+    // Se muestra la caja de diálogo con su título.
+    SAVE_MODAL.show();
+    MODAL_TITLE.textContent = 'Agregar Material';
+    // Se prepara el formulario.
+    SAVE_FORM.reset();
+}
 
 /*
 *   Función asíncrona para preparar el formulario al momento de actualizar un registro.
@@ -252,6 +207,80 @@ const openUpdate = async (id) => {
     }
 }
 
+// * Función asincrona para preparar el formulario al momento de actualizar la cantidad de material
+const openUpdateQuantity = async (id) => {
+    // Se define un objeto con los datos del registro seleccionado.
+    const FORM = new FormData();
+    FORM.append('idMaterial', id);
+    // Petición para obtener los datos del registro solicitado.
+    const DATA = await fetchData(MATERIALES_API, 'readOne', FORM);
+    // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
+    if (DATA.status) {
+        // Se muestra la caja de diálogo con su título.
+        MATERIAL_MODAL.show();
+        // Se inicializan los campos con los datos.
+        const ROW = DATA.dataset;
+        ID_MATERIAL_CONTENIDO.value = ROW.id_material;
+    } else {
+        sweetAlert(2, DATA.error, false);
+    }
+}
+
+const openQuantity = async (id, tipoCambio) => {
+    MATERIAL_TITTLE.textContent = '';
+    switch (tipoCambio) {
+        case 1:
+            MATERIAL_TITTLE.textContent = 'agregar material';
+            TIPO_CANTIDAD_MATERIAL = 1;
+            break;
+        case 2:
+            MATERIAL_TITTLE.textContent = 'restar material';
+            TIPO_CANTIDAD_MATERIAL = 2;
+            break
+        default:
+            break;
+    }
+    // Se define un objeto con los datos del registro seleccionado.
+    const FORM = new FormData();
+    FORM.append('idMaterial', id);
+    // Petición para obtener los datos del registro solicitado
+    const DATA = await fetchData(MATERIALES_API, 'readOne', FORM);
+    // se comprueba si la repuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción
+    if (DATA.status) {
+        // Se muestra la caja de dialogo con su titulo
+        const ROW = DATA.dataset;
+        ID_CANTIDAD_TIPO_MATERIAL.value = ROW.id_material;
+        CANTIDAD_ACTUAL_MATERIAL.textContent = ROW.cantidad_material;
+        CANTIDAD_Mt = parseInt(ROW.cantidad_material);
+        console.log(CANTIDAD_Mt);
+        // CANTIDAD_ACTUALIZADA_MATERIAL.textContent = ROW.cantidad_material + 
+        // console.log('contenido es ' + ROW.cantidad_material + ' o owo')
+        // ACTUALIZAR_MATERIAL.value = ROW.
+        // se inicializa loa campos con los datos
+    } else {
+
+    }
+}
+
+const updateActualQuantity = async (cantidad) => {
+    switch (TIPO_CANTIDAD_MATERIAL) {
+        case 1:
+            CANTIDAD_ACTUALIZADA_MATERIAL.textContent = Number(cantidad.value) + Number(CANTIDAD_Mt);
+            break;
+        case 2:
+            if (cantidad.value > CANTIDAD_Mt) {
+                CANTIDAD_ACTUALIZADA_MATERIAL.textContent = 'Cantidad no permitida';
+            } else {
+                CANTIDAD_ACTUALIZADA_MATERIAL.textContent = CANTIDAD_Mt - cantidad.value;
+            }
+            break;
+        default:
+            sweetAlert(1, 'Error al mostrar datos', true);
+            break;
+    }
+    console.log(CANTIDAD_Mt);
+}
+
 /*
 *   Función asíncrona para eliminar un registro.
 *   Parámetros: id (identificador del registro seleccionado).
@@ -272,7 +301,7 @@ const openDelete = async (id) => {
             // Se muestra un mensaje de éxito.
             await sweetAlert(1, DATA.message, true);
             // Se carga nuevamente la tabla para visualizar los cambios.
-            fillTable();
+            readAllTable(null, 1);
         } else {
             sweetAlert(2, DATA.error, false);
         }
@@ -349,108 +378,14 @@ const showCategory = async (category, form) => {
                     break;
             }
 
-            // Se crean y concatenan las filas de la tabla con los datos de cada registro.
-            TABLE_BODY.innerHTML += `
-            <div class="card text-bg-dark mb-5">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-5 col-md-8 col-sm-12 text-center">
-                            <h5 class="text-white">Nombre del material</h5>
-                            <p class="card-title text-white">${row.nombre_material}</p>
-                            <h5 class="text-white">Descripción del material</h5>
-                            <p class="card-text text-white">${row.descripcion_material}</p>
-                            <h5 class="text-white">Código Material</h5>
-                            <p class="card-text text-white">${row.codigo_material} Unidades</p>
-                        </div>
-                        <div class="col-lg-5 col-md-8 col-sm-12 text-center">
-                            <h5 class="text-white">Cantidad actual material</h5>
-                            <p class="card-text text-white">${row.cantidad_material} Metros MT.</p>
-                            <h5 class="text-white">Cantidad minima material</h5>
-                            <p class="card-text text-white">${row.cantidad_minima_material} Metros MT.</p>
-                            <h5 class="text-white">Registro alterado por:</h5>
-                            <p class="card-text text-white">${row.nombre_administrador} ${row.apellido_administrador}
-                            </p>
-                        </div>
-                        <div class="col-lg-2 col-md-12 col-sm-12 text-center mt-3">
-                            <div class="d-flex flex-column ">
-                                <div class="round bg-info rounded-3 text-dark mb-2">
-                                    <h5 class="card-text ">${info}</h5>
-                                </div>
-                                <button class="btn btn-outline-light mb-2" onclick="openUpdate(${row.id_material})">
-                                    <i class="bi bi-pencil-square"></i> Editar Registro
-                                </button>
-                                <button class="btn btn-outline-light mb-2" onclick="openDelete(${row.id_material})">
-                                    <i class="bi bi-trash"></i> Eliminar Registro
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            `;
-        });
-        // Se muestra un mensaje de acuerdo con el resultado.
-        ROWS_FOUND.textContent = DATA.message;
-    } else {
-        sweetAlert(4, DATA.error, true);
-        TABLE_BODY.innerHTML += `
-        <div class="col-5 justify-content-center align-items-center">
-                <img src="../../resources/images/error/404iNFORMACION.png" class="card-img-top" alt="ERROR CARGAR IMAGEN">
-            </div>
-        `
-    }
-}
+            if (row.necesita_reposicion == 1) {
+                cantidad = `<div class="round alert alert-danger rounded-3 mb-2" role="alert">
+                                <i class="bi bi-exclamation-triangle-fill"></i> <strong class=''>¡Atención! material es menor a la cantidad minima</strong>
+                            </div>`;
 
-
-// ? función asíncrona para ordenar los registros de diferentes formas que el  usuario  requiera
-// ! terminar esto para clasificar los datos
-const readAllTable = async (form = null, buscador) => {
-    // Se inicializa el contenido de la tabla.
-    ROWS_FOUND.textContent = '';
-    TABLE_BODY.innerHTML = '';
-
-    switch (buscador) {
-        case 1:
-            action = 'readAll';
-            break;
-        case 2:
-            action = 'readByMax';
-            break;
-        case 3:
-            action = 'readByMin';
-            break;
-        case 4:
-            action = 'readByModify';
-            break;
-        default:
-    }
-    // Petición para obtener los registros disponibles.
-    const DATA = await fetchData(MATERIALES_API, action, form);
-
-
-    if (DATA.status) {
-         // Se recorre el conjunto de registros (dataset) fila por fila a través del objeto row.
-         DATA.dataset.forEach(row => {
-            let info;
-            // ? icono y texto para clasificar la categoría
-            switch (row.categoria_material) {
-                case 'Uso habitual':
-                    info = '<i class="bi bi-house-door"></i> Uso habitual';
-                    break;
-                case 'Material para CL200':
-                    info = '<i class="bi bi-lightning-charge"></i> Material para CL200';
-                    break;
-                case 'Acometida especial':
-                    info = '<i class="bi bi-lightning-fill"></i> Acometida especial';
-                    break;
-                case 'Subterráneo':
-                    info = '<i class="bi bi-minecart-loaded"></i> Subterráneo';
-                    break;
-                case 'Antihurto y telegestión':
-                    info = '<i class="bi bi-shield-lock"></i> Antihurto y telegestión';
-                    break;
-                default:
-                    break;
+                sweetAlert(3, 'materiales con poco stock');
+            } else {
+                cantidad = '';
             }
 
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
@@ -486,6 +421,158 @@ const readAllTable = async (form = null, buscador) => {
                                 <button class="btn btn-outline-light mb-2" onclick="openDelete(${row.id_material})">
                                     <i class="bi bi-trash"></i> Eliminar Registro
                                 </button>
+                                <button class="btn btn-outline-light mb-2" onclick="openUpdateQuantity(${row.id_material})">
+                                    <i class="bi bi-clipboard-plus-fill"></i> Editar Cantidad
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+        });
+        // Se muestra un mensaje de acuerdo con el resultado.
+        ROWS_FOUND.textContent = DATA.message;
+    } else {
+        sweetAlert(4, DATA.error, true);
+        TABLE_BODY.innerHTML += `
+        <div class="col-5 justify-content-center align-items-center">
+                <img src="../../resources/images/error/404iNFORMACION.png" class="card-img-top" alt="ERROR CARGAR IMAGEN">
+            </div>
+        `
+    }
+}
+
+// ? función asíncrona para ordenar los registros de diferentes formas que el  usuario  requiera
+const readAllTable = async (form = null, buscador) => {
+
+    // Se inicializa el contenido de la tabla.
+    ROWS_FOUND.textContent = '';
+    TABLE_BODY.innerHTML = '';
+
+    let action = form ? 'searchRows' : 'readAll'; // Valor por defecto
+
+    // Si el buscador tiene un valor válido (1-4), sobrescribe la acción
+    if (buscador >= 1 && buscador <= 4) {
+        switch (buscador) {
+            case 1:
+                action = 'readAll';
+                break;
+            case 2:
+                action = 'readByMax';
+                break;
+            case 3:
+                action = 'readByMin';
+                break;
+            case 4:
+                action = 'readByModify';
+                break;
+            case 5:
+                action = 'readAll';
+                activarBoton(BOTON_GENERAL);
+                break;
+            case 6:
+                action = 'readByCategory1';
+                activarBoton(BOTON_USO_COTIDIANO);
+                break;
+            case 7:
+                action = 'readByCategory2';
+                activarBoton(BOTON_CL200);
+                break;
+            case 8:
+                action = 'readByCategory3';
+                activarBoton(BOTON_ACOMETIDA_ESPECIAL);
+                break;
+            case 9:
+                action = 'readByCategory4';
+                activarBoton(BOTON_SUBTERRANEO);
+                break;
+            case 10:
+                action = 'readByCategory5';
+                activarBoton(BOTON_ANTI_TELE);
+                break;
+            default:
+                // Opcional: Resetear todos si no hay coincidencia
+                resetearBotones();
+                BOTON_GENERAL.classList.add('btn-success'); // Por defecto
+                break;
+        }
+    }
+
+    const DATA = await fetchData(MATERIALES_API, action, form);
+
+    if (DATA.status) {
+        // Se recorre el conjunto de registros (dataset) fila por fila a través del objeto row.
+        DATA.dataset.forEach(row => {
+            let info;
+            // ? icono y texto para clasificar la categoría
+            switch (row.categoria_material) {
+                case 'Uso habitual':
+                    info = '<i class="bi bi-house-door"></i> Uso habitual';
+                    break;
+                case 'Material para CL200':
+                    info = '<i class="bi bi-lightning-charge"></i> Material para CL200';
+                    break;
+                case 'Acometida especial':
+                    info = '<i class="bi bi-lightning-fill"></i> Acometida especial';
+                    break;
+                case 'Subterráneo':
+                    info = '<i class="bi bi-minecart-loaded"></i> Subterráneo';
+                    break;
+                case 'Antihurto y telegestión':
+                    info = '<i class="bi bi-shield-lock"></i> Antihurto y telegestión';
+                    break;
+                default:
+                    break;
+            }
+
+            if (row.necesita_reposicion == 1) {
+                cantidad = `<div class="round alert alert-danger rounded-3 mb-2" role="alert">
+                                <i class="bi bi-exclamation-triangle-fill"></i> <strong class=''>¡Atención! material es menor a la cantidad minima</strong>
+                            </div>`;
+
+                sweetAlert(3, 'materiales con poco stock');
+            } else {
+                cantidad = '';
+            }
+
+            // Se crean y concatenan las filas de la tabla con los datos de cada registro.
+            TABLE_BODY.innerHTML += `
+            <div class="card text-bg-dark mb-5">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-5 col-md-8 col-sm-12 text-center">
+                            <h5 class="text-white">Nombre del material</h5>
+                            <p class="card-title text-white">${row.nombre_material}</p>
+                            <h5 class="text-white">Descripción del material</h5>
+                            <p class="card-text text-white">${row.descripcion_material}</p>
+                            <h5 class="text-white">Código Material</h5>
+                            <p class="card-text text-white">${row.codigo_material} Unidades</p>
+                        </div>
+                        <div class="col-lg-5 col-md-8 col-sm-12 text-center">
+                            <h5 class="text-white">Cantidad actual material</h5>
+                            <p class="card-text text-white">${row.cantidad_material} Metros MT.</p>
+                            <h5 class="text-white">Cantidad minima material</h5>
+                            <p class="card-text text-white">${row.cantidad_minima_material} Metros MT.</p>
+                            <h5 class="text-white">Registro alterado por:</h5>
+                            <p class="card-text text-white">${row.nombre_administrador} ${row.apellido_administrador}
+                            </p>
+                        </div>
+                        <div class="col-lg-2 col-md-12 col-sm-12 text-center mt-3">
+                            <div class="d-flex flex-column ">
+                                ${cantidad}
+                                <div class="round bg-info rounded-3 text-dark mb-2">
+                                    <h5 class="card-text ">${info}</h5>
+                                </div>
+                                <button class="btn btn-outline-light mb-2" onclick="openUpdate(${row.id_material})">
+                                    <i class="bi bi-pencil-square"></i> Editar Registro
+                                </button>
+                                <button class="btn btn-outline-light mb-2" onclick="openDelete(${row.id_material})">
+                                    <i class="bi bi-trash"></i> Eliminar Registro
+                                </button>
+                                <button class="btn btn-outline-light mb-2" onclick="openUpdateQuantity(${row.id_material})">
+                                    <i class="bi bi-clipboard-plus-fill"></i> Editar Cantidad
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -498,4 +585,4 @@ const readAllTable = async (form = null, buscador) => {
     } else {
         sweetAlert(4, DATA.error, true);
     }
-} 
+}

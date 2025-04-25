@@ -144,13 +144,30 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'Error al editar el material';
                 }
                 break;
-            case 'SubtractRow':
+            case 'addQuantity':
+                // echo ($_POST['hola']);
+                // die;
                 $_POST = Validator::validateForm($_POST);
                 if (
-                    !$material->setCategoria($_POST['CategoriaMaterial'])
+                    !$material->setId($_POST['idMaterial']) or
+                    !$material->setCantidad($_POST['cantidadMaterial'])
                 ) {
                     $result['error'] = $material->getDataError();
-                } elseif ($material->SubtractRow()) {
+                } elseif ($material->addQuantity()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Material agregado correctamente';
+                } else {
+                    $result['error'] = 'Error al agregar el material';
+                }
+                break;
+            case 'restQuantity':
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$material->setId($_POST['idMaterial']) or
+                    !$material->setCantidad($_POST['cantidadMaterial'])
+                ) {
+                    $result['error'] = $material->getDataError();
+                } elseif ($material->restQuantity()) {
                     $result['status'] = 1;
                     $result['message'] = 'Material restado correctamente';
                 } else {

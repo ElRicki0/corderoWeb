@@ -80,20 +80,28 @@ class MaterialHandler
     public function readAll()
     {
         $sql = 'SELECT
-                    `id_material`,
-                    `nombre_material`,
-                    `descripcion_material`,
-                    `categoria_material`,
-                    `codigo_material`,
-                    `cantidad_minima_material`,
-                    `cantidad_material`,
-                    ad.nombre_administrador, 
-                    ad.apellido_administrador
-                FROM
-                    `tb_materiales` mt
-                    INNER join
-                    tb_administradores ad ON
-                    mt.id_administrador = ad.id_administrador';
+                `id_material`,
+                `nombre_material`,
+                `descripcion_material`,
+                `categoria_material`,
+                `codigo_material`,
+                `cantidad_minima_material`,
+                cantidad_material,
+                fecha_material,
+                mt.id_administrador,
+                ad.nombre_administrador, 
+                ad.apellido_administrador,
+                CASE 
+                    WHEN cantidad_material <= cantidad_minima_material THEN 1
+                    ELSE 0
+                END AS necesita_reposicion
+            FROM
+                `tb_materiales` mt
+                LEFT JOIN tb_administradores ad ON
+                mt.id_administrador = ad.id_administrador
+            ORDER BY 
+                necesita_reposicion DESC,
+                (cantidad_minima_material - cantidad_material) DESC;';
         return Database::getRows($sql);
     }
 
@@ -108,7 +116,11 @@ class MaterialHandler
                     `cantidad_minima_material`,
                     `cantidad_material`,
                     ad.nombre_administrador,
-                    ad.apellido_administrador
+                    ad.apellido_administrador,
+                CASE 
+                    WHEN cantidad_material <= cantidad_minima_material THEN 1
+                    ELSE 0
+                END AS necesita_reposicion
                 FROM
                     `tb_materiales` mt
                 INNER JOIN tb_administradores ad ON
@@ -132,13 +144,20 @@ class MaterialHandler
                     `cantidad_minima_material`,
                     `cantidad_material`,
                     ad.nombre_administrador, 
-                    ad.apellido_administrador
+                    ad.apellido_administrador,
+                CASE 
+                    WHEN cantidad_material <= cantidad_minima_material THEN 1
+                    ELSE 0
+                END AS necesita_reposicion
                 FROM
                     `tb_materiales` mt
                     INNER join
                     tb_administradores ad ON
                     mt.id_administrador = ad.id_administrador
-                WHERE categoria_material= "Uso habitual"';
+                WHERE categoria_material= "Uso habitual" 
+                ORDER BY 
+                necesita_reposicion DESC,
+                (cantidad_minima_material - cantidad_material) DESC;';
         return Database::getRows($sql);
     }
 
@@ -153,13 +172,20 @@ class MaterialHandler
                     `cantidad_minima_material`,
                     `cantidad_material`,
                     ad.nombre_administrador, 
-                    ad.apellido_administrador
+                    ad.apellido_administrador,
+                CASE 
+                    WHEN cantidad_material <= cantidad_minima_material THEN 1
+                    ELSE 0
+                END AS necesita_reposicion
                 FROM
                     `tb_materiales` mt
                     INNER join
                     tb_administradores ad ON
                     mt.id_administrador = ad.id_administrador
-                WHERE categoria_material= "Material para CL200"';
+                WHERE categoria_material= "Material para CL200"
+                ORDER BY 
+                necesita_reposicion DESC,
+                (cantidad_minima_material - cantidad_material) DESC;';
         return Database::getRows($sql);
     }
 
@@ -174,13 +200,20 @@ class MaterialHandler
                     `cantidad_minima_material`,
                     `cantidad_material`,
                     ad.nombre_administrador, 
-                    ad.apellido_administrador
+                    ad.apellido_administrador,
+                CASE 
+                    WHEN cantidad_material <= cantidad_minima_material THEN 1
+                    ELSE 0
+                END AS necesita_reposicion
                 FROM
                     `tb_materiales` mt
                     INNER join
                     tb_administradores ad ON
                     mt.id_administrador = ad.id_administrador
-                WHERE categoria_material= "Acometida especial"';
+                WHERE categoria_material= "Acometida especial"
+                ORDER BY 
+                necesita_reposicion DESC,
+                (cantidad_minima_material - cantidad_material) DESC;';
         return Database::getRows($sql);
     }
 
@@ -195,13 +228,20 @@ class MaterialHandler
                     `cantidad_minima_material`,
                     `cantidad_material`,
                     ad.nombre_administrador, 
-                    ad.apellido_administrador
+                    ad.apellido_administrador,
+                CASE 
+                    WHEN cantidad_material <= cantidad_minima_material THEN 1
+                    ELSE 0
+                END AS necesita_reposicion
                 FROM
                     `tb_materiales` mt
                     INNER join
                     tb_administradores ad ON
                     mt.id_administrador = ad.id_administrador
-                WHERE categoria_material= "Subterráneo"';
+                WHERE categoria_material= "Subterráneo"
+                ORDER BY 
+                necesita_reposicion DESC,
+                (cantidad_minima_material - cantidad_material) DESC;';
         return Database::getRows($sql);
     }
 
@@ -216,13 +256,20 @@ class MaterialHandler
                     `cantidad_minima_material`,
                     `cantidad_material`,
                     ad.nombre_administrador, 
-                    ad.apellido_administrador
+                    ad.apellido_administrador,
+                CASE 
+                    WHEN cantidad_material <= cantidad_minima_material THEN 1
+                    ELSE 0
+                END AS necesita_reposicion
                 FROM
                     `tb_materiales` mt
                     INNER join
                     tb_administradores ad ON
                     mt.id_administrador = ad.id_administrador
-                WHERE categoria_material= "Antihurto y telegestión"';
+                WHERE categoria_material= "Antihurto y telegestión"
+                ORDER BY 
+                necesita_reposicion DESC,
+                (cantidad_minima_material - cantidad_material) DESC;';
         return Database::getRows($sql);
     }
 
@@ -238,7 +285,11 @@ class MaterialHandler
                     `cantidad_minima_material`,
                     `cantidad_material`,
                     ad.nombre_administrador, 
-                    ad.apellido_administrador
+                    ad.apellido_administrador,
+                CASE 
+                    WHEN cantidad_material <= cantidad_minima_material THEN 1
+                    ELSE 0
+                END AS necesita_reposicion
                 FROM
                     `tb_materiales` mt
                     INNER join
@@ -260,7 +311,11 @@ class MaterialHandler
                     `cantidad_minima_material`,
                     `cantidad_material`,
                     ad.nombre_administrador, 
-                    ad.apellido_administrador
+                    ad.apellido_administrador,
+                CASE 
+                    WHEN cantidad_material <= cantidad_minima_material THEN 1
+                    ELSE 0
+                END AS necesita_reposicion
                 FROM
                     `tb_materiales` mt
                     INNER join
@@ -282,7 +337,11 @@ class MaterialHandler
                     `cantidad_minima_material`,
                     `cantidad_material`,
                     ad.nombre_administrador, 
-                    ad.apellido_administrador
+                    ad.apellido_administrador,
+                CASE 
+                    WHEN cantidad_material <= cantidad_minima_material THEN 1
+                    ELSE 0
+                END AS necesita_reposicion
                 FROM
                     `tb_materiales` mt
                     INNER join
@@ -313,15 +372,23 @@ class MaterialHandler
         return Database::executeRow($sql, $params);
     }
 
-    public function SubtractRow()
+    public function addQuantity()
     {
-        $sql = 'UPDATE
-                    `tb_materiales`
-                SET
-                    `cantidad_material` = `cantidad_material` - ?
-                WHERE
-                    `id_material` = ?';
-        $params=array($this->cantidad);
+        $sql = 'UPDATE `tb_materiales` 
+        SET `cantidad_material` = 
+        `cantidad_material` + ? WHERE `id_material` = ?
+        ';
+        $params = array($this->cantidad, $this->id);
+        return Database::executeRow($sql, $params);
+    }
+
+    public function restQuantity()
+    {
+        $sql = 'UPDATE `tb_materiales` 
+        SET `cantidad_material` = 
+        `cantidad_material` - ? WHERE `id_material` = ?
+        ';
+        $params = array($this->cantidad, $this->id);
         return Database::executeRow($sql, $params);
     }
 
