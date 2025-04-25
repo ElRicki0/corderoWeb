@@ -52,8 +52,8 @@ const loadTemplate = async () => {
                     </a>
                 </li>
                 <li>
-                    <a href="../../views/admin/cables.html">
-                        <label for="menuCheckbox" onclick="this.parentNode.click();">Cables</label>
+                    <a href="../../views/admin/bodega.html">
+                        <label for="menuCheckbox" onclick="this.parentNode.click();">Bodega</label>
                     </a>
                 </li>
                 <li>

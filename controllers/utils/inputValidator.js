@@ -93,6 +93,32 @@ function formatPhoneNumber(input) {
     }
 }
 
+    // codigo de validacion campo codigo
+    function formatCode(input) {
+        // 1. Remover caracteres no permitidos (números y guiones)
+        let cleanValue = input.value.replace(/[^0-9a-zA-Z-]/g, '');
+        
+        // 2. Eliminar guiones para contar dígitos
+        let digitsOnly = cleanValue.replace(/-/g, '');
+        
+        // 3. Limitar a 6 dígitos numéricos (sin contar guiones)
+        if (digitsOnly.length > 6) {
+            // Reconstruir el valor manteniendo guiones pero limitando dígitos
+            cleanValue = cleanValue.slice(0, 6 + (cleanValue.match(/-/g)?.length || 0));
+            digitsOnly = digitsOnly.slice(0, 6);
+        }
+        
+        // 4. Actualizar el valor del input (conservando guiones válidos)
+        input.value = cleanValue;
+        
+        // 5. Validar longitud
+        if (digitsOnly.length < 5) {
+            input.classList.add('is-invalid');
+        } else {
+            input.classList.remove('is-invalid');
+        }
+    }
+
 // Codigo de validacion de campo de contraseña
 function formatPassword(input) {
 

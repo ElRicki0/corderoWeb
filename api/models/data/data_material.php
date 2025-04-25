@@ -2,9 +2,9 @@
 //? Se incluye la clase para validar los datos de entrada.
 require_once('../../helpers/validator.php');
 //? Se incluye la clase padre.
-require_once('../../models/handler/handler_cable.php');
+require_once('../../models/handler/handler_material.php');
 // ? clase para manejar encasamiento de la clase cable
-class CableData extends CablesHandler
+class MaterialData extends MaterialHandler
 {
     // ? atributos adicionales
     private $data_error = null;
@@ -18,7 +18,7 @@ class CableData extends CablesHandler
             $this->id = $value;
             return true;
         } else {
-            $this->data_error = 'El identificador del producto es incorrecto';
+            $this->data_error = 'El identificador del material es incorrecto';
             return false;
         }
     }
@@ -51,14 +51,14 @@ class CableData extends CablesHandler
         }
     }
 
-    public function setLongitud($value)
+    public function setCantidad($value)
     {
-        if (Validator::validateString($value)) {
+        if (!Validator::validateNaturalNumber($value)) {
+            $this->data_error = 'La cantidad debe ser un número entero positivo';
+            return false;
+        } else {
             $this->cantidad = $value;
             return true;
-        } else {
-            $this->data_error = 'La longitud debe ser un número entero positivo';
-            return false;
         }
     }
 
@@ -68,44 +68,37 @@ class CableData extends CablesHandler
             $this->minima = $value;
             return true;
         } else {
-            $this->data_error = 'La longitud minima debe ser un número entero positivo';
+            $this->data_error = 'La cantidad minima debe ser un número entero positivo';
             return false;
         }
     }
 
     public function setCategoria($value)
     {
-        if (Validator::validateNaturalNumber($value)) {
+        if (Validator::validateString($value)) {
             $this->categoria = $value;
             return true;
         } else {
-            $this->data_error = 'El identificador de la categoría es incorrecto';
+            $this->data_error = 'La categoría es incorrecta';
             return false;
         }
     }
 
-    public function setEstado($value, $min = 0, $max = 250)
-{
-    // Validar que el valor sea alfanumérico
-    if (!Validator::validateAlphanumeric($value)) {
-        $this->data_error = 'Estado no es alfanumérico.';
-        return false;
+    public function setCodigo($value, $min = 5, $max = 6)
+    {
+        if (!Validator::validateAlphanumeric($value)) {
+            $this->data_error = 'El codigo debe ser un valor alfanumérico';
+            return false;
+        } elseif (Validator::validateLength($value, $min, $max)) {
+            $this->codigo = $value;
+            return true;
+        } else {
+            $this->data_error = 'El código debe tener una longitud entre ' . $min . ' y ' . $max;
+            return false;
+        }
     }
-
-    // Validar que el valor cumpla con la longitud mínima y máxima
-    if (!Validator::validateLength($value, $min, $max)) {
-        $this->data_error = "Estado no cumple con la longitud permitida ($min-$max caracteres).";
-        return false;
-    }
-
-    // Si ambas validaciones son correctas, asignar el valor y devolver true
-    $this->estado = $value;
-    return true;
-}
-
 
     // ? método para tener los datos adicionales del error
-
     public function getDataError()
     {
         return $this->data_error;

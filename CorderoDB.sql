@@ -5,6 +5,19 @@ CREATE DATABASE CorderoDB;
 USE CorderoDB;
 
 CREATE TABLE
+    tb_administradores (
+        id_administrador INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        nombre_administrador VARCHAR(50) NOt NULL,
+        apellido_administrador VARCHAR(50) NOT NULL,
+        correo_administrador VARCHAR(60) NOT NULL UNIQUE,
+        telefono_administrador VARCHAR(10),
+        clave_administrador VARCHAR(500) NOT NULL,
+        fecha_clave DATE NOT NULL,
+        codigo_clave VARCHAR(6) NOT NULL,
+        imagen_administrador VARCHAR(300)
+    );
+
+CREATE TABLE
     tb_empleados (
         id_empleado INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
         nombre_empleado VARCHAR(50) NOT NULL,
@@ -47,70 +60,21 @@ CREATE TABLE
     );
 
 CREATE TABLE
-    tb_conectores (
-        id_conector INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-        nombre_conector VARCHAR(30) NOT NULL,
-        descripcion_conector VARCHAR(300),
-        codigo_conetor VARCHAR(6),
-        categoria_conector ENUM (
+    tb_materiales (
+        id_material INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        nombre_material VARCHAR(50) NOT NULL,
+        descripcion_material VARCHAR(300),
+        categoria_material ENUM (
             'Uso habitual',
-            'Material para CL200',
-            'Acometida espacial'
-        ) NOT NULL,
-        cantidad_minima_conector INT,
-        cantidad_conector INT,
-        fecha_conector DATETIME,
-        id_administrador INT,
-        FOREIGN KEY (id_administrador) REFERENCES tb_administradores (id_administrador) ON DELETE CASCADE
-    );
-
-CREATE TABLE
-    tb_medidores (
-        id_medidor INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-        nombre_medidor VARCHAR(30) NOT NULL,
-        descripcion_medidor VARCHAR(300),
-        codigo_medidor VARCHAR(6) NOT NULL,
-        categoria_medidor ENUM (
-            'Uso habitual',
-            'Material para CL200',
-            'Patron antihurto y telegestion'
-        ) NOT NULL,
-        cantidad_minima_medidor INT,
-        cantidad_medidor INT,
-        fecha_medidor DATETIME,
-        id_administrador INT,
-        FOREIGN KEY (id_administrador) REFERENCES tb_administradores (id_administrador) ON DELETE CASCADE
-    );
-
-CREATE TABLE
-    tb_cable_rollo (
-        id_cable_rollo INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-        nombre_cable_rollo VARCHAR(30) NOT NULL,
-        descripcion_cable_rollo VARCHAR(300),
-        codigo_cable_rollo VARCHAR(6) NOT NULL,
-        categoria_cable_rollo ENUM ('Uso habitual') NOT NULL,
-        cantidad_minima_cable_rollo INT NOT NULL,
-        catidad_cable_rollo INT NOT NULL,
-        fecha_cable_rollo INT NOT NULL,
-        id_administrador INT,
-        FOREIGN KEY (id_administrador) REFERENCES tb_administradores (id_administrador) ON DELETE CASCADE
-    );
-
-CREATE TABLE
-    tb_cable_suelto (
-        id_cable_suelto INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-        nombre_cable_suelto VARCHAR(30) NOT NULL,
-        descripcion_cable_suelto VARCHAR(300),
-        codigo_cable_suelto VARCHAR(6) NOT NULL,
-        categoria_cable_suelto ENUM (
             'Material para CL200',
             'Acometida especial',
             'Subterráneo',
-            'Patron antihurto y telegestión'
+            'Antihurto y telegestión'
         ) NOT NULL,
-        cantidad_minima_cable_suelto INT NOT NULL,
-        catidad_cable_suelto INT NOT NULL,
-        fecha_cable_suelto INT NOT NULL,
+        codigo_material VARCHAR(6),
+        cantidad_minima_material INT,
+        cantidad_material INT NOT NULL,
+        fecha_material DATETIME NOT NULL,
         id_administrador INT,
         FOREIGN KEY (id_administrador) REFERENCES tb_administradores (id_administrador) ON DELETE CASCADE
     );
@@ -124,19 +88,6 @@ CREATE TABLE
         categoria_electrica VARCHAR(10),
         estado_herramienta TINYINT (1) NULL NULL,
         imagen_herramienta VARCHAR(300)
-    );
-
-CREATE TABLE
-    tb_administradores (
-        id_administrador INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-        nombre_administrador VARCHAR(50) NOt NULL,
-        apellido_administrador VARCHAR(50) NOT NULL,
-        correo_administrador VARCHAR(60) NOT NULL UNIQUE,
-        telefono_administrador VARCHAR(10),
-        clave_administrador VARCHAR(500) NOT NULL,
-        fecha_clave DATE NOT NULL,
-        codigo_clave VARCHAR(6) NOT NULL,
-        imagen_administrador VARCHAR(300)
     );
 
 CREATE TABLE
