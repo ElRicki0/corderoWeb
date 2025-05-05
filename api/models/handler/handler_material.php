@@ -45,8 +45,8 @@ class MaterialHandler
                 INNER JOIN tb_administradores ad ON
                     mt.id_administrador = ad.id_administrador
                 WHERE
-                    `nombre_material` LIKE ? OR `descripcion_material` LIKE ? OR `codigo_material` LIKE ?';
-        $params = array($value, $value, $value);
+                    `nombre_material` LIKE ? OR `descripcion_material` LIKE ? OR `codigo_material` LIKE ? OR `categoria_material` LIKE ?';
+        $params = array($value, $value, $value, $value);
         return Database::getRows($sql, $params);
     }
 

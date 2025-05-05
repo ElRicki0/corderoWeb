@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../resources/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../resources/css/general.css">
+    <link rel="stylesheet" href="../../resources/css/bootstrap-icons.min.css">
+</head>
+
+<body>
+    <!-- Contenido principal del documento -->
+    <main>
+        <h2 id="mainTitle"></h2>
+        <div class="container-fluid">
+            <div class="row py-4">
+                <h3 class="fw-bold"> <i class="bi bi-box-seam-fill"></i> solicitud de materiales</h3>
+                </h3>
+                <h6 class="fw-medium text-secondary">Solicite el material<br>
+                    Añada el material que necesita para su la requisición<br>
+                </h6>
+            </div>
+        </div>
+        <div class="row justify-content-center g-4 px-2">
+            <!-- Added g-4 for gap, py-3 for vertical padding, px-2 for horizontal padding -->
+            <div class="col-auto"> <!-- Changed to col-auto for automatic width based on content -->
+                <button type="button" class="py-4 btn btn-success disabled" onclick="fillTable(null, 1)"
+                    id="botonGeneral">
+                    <h5 class="mb-0" onclick="readAllTable(null, 1)">Ver todas las categorías</h5>
+                    <!-- Added mb-0 to remove margin -->
+                </button>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="py-4 btn btn-secondary" onclick="fillTable(null, 2)"
+                    id="botonUsoCotidiano">
+                    <h5 class="mb-0"><i class="bi bi-house-door"></i> Uso cotidiano</h5>
+                </button>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="py-4 btn btn-secondary" onclick="fillTable(null, 3)" id="botonCL200">
+                    <h5 class="mb-0"><i class="bi bi-lightning-charge"></i> Material para CL200</h5>
+                </button>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="py-4 btn btn-secondary" onclick="fillTable(null, 4)"
+                    id="botonAcomedidaEspecial">
+                    <h5 class="mb-0"><i class="bi bi-lightning-fill"></i> Acometida especial</h5>
+                </button>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="py-4 btn btn-secondary" onclick="fillTable(null, 5)" id="botonSubterraneo">
+                    <h5 class="mb-0"><i class="bi bi-minecart-loaded"></i> Subterráneo</h5>
+                </button>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="py-4 btn btn-secondary" onclick="fillTable(null, 6)" id="botonAntiTele">
+                    <h5 class="mb-0"><i class="bi bi-shield-lock"></i> Patron antihurto y telegestión</h5>
+                </button>
+            </div>
+        </div>
+
+        <!-- ? Formulario de búsqueda -->
+        <div class="row">
+            <form class="col-sm-12 col-md-12 col-lg-10" id="searchForm">
+                <div class="row">
+                    <div class="col-lg-7 col-md-6 col-sm-12 mt-5">
+                        <input type="search" class="form-control custom-input border-2 fs-3" id="search" name="search"
+                            placeholder="Buscador..." required>
+                    </div>
+                    <div class="col-lg-5 col-md-9 col-sm-9 d-flex flex-row align-items-center gap-2 mt-5">
+                        <!-- Grupo de botones -->
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-success" onclick="resetearBotones()">
+                                <h2>
+                                    <i class="bi bi-search"></i> Buscar...
+                                </h2>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <p id="rowsFound" class="text-white fw-bold mt-3"></p>
+        <!-- Contenedor para la tabla con scroll-->
+        <div class="container justify-content-center row">
+            <div class="container mt-4">
+                <div id="materials" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    <!-- Agrega más tarjetas según sea necesario -->
+                </div>
+            </div>
+        </div>
+        <!-- * modal de registro para agregar material a la requisición -->
+        <div class="modal fade" id="saveModal" tabindex="-1" aria-labelledby="saveModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <form id="saveForm">
+                        <div class="modal-header">
+                            <h2 class="modal-title text-center">Agregar material</h2>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center">
+                            <input type="number" class="d-none" name="idMaterial" id="idMaterial">
+                            <h4 class="" name="nombreMaterial" id="nombreMaterial">Nombre de ejemplo</h4>
+                            <p class="fw-semibold my-3" id="descripcionMaterial">Ingrese la cantidad que necesita para
+                                su requisición</p>
+
+                            <div class="input-group input-group-lg mb-3 mx-auto border-3 border-primary w-50">
+                                <input type="number" class="form-control border-secondary" id="cantidadMaterial" name="cantidadMaterial">
+                                <span class="input-group-text" id="unidadMaterial">Cantidad</span>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+    </main>
+
+    <!-- IMPORTACIÓN DE ARCHIVOS JAVASCRIPT -->
+    <!-- Llamada al framework y librería de mensajes -->
+    <script src="../../resources/js/bootstrap.bundle.min.js"></script>
+    <script src="../../resources/js/sweetalert.min.js"></script>
+    <!-- Llamada al controlador general de la aplicación -->
+    <script type="text/javascript" src="../../controllers/utils/components.js"></script>
+    <!-- Llamada al controlador del sitio privado -->
+    <script type="text/javascript" src="../../controllers/utils/public.js"></script>
+    <!-- ? Llama al validador de textos -->
+    <script src="../../controllers/utils/inputValidator.js"></script>
+    <!-- Llamada al controlador de la página web -->
+    <script src="../../controllers/public/materiales.js"></script>
+</body>
+
+</html>

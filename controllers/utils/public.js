@@ -29,8 +29,52 @@ const loadTemplate = async () => {
         if (DATA.status) {
             // Se agrega el encabezado de la página web antes del contenido principal.
             MAIN.insertAdjacentHTML('beforebegin', `
-                `);
-
+                <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top" data-bs-theme="light">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" href="inicio.html">Corderos</a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#contentNavbar"
+                            aria-controls="contentNavbar" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="offcanvas offcanvas-end" id="contentNavbar" aria-labelledby="offcanvasNavbarLabel">
+                            <div class="offcanvas-header text-center">
+                                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                            </div>
+                            <div class="offcanvas-body">
+                                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-current="page" href="inicio.html">
+                                            <button type="button" class="btn btn-outline-dark w-100">Inicio</button>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-current="page" href="../../views/public/materiales.html">
+                                            <button type="button" class="btn btn-outline-dark w-100">Materiales</button>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-current="page" href="#">
+                                            <button type="button" class="btn btn-outline-dark w-100">Requisición actual</button>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-current="page" href="#">
+                                            <button type="button" class="btn btn-outline-dark w-100">Historial</button>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-current="page">
+                                            <button type="button" class="btn btn-danger w-100" onclick="logOut()">
+                                                Cerrar sesión
+                                            </button>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </nav>`);
             // Se agrega el pie de la página web después del contenido principal.
             MAIN.insertAdjacentHTML('afterend', ``);
         } else {

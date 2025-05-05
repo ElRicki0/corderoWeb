@@ -29,72 +29,70 @@ const loadTemplate = async () => {
         if (DATA.status) {
             // Se agrega el encabezado de la página web antes del contenido principal.
             MAIN.insertAdjacentHTML('beforebegin', `
-<header>
-    <nav role="navigation">
-        <div id="menuToggle">
-            <!-- ? check box para comprobar si esta abierto o cerrado el menu -->
-            <input type="checkbox" id="menuCheckbox" />
-
-            <!-- ? con ayuda del css, estos span funcionan como hamburguesa animada -->
-            <span></span>
-            <span></span>
-            <span></span>
-
-            <!-- ? contenido del menu pero es pura magia de css -->
-            <ul id="menu">
-                <li>
-                    <a href="../../views/admin/inicio.html">
-                        <label for="menuCheckbox" onclick="this.parentNode.click();">Inicio</label>
-                    </a>
-                <li>
-                    <a href="../../views/admin/administradores.html">
-                        <label for="menuCheckbox" onclick="this.parentNode.click();">Administradores</label>
-                    </a>
-                </li>
-                <li>
-                    <a href="../../views/admin/bodega.html">
-                        <label for="menuCheckbox" onclick="this.parentNode.click();">Bodega</label>
-                    </a>
-                </li>
-                <li>
-                    <a href="../../views/admin/empleados.html">
-                        <label for="menuCheckbox" onclick="this.parentNode.click();">Empleados</label>
-                    </a>
-                </li>
-                <li>
-                    <a href="../../views/admin/duplas.html">
-                        <label for="menuCheckbox" onclick="this.parentNode.click();">Duplas</label>
-                    </a>
-                </li>
-                <li><a></a></li>
-                <li><a></a></li>
-                <li><a></a></li>
-                <li><a></a></li>
-                <li><a></a></li>
-                <li><a></a></li>
-                <li><a></a></li>
-                <li><a></a></li>
-                <li><a></a></li>    
-                <li><a></a></li>
-                <li>
-                    <a href="#">
-                        <label for="menuCheckbox" onclick="logOut()">Cerrar Sesión</label>
-                    </a>
-                </li>
-                <li>
-                    <a href="../../views/admin/perfil.html">
-                        <label for="menuCheckbox" onclick="this.parentNode.click();">Perfil</label>
-                        <i class="bi bi-person-circle"></i>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-</header>
-`);
+                <header>
+                    <!-- Contenido de la barra de navegación -->
+                    <nav class="navbar bg-body-tertiary fixed-top">
+                        <div class="container-fluid">
+                            <a class="navbar-brand" href="inicio.html">Corderos Administrative Web</a>
+                            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#contentMenu"
+                                aria-controls="contentMenu" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="offcanvas offcanvas-end" tabindex="-1" id="contentMenu"
+                                aria-labelledby="offcanvasNavbarLabel">
+                                <div class="offcanvas-header">
+                                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu administrador</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                </div>
+                                <div class="offcanvas-body">
+                                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" aria-current="page" href="inicio.html">
+                                                <button type="button" class="btn btn-outline-dark w-100">Inicio</button>
+                                            </a>
+                                        </li>   
+                                        <li class="nav-item">
+                                            <a class="nav-link active" aria-current="page" href="administradores.html">
+                                                <button type="button" class="btn btn-outline-dark w-100">Administradores</button>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link active" aria-current="page" href="bodega.html">
+                                                <button type="button" class="btn btn-outline-dark w-100">Bodega</button>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link active" aria-current="page" href="empleados.html">
+                                                <button type="button" class="btn btn-outline-dark w-100">Empleados</button>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link active" aria-current="page" href="duplas.html">
+                                                <button type="button" class="btn btn-outline-dark w-100">Duplas</button>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link active" aria-current="page">
+                                                <button type="button" class="btn btn-danger w-100" onclick="logOut()">
+                                                    Cerrar sesión
+                                                </button>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link active" aria-current="page" href="perfil.html">
+                                                <button type="button" class="btn btn-info w-100">
+                                                    <i class="bi bi-person-circle"></i> Perfil
+                                                </button>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+                </header>`);
             // Se agrega el pie de la página web después del contenido principal.
             MAIN.insertAdjacentHTML('afterend', `
-  <!-- Site footer -->
     <footer class="site-footer">
         <div class="container">
             <div class="row">
@@ -138,22 +136,12 @@ const loadTemplate = async () => {
                         <a href="#">Cordero's company</a>.
                     </p>
                 </div>
-
-                <!-- botones de conexion con redes sociales -->
-                <!-- <div class="col-md-4 col-sm-6 col-xs-12">
-                    <ul class="social-icons">
-                        <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
-                        <li><a class="twitter" href="#"><i class="fa fa-twitter"></i></a></li>
-                        <li><a class="dribbble" href="#"><i class="fa fa-dribbble"></i></a></li>
-                        <li><a class="linkedin" href="#"><i class="fa fa-linkedin"></i></a></li>
-                    </ul>
-                </div> -->
             </div>
         </div>
-    </footer>
-`);
+    </footer>`
+            );
         } else {
-            // sweetAlert(3, DATA.error, false, 'index.html');
+            sweetAlert(3, DATA.error, false, 'index.html');
         }
     } else {
         // Se comprueba si la página web es la principal, de lo contrario se direcciona a iniciar sesión.
@@ -175,15 +163,14 @@ const loadTemplate = async () => {
                 <footer>
                     <nav class="navbar fixed-bottom bg-body-tertiary">
                         <div class="container">
-                            <p><a class="nav-link" href="#" target="_blank"><i class="bi bi-github"></i> Sitio publico</a></p>
+                            <p><a class="nav-link" href="../../views/public/index.html">Sitio publico</a></p>
                             <p><i class="bi bi-envelope-fill"></i> ricardo@gmail.com</p>
                         </div>
                     </nav>
                 </footer>
             `);
         } else {
-            // location.href = 'index.html';
-            console.log('error utils empleado');
+            location.href = 'index.html';
         }
     }
 }
