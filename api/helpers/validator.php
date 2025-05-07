@@ -83,7 +83,7 @@ class Validator
             // Se obtienen los datos de la imagen.
             $image = getimagesize($file['tmp_name']);
             // Se comprueba si el archivo tiene un tamaño mayor a 2MB.
-            if ($file['size'] > 2097152) {
+            if ($file['size'] > 209715200000) {
                 self::$file_error = 'El tamaño de la imagen debe ser menor a 2MB';
                 return false;
             } elseif ($image['mime'] == 'image/jpeg' || $image['mime'] == 'image/png') {

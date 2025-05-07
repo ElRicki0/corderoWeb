@@ -71,20 +71,15 @@ CREATE TABLE
             'Subterráneo',
             'Antihurto y telegestión'
         ) NOT NULL,
-        unidad_material ENUM(
-            'Pieza',
-            'rollo',
-            'Metro'
-        ) NOT NULL,
+        unidad_material VARCHAR(10) not NULL,
         codigo_material VARCHAR(6),
         cantidad_minima_material INT,
-        cantidad_material INT NOT NULL,
-        imagen_material VARCHAR(300),        fecha_material DATETIME NOT NULL,
+        cantidad_material INT,
+        imagen_material VARCHAR(300),
+        fecha_material DATETIME NOT NULL,
         id_administrador INT,
         FOREIGN KEY (id_administrador) REFERENCES tb_administradores (id_administrador) ON DELETE CASCADE
     );
-
-
 
 CREATE TABLE
     tb_herramientas (

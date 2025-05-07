@@ -30,37 +30,38 @@
                 <div class="row justify-content-center g-4 px-2">
                     <!-- Added g-4 for gap, py-3 for vertical padding, px-2 for horizontal padding -->
                     <div class="col-auto"> <!-- Changed to col-auto for automatic width based on content -->
-                        <button type="button" class="py-4 btn btn-success disabled" onclick="showCategory(1)"
+                        <button type="button" class="py-4 btn btn-success disabled" onclick="readAllTable(null,5)"
                             id="botonGeneral">
                             <h5 class="mb-0" onclick="readAllTable(null, 1)">Ver todas las categorías</h5>
                             <!-- Added mb-0 to remove margin -->
                         </button>
                     </div>
                     <div class="col-auto">
-                        <button type="button" class="py-4 btn btn-secondary" onclick="showCategory(2)"
+                        <button type="button" class="py-4 btn btn-secondary" onclick="readAllTable(null,6)"
                             id="botonUsoCotidiano">
                             <h5 class="mb-0"><i class="bi bi-house-door"></i> Uso cotidiano</h5>
                         </button>
                     </div>
                     <div class="col-auto">
-                        <button type="button" class="py-4 btn btn-secondary" onclick="showCategory(3)" id="botonCL200">
+                        <button type="button" class="py-4 btn btn-secondary" onclick="readAllTable(null,7)"
+                            id="botonCL200">
                             <h5 class="mb-0"><i class="bi bi-lightning-charge"></i> Material para CL200</h5>
                         </button>
                     </div>
                     <div class="col-auto">
-                        <button type="button" class="py-4 btn btn-secondary" onclick="showCategory(4)"
+                        <button type="button" class="py-4 btn btn-secondary" onclick="readAllTable(null,8)"
                             id="botonAcomedidaEspecial">
                             <h5 class="mb-0"><i class="bi bi-lightning-fill"></i> Acometida especial</h5>
                         </button>
                     </div>
                     <div class="col-auto">
-                        <button type="button" class="py-4 btn btn-secondary" onclick="showCategory(5)"
+                        <button type="button" class="py-4 btn btn-secondary" onclick="readAllTable(null,9)"
                             id="botonSubterraneo">
                             <h5 class="mb-0"><i class="bi bi-minecart-loaded"></i> Subterráneo</h5>
                         </button>
                     </div>
                     <div class="col-auto">
-                        <button type="button" class="py-4 btn btn-secondary" onclick="showCategory(6)"
+                        <button type="button" class="py-4 btn btn-secondary" onclick="readAllTable(null, 10)"
                             id="botonAntiTele">
                             <h5 class="mb-0"> <i class="bi bi-shield-lock"></i> Patron antihurto y telegestión</h5>
                         </button>
@@ -122,7 +123,6 @@
         <div class="modal fade" id="saveModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content bg-dark text-white">
-
                     <!-- Formulario saveForm -->
                     <form id="saveForm">
                         <!-- Campo oculto para asignar el id del registro al momento de modificar -->
@@ -130,61 +130,122 @@
                         <form class="needs-validation">
                             <div class="modal-header">
                                 <h5 class="fs-4 fw-bold text-center mb-4" id="modalTitle"></h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
                             <!-- Body del modal -->
                             <div class="modal-body">
                                 <!-- Inputs -->
-                                <div class="row gy-3">
-                                    <div class="col-6">
-                                        <label class="form-label">Nombre material</label>
-                                        <input id="nombreMaterial" name="nombreMaterial" class="form-control"
-                                            autocomplete="off" required placeholder="Ingrese el nombre del material...">
-                                    </div>
-                                    <div class="col-6">
-                                        <label class="form-label">Descripción material</label>
-                                        <textarea id="descripcionMaterial" name="descripcionMaterial" autocomplete="off"
-                                            class="form-control" required
-                                            placeholder="ingrese la descripción del material..."></textarea>
-                                    </div>
-                                    <div class="col-6">
-                                        <label class="form-label">Categoría material</label>
-                                        <select id="CategoriaMaterial" name="CategoriaMaterial" class="form-select"
-                                            autocomplete="off" required>
-                                            <option selected>seleccione una categoría</option>
-                                            <option value="Uso habitual">Uso habitual</option>
-                                            <option value="Material para CL200">Material para CL200</option>
-                                            <option value="Acometida especial">Acometida Especial</option>
-                                            <option value="Subterráneo">Subterráneo</option>
-                                            <option value="Antihurto y telegestión">Antihurto y telegestión</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="codigoMaterial" class="form-label">Código material</label>
-                                        <input type="text" class="form-control" name="codigoMaterial"
-                                            id="codigoMaterial" placeholder="ingrese un código de 5 o 6 dígitos..."
-                                            oninput="formatCode(this)">
-                                    </div>
-                                    <div class="col-6">
-                                        <label class="form-label" for="codigoMaterial">Cantidad materiales
+                                <div class="row">
+                                    <!-- <input id="imagen" type="file" name="imagen" class="form-control d-none"
+                                            accept="image/*" capture="environment"> -->
+                                    <div class="col-12 text-center"> <!-- Asegura el centrado de la imagen -->
+                                        <label for="imagenMaterial" style="cursor: pointer;">
+                                            <img id="imagenMuestra"
+                                                class="rounded mx-auto d-block img-fluid mt-3 border border-3 border-secondary-subtle rounded-circle imagen_R"
+                                                src="../../resources/images/error/404material.png"
+                                                onerror="this.onerror=null; this.src='../../resources/images/error/404material.png';"
+                                                id="imagenVisualAdmin" alt="ERROR FOTO MODAL" width="200px"
+                                                height="200px">
                                         </label>
-                                        <input type="number" class="form-control" id="cantidadMaterial"
-                                            name="cantidadMaterial" placeholder="ingrese cantidad material...">
+                                        <input id="imagenMaterial" type="file" name="imagenMaterial"
+                                            class="form-control d-none" accept=".png, .jpg">
                                     </div>
-                                    <div class="col-6">
-                                        <label class="form-label" for="cantidadMinimaMaterial">cantidad minima
-                                            material</label>
-                                        <input type="number" class="form-control" id="cantidadMinimaMaterial"
-                                            name="cantidadMinimaMaterial"
-                                            placeholder="ingrese cantidad minima material...">
+                                    <div class="col-12">
+                                        <div class="row gy-3">
+                                            <div class="col-6">
+                                                <label class="form-label">Nombre material</label>
+                                                <input id="nombreMaterial" name="nombreMaterial" class="form-control"
+                                                    autocomplete="off" required
+                                                    placeholder="Ingrese el nombre del material...">
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="form-label">Descripción material</label>
+                                                <textarea id="descripcionMaterial" name="descripcionMaterial"
+                                                    autocomplete="off" class="form-control" required
+                                                    placeholder="ingrese la descripción del material..."></textarea>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="form-label">Categoría material</label>
+                                                <select id="categoriaMaterial" name="categoriaMaterial"
+                                                    class="form-select" autocomplete="off" required>
+                                                    <option selected>seleccione una categoría</option>
+                                                    <option value="Uso habitual">Uso habitual</option>
+                                                    <option value="Material para CL200">Material para CL200</option>
+                                                    <option value="Acometida especial">Acometida Especial</option>
+                                                    <option value="Subterráneo">Subterráneo</option>
+                                                    <option value="Antihurto y telegestión">Antihurto y telegestión
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="codigoMaterial" class="form-label">Código material</label>
+                                                <input type="text" class="form-control" name="codigoMaterial"
+                                                    id="codigoMaterial"
+                                                    placeholder="ingrese un código de 5 o 6 dígitos..."
+                                                    oninput="formatCode(this)">
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="unidadMaterial" class="form-label">Tipo de unidades</label>
+                                                <select name="unidadMaterial" id="unidadMaterial" class="form-select"
+                                                    autocomplete="off" required>
+                                                    <option selected>seleccione una unidad</option>
+                                                    <option value="Metros">Metros</option>
+                                                    <option value="Piezas">Piezas</option>
+                                                    <option value="Rollos">Rollos</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="form-label">Estado alerta de solicitud</label>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio"
+                                                        name="estadoAlertaMaterial" id="estadoAlertaMaterial1" value="1"
+                                                        checked onclick="statusAlertDeactivate()">
+                                                    <label class="form-check-label" for="estadoAlertaMaterial1">
+                                                        Activar alerta de solicitud
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio"
+                                                        name="estadoAlertaMaterial" id="estadoAlertaMaterial2" value="0"
+                                                        onclick="statusAlertActivate()">
+                                                    <label class="form-check-label" for="estadoAlertaMaterial2">
+                                                        Desactivar alerta de solicitud
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 my-2">
+                                                <label class="form-label" for="cantidadMinimaMaterial">Cantidad
+                                                    necesaria para
+                                                    solicitud
+                                                    <!-- Icono con tooltip -->
+                                                    <span class="text-primary ms-2" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top"
+                                                        title="Alerta que se muestra al llegar a la cantidad mínima">
+                                                        <i class="bi bi-question-circle-fill fs-4"></i>
+                                                        <!-- Bootstrap Icons -->
+                                                    </span>
+                                                </label>
+                                                <input type="number" class="form-control" id="cantidadMinimaMaterial"
+                                                    name="cantidadMinimaMaterial"
+                                                    placeholder="Ingrese cantidad mínima material...">
+                                                <!-- Input real (oculto) que PHP procesará -->
+                                                <input type="hidden" name="cantidadMinimaMaterial"
+                                                    id="cantidadMinimaMaterial_real">
+                                            </div>
+                                            <div class="col-6 my-4">
+                                                <label class="form-label" for="codigoMaterial">Cantidad materiales
+                                                </label>
+                                                <input type="number" class="form-control" id="cantidadMaterial"
+                                                    name="cantidadMaterial" placeholder="ingrese cantidad material...">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="row mb-3 p-3">
                                 <div class="col-12 text-end">
-                                    <button type="submit" class="btn btn-primary ps-4 pe-4">
-                                        <i class="bi bi-person-fill-add me-1"></i> Aceptar
+                                    <button type="submit" class="btn btn-primary ps-4 pe-4" id="iconoBoton">
                                     </button>
                                 </div>
                             </div>
@@ -203,7 +264,7 @@
                     <input type="number" class="d-none" id="idMaterialCantidad" name="idMaterial">
                     <div class="modal-header">
                         <h5 class="modal-title">Actualizar cantidad</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        <button type="button" class="btn-close btn-close-white text-reset" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
                     <div class="modal-body d-flex flex-column align-items-center gap-3">
@@ -233,7 +294,7 @@
                         <input type="number" class="d-none" id="idTipoMaterialCantidad" name="idMaterial">
                         <div class="modal-header">
                             <h2 class="modal-tittle" id="TipoAltMaterial"></h2>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            <button type="button" class="btn-close btn-close-white text-reset" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body d-flex flex-column align-items-center gap-3 text-center">
@@ -270,7 +331,6 @@
     <script src="../../controllers/utils/inputValidator.js"></script>
     <!-- Llamada al controlador de la página web -->
     <script src="../../controllers/admin/bodega.js"></script>
-
 </body>
 
 </html>

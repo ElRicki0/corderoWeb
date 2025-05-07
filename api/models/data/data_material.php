@@ -8,6 +8,7 @@ class MaterialData extends MaterialHandler
 {
     // ? atributos adicionales
     private $data_error = null;
+    private $filename = null;
 
     /*
      *   Métodos para validar y establecer los datos.
@@ -64,7 +65,7 @@ class MaterialData extends MaterialHandler
 
     public function setMinimo($value)
     {
-        if (Validator::validateNaturalNumber($value)) {
+        if (Validator::validateNaturalNumber($value) or true) {
             $this->minima = $value;
             return true;
         } else {
@@ -84,6 +85,17 @@ class MaterialData extends MaterialHandler
         }
     }
 
+    public function setUnidad($value)
+    {
+        if (Validator::validateString($value)) {
+            $this->unidad = $value;
+            return true;
+        } else {
+            $this->data_error = 'La unidad es incorrecta';
+            return false;
+        }
+    }
+
     public function setCodigo($value, $min = 5, $max = 6)
     {
         if (!Validator::validateAlphanumeric($value)) {
@@ -98,9 +110,42 @@ class MaterialData extends MaterialHandler
         }
     }
 
+    public function setImagen($file, $filename = null)
+    {
+        if (Validator::validateImageFile($file, 1000)) {
+            $this->imagen = Validator::getFileName();
+            return true;
+        } elseif (Validator::getFileError()) {
+            $this->data_error = Validator::getFileError();
+            return false;
+        } elseif ($filename) {
+            $this->imagen = $filename;
+            return true;
+        } else {
+            $this->imagen = 'default.png';
+            return true;
+        }
+    }
+
+    public function setFilename()
+    {
+        if ($data = $this->readFilename()) {
+            $this->filename = $data['imagen_material'];
+            return true;
+        } else {
+            $this->data_error = 'material inexistente';
+            return false;
+        }
+    }
+
     // ? método para tener los datos adicionales del error
     public function getDataError()
     {
         return $this->data_error;
+    }
+    
+    public function getFilename()
+    {
+        return $this->filename;
     }
 }

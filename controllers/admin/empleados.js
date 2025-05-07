@@ -90,7 +90,7 @@ SAVE_FORM.addEventListener('submit', async (event) => {
 });
 
 function actualizarMunicipios() {
-    let departamento = document.getElementById("departamentoEmpleado").value;
+    let departamento = DEPARTAMENTO_EMPLEADO.value;
 
     // Limpiar opciones previas
     MUNICIPIO_EMPLEADO.innerHTML = '<option value="">Seleccione un municipio</option>';
@@ -110,7 +110,6 @@ function actualizarMunicipios() {
         "Morazán": ["San Francisco Gotera", "Cacaopera", "Joateca", "Perquín", "Sociedad"],
         "La Unión": ["La Unión", "Conchagua", "El Carmen", "Santa Rosa de Lima", "Intipucá"],
         "San Miguel": ["San Miguel", "Chinameca", "Quelepa", "Moncagua", "Nuevo Edén de San Juan"],
-        // "Tecapa": ["Tecapa 1", "Tecapa 2", "Tecapa 3"] // Agrega municipios si es un departamento válido
     };
 
     // Agregar opciones según el departamento seleccionado
@@ -174,8 +173,7 @@ const fillTable = async (form = null) => {
                                     <p class="card-title text-white">${row.departamento_trabajo_empleado}
                                     <h5 class="text-white">Municipio</h5>
                                     <p class="card-title text-white">${row.municipio_trabajo_empleado}
-                                    <h5 class="text-white">Estado empleado</h5>
-                                    <p class="card-text text-white">Estado: <i class="${icon} text-white h1"></i></p>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -274,8 +272,7 @@ const readAllTable = async (form = null, buscador) => {
                                     <p class="card-title text-white">${row.departamento_trabajo_empleado}
                                     <h5 class="text-white">Municipio</h5>
                                     <p class="card-title text-white">${row.municipio_trabajo_empleado}
-                                    <h5 class="text-white">Estado empleado</h5>
-                                    <p class="card-text text-white">Estado: <i class="${icon} text-white h1"></i></p>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -351,18 +348,31 @@ const openDelete = async (id) => {
 *   Retorno: ninguno.
 */
 const openUpdate = async (id) => {
+    // Mostrar el mensaje de confirmación
+    const isConfirmed = await confirmAction('¿Estás seguro de que deseas actualizar este registro del empleado?');
+
+    // Si el usuario cancela, no se realiza ninguna acción
+    if (!isConfirmed) {
+        sweetAlert(3, 'Acción cancelada', false);
+        return;
+    }
+
     // Se define un objeto con los datos del registro seleccionado.
     const FORM = new FormData();
     FORM.append('idEmpleado', id);
+
     // Petición para obtener los datos del registro solicitado.
     const DATA = await fetchData(EMPLADO_API, 'readOne', FORM);
+
     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
     if (DATA.status) {
         // Se muestra la caja de diálogo con su título.
         SAVE_MODAL.show();
         MODAL_TITLE.textContent = 'Actualizar empleado';
+
         // Se prepara el formulario.
         SAVE_FORM.reset();
+
         // Se inicializan los campos con los datos.
         const ROW = DATA.dataset;
         ID_EMPLEADO.value = ROW.id_empleado;
@@ -371,8 +381,11 @@ const openUpdate = async (id) => {
         DUI_EMPLEADO.value = ROW.DUI_empleado;
         TELEFONO_EMPLEADO.value = ROW.telefono_personal_empleado;
         DEPARTAMENTO_EMPLEADO.value = ROW.departamento_trabajo_empleado;
-        MUNICIPIO_EMPLEADO.value = ROW.municipio_trabajo_empleado;
+
+        // Actualizar los municipios según el departamento
+        actualizarMunicipios();
+        MUNICIPIO_EMPLEADO.value = ROW.municipio_trabajo_empleado; // Asignar el municipio
     } else {
         sweetAlert(2, DATA.error, false);
     }
-}
+};

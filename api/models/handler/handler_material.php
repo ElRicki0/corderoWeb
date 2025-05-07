@@ -9,11 +9,16 @@ class MaterialHandler
     protected $nombre = null;
     protected $descripcion = null;
     protected $categoria = null;
+    protected $unidad = null;
     protected $codigo = null;
     protected $minima = null;
     protected $cantidad = null;
+    protected $imagen = null;
     protected $fecha = null;
     protected $administrador = null;
+
+    // Constante para establecer la ruta de las imágenes.
+    const RUTA_IMAGEN = '../../images/material/';
 
     public function __construct()
     {
@@ -37,7 +42,9 @@ class MaterialHandler
                     `categoria_material`,
                     `codigo_material`,
                     `cantidad_minima_material`,
-                    `cantidad_material`,
+                    `cantidad_material`,    
+                    `imagen_material`,
+                    `unidad_material`,
                     ad.nombre_administrador,
                     ad.apellido_administrador
                 FROM
@@ -56,9 +63,11 @@ class MaterialHandler
                     `nombre_material`,
                     `descripcion_material`,
                     `categoria_material`,
+                    `unidad_material`,
                     `codigo_material`,
                     `cantidad_minima_material`,
                     `cantidad_material`,
+                    `imagen_material`,
                     `fecha_material`,
                     `id_administrador`
                 )
@@ -70,10 +79,21 @@ class MaterialHandler
                     ?,
                     ?,
                     ?,
+                    ?,
+                    ?,
                     ?
                 )';
-        $params = array($this->nombre, $this->descripcion, $this->categoria, $this->codigo, $this->minima, $this->cantidad, $this->fecha,  $_SESSION['idAdministrador']);
+        $params = array($this->nombre, $this->descripcion, $this->categoria, $this->unidad, $this->codigo, $this->minima, $this->cantidad, $this->imagen, $this->fecha,  $_SESSION['idAdministrador']);
         return Database::executeRow($sql, $params);
+    }
+
+    public function readFilename()
+    {
+        $sql = 'SELECT imagen_material
+                FROM tb_materiales
+                WHERE id_material = ?';
+        $params = array($this->id);
+        return Database::getRow($sql, $params);
     }
 
     // ? métodos para mostrar todos los datos
@@ -86,8 +106,10 @@ class MaterialHandler
                 `categoria_material`,
                 `codigo_material`,
                 `cantidad_minima_material`,
+                `imagen_material`,
                 cantidad_material,
                 fecha_material,
+                `unidad_material`,
                 mt.id_administrador,
                 ad.nombre_administrador, 
                 ad.apellido_administrador,
@@ -115,6 +137,8 @@ class MaterialHandler
                     `codigo_material`,
                     `cantidad_minima_material`,
                     `cantidad_material`,
+                    `imagen_material`,
+                    `unidad_material`,
                     ad.nombre_administrador,
                     ad.apellido_administrador,
                 CASE 
@@ -143,6 +167,8 @@ class MaterialHandler
                     `codigo_material`,
                     `cantidad_minima_material`,
                     `cantidad_material`,
+                    `imagen_material`,
+                    `unidad_material`,
                     ad.nombre_administrador, 
                     ad.apellido_administrador,
                 CASE 
@@ -171,6 +197,8 @@ class MaterialHandler
                     `codigo_material`,
                     `cantidad_minima_material`,
                     `cantidad_material`,
+                    `imagen_material`,
+                    `unidad_material`,
                     ad.nombre_administrador, 
                     ad.apellido_administrador,
                 CASE 
@@ -199,6 +227,8 @@ class MaterialHandler
                     `codigo_material`,
                     `cantidad_minima_material`,
                     `cantidad_material`,
+                    `imagen_material`,
+                    `unidad_material`,
                     ad.nombre_administrador, 
                     ad.apellido_administrador,
                 CASE 
@@ -227,6 +257,8 @@ class MaterialHandler
                     `codigo_material`,
                     `cantidad_minima_material`,
                     `cantidad_material`,
+                    `imagen_material`,
+                    `unidad_material`,
                     ad.nombre_administrador, 
                     ad.apellido_administrador,
                 CASE 
@@ -255,6 +287,8 @@ class MaterialHandler
                     `codigo_material`,
                     `cantidad_minima_material`,
                     `cantidad_material`,
+                    `imagen_material`,
+                    `unidad_material`,
                     ad.nombre_administrador, 
                     ad.apellido_administrador,
                 CASE 
@@ -284,6 +318,8 @@ class MaterialHandler
                     `codigo_material`,
                     `cantidad_minima_material`,
                     `cantidad_material`,
+                    `imagen_material`,
+                    `unidad_material`,
                     ad.nombre_administrador, 
                     ad.apellido_administrador,
                 CASE 
@@ -310,6 +346,8 @@ class MaterialHandler
                     `codigo_material`,
                     `cantidad_minima_material`,
                     `cantidad_material`,
+                    `imagen_material`,
+                    `unidad_material`,
                     ad.nombre_administrador, 
                     ad.apellido_administrador,
                 CASE 
@@ -336,6 +374,8 @@ class MaterialHandler
                     `codigo_material`,
                     `cantidad_minima_material`,
                     `cantidad_material`,
+                    `imagen_material`,
+                    `unidad_material`,
                     ad.nombre_administrador, 
                     ad.apellido_administrador,
                 CASE 

@@ -124,8 +124,8 @@ const openUpdate = async (id) => {
         APELLIDO_ADMINISTRADOR.value = ROW.apellido_administrador;
         TELEFONO_ADMINISTRADOR.value = ROW.telefono_administrador;
         CORREO_ADMINISTRADOR.value = ROW.correo_administrador;
-        IMAGEN_VADMINISTRADOR.src = SERVER_URL.concat('images/admin/', ROW.imagen_administrador);
-
+        // IMAGEN_ADMINISTRADOR.src = SERVER_URL.concat('images/admin/', ROW.imagen_administrador);
+        console.log(IMAGEN_ADMINISTRADOR.value);
         // ? llama la función para mostrar los datos del perfil
         showProfile();
     } else {

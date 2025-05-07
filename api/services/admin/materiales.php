@@ -9,7 +9,7 @@ if (isset($_GET['action'])) {
     //? Se instancia la clase correspondiente.
     $material = new MaterialData;
     //? Se declara e inicializa un arreglo para guardar el resultado que retorna la API.
-    $result = array('status' => 0, 'message' => null, 'dataset' => null, 'error' => null, 'exception' => null);
+    $result = array('status' => 0, 'message' => null, 'dataset' => null, 'error' => null, 'exception' => null, 'fileStatus' => null);
     // ? se verifica si hay un session iniciada como administrador, de lo contrario el código termina con un error
     if (isset($_SESSION['idAdministrador'])) {
         // if (isset($_SESSION['idAdministrador'])) {
@@ -26,19 +26,25 @@ if (isset($_GET['action'])) {
                 }
                 break;
             case 'createRow':
+                // echo ($_POST['unidadMaterial']);
+                // die;
                 $_POST = Validator::validateForm($_POST);
                 if (
                     !$material->setNombre($_POST['nombreMaterial']) or
                     !$material->setDescripcion($_POST['descripcionMaterial']) or
-                    !$material->setCategoria($_POST['CategoriaMaterial']) or
+                    !$material->setCategoria($_POST['categoriaMaterial']) or
+                    !$material->setUnidad($_POST['unidadMaterial']) or
                     !$material->setCodigo($_POST['codigoMaterial']) or
                     !$material->setCantidad($_POST['cantidadMaterial']) or
-                    !$material->setMinimo($_POST['cantidadMinimaMaterial'])
+                    !$material->setMinimo($_POST['cantidadMinimaMaterial']) or
+                    !$material->setImagen($_FILES['imagenMaterial'])
                 ) {
                     $result['error'] = $material->getDataError();
                 } elseif ($material->CreateRow()) {
                     $result['status'] = 1;
                     $result['message'] = 'Material agregado correctamente';
+                    // Se asigna el estado del archivo después de insertar.
+                    $result['fileStatus'] = Validator::saveFile($_FILES['imagenMaterial'], $material::RUTA_IMAGEN);
                 } else {
                     $result['error'] = 'Ocurrió un problema al agregar el material';
                 }
@@ -131,7 +137,7 @@ if (isset($_GET['action'])) {
                     !$material->setId($_POST['idMaterial']) or
                     !$material->setNombre($_POST['nombreMaterial']) or
                     !$material->setDescripcion($_POST['descripcionMaterial']) or
-                    !$material->setCategoria($_POST['CategoriaMaterial']) or
+                    !$material->setCategoria($_POST['categoriaMaterial']) or
                     !$material->setCodigo($_POST['codigoMaterial']) or
                     !$material->setCantidad($_POST['cantidadMaterial']) or
                     !$material->setMinimo($_POST['cantidadMinimaMaterial'])
