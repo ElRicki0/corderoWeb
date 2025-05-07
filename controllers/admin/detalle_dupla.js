@@ -89,28 +89,37 @@ const fillInformation = async () => {
                 src="https://www.google.com/maps?q=${latitud},${longitud}&hl=es&z=15&output=embed">
         </iframe>
         `
+        // Obtener el elemento donde se mostrará el estado
+        const ESTADO_DUPLA = document.getElementById('estadoDupla');
 
-        // `https://www.google.com/maps?q=${latitud},${longitud}&hl=es&z=15&output=embed`;
+        // Limpiar clases previas
+        ESTADO_DUPLA.classList.remove('text-success', 'text-danger');
 
-        // ? Se colocan los datos en la página web de acuerdo con la dupla seleccionada previamente.
-        // *datos de generales de dupla 1
+        // Determinar el mensaje y las clases según el estado
+        if (parseInt(DATA.dataset.estado_dupla) === 1) {
+            ESTADO_DUPLA.textContent = 'Jornada iniciada';
+            ESTADO_DUPLA.classList.add('text-success'); // Mensaje en verde
+        } else {
+            ESTADO_DUPLA.textContent = 'Jornada no iniciada';
+            ESTADO_DUPLA.classList.add('text-danger'); // Mensaje en rojo
+        }
+
+        // Actualizar otros datos de la dupla
         document.getElementById('usuarioDupla').textContent = DATA.dataset.usuario_dupla;
         document.getElementById('telefonoDupla').textContent = DATA.dataset.telefono_empresa_dupla;
         (DATA.dataset.tipo_dupla) ? type = 'Permanente' : type = 'Temporal';
         document.getElementById('tipoDupla').textContent = type;
 
-        // document.getElementById('telefonoDupla').textContent = DATA.dataset.telefono_empresa_dupla;
-        const ESTADO_DUPLA = document.getElementById('estadoDupla');
-        ESTADO_DUPLA.classList.add(icon);
-        ESTADO_DUPLA.textContent = info
-        // *datos de empleado 1
+        // Actualizar datos de los empleados
         document.getElementById('empleadoImagen1').src = SERVER_URL.concat('images/empleados/', DATA.dataset.imagen_empleado1);
         document.getElementById('nombreEmpleado1').textContent = DATA.dataset.nombre_empleado1 + ' ' + DATA.dataset.apellido_empleado1;
         document.getElementById('telefonoEmpleado1').textContent = DATA.dataset.telefono_personal_empleado1;
-        // *datos de empleado 2
+
         document.getElementById('empleadoImagen2').src = SERVER_URL.concat('images/empleados/', DATA.dataset.imagen_empleado2);
         document.getElementById('nombreEmpleado2').textContent = DATA.dataset.nombre_empleado2 + ' ' + DATA.dataset.apellido_empleado2;
         document.getElementById('telefonoEmpleado2').textContent = DATA.dataset.telefono_personal_empleado2;
+
+        // `https://www.google.com/maps?q=${latitud},${longitud}&hl=es&z=15&output=embed`;
     } else {
         // Se presenta un mensaje de error cuando no existen datos para mostrar.
         document.getElementById('mainTitle').textContent = DATA.error;
