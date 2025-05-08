@@ -50,7 +50,8 @@ if (isset($_GET['action'])) {
                     !$duplas->setTelefono($_POST['telefonoDupla']) or
                     !$duplas->setUsuario($_POST['usuarioDupla']) or
                     !$duplas->setEmpleado1($_POST['duplaEmpleado1']) or
-                    !$duplas->setEmpleado2($_POST['duplaEmpleado2'])
+                    !$duplas->setEmpleado2($_POST['duplaEmpleado2']) or
+                    !$duplas->setTipo($_POST['tipoDupla'])
                 ) {
                     $result['error'] = $duplas->getDataError();
                 } elseif ($duplas->updateRow()) {

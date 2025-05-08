@@ -38,7 +38,7 @@
                             <button type="submit" class="btn btn-success">
                                 <i class="bi bi-search"></i>
                             </button>
-                            <button type="reset" class="btn btn-secondary" onclick="fillTable()">
+                            <button type="reset" class="btn btn-secondary" onclick="readAllTable(null, 8)">
                                 <i class="bi bi-arrow-counterclockwise"></i>
                             </button>
                             <button type="button" class="btn btn-warning" onclick="openCreate()">
@@ -122,8 +122,7 @@
                                             <div class="col-12 col-md-6 col-lg-4 mb-3">
                                                 <label for="usuarioDupla" class="form-label">Nombre dupla</label>
                                                 <input type="text" class="form-control" id="usuarioDupla"
-                                                    name="usuarioDupla" placeholder="Ingrese un usuario..."
-                                                    required>
+                                                    name="usuarioDupla" placeholder="Ingrese un usuario..." required>
                                             </div>
 
                                             <!-- Claves en la misma fila -->
@@ -156,19 +155,20 @@
                                     <hr>
                                     <h3>Tipo dupla</h3>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="tipoDupla" id="tipoDupla1"
-                                            value="1">
-                                        <label class="form-check-label h4" for="tipoDupla1">
-                                            Temporal
-                                        </label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="tipoDupla" id="tipoDupla2"
                                             checked value="0">
                                         <label class="form-check-label h4" for="tipoDupla2">
                                             Permanente
                                         </label>
                                     </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="tipoDupla" id="tipoDupla1"
+                                            value="1">
+                                        <label class="form-check-label h4" for="tipoDupla1">
+                                            Temporal
+                                        </label>
+                                    </div>
+
                                 </div>
                             </div>
                             <div class="row d-flex justify-content-center align-items-center">
