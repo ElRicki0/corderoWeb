@@ -101,20 +101,38 @@
                             <h2 class="modal-title text-center">Agregar material</h2>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body text-center">
+                        <div class="modal-body p-4">
                             <input type="number" class="d-none" name="idMaterial" id="idMaterial">
-                            <h4 class="" name="nombreMaterial" id="nombreMaterial">Nombre de ejemplo</h4>
-                            <p class="fw-semibold my-3" id="descripcionMaterial">Ingrese la cantidad que necesita para
-                                su requisición</p>
 
-                            <div class="input-group input-group-lg mb-3 mx-auto border-3 border-primary w-50">
-                                <input type="number" class="form-control border-secondary" id="cantidadMaterial" name="cantidadMaterial">
-                                <span class="input-group-text" id="unidadMaterial">Cantidad</span>
+                            <div class="mb-4 text-center">
+                                <label class="form-label text-muted mb-2">Nombre del material</label>
+                                <p class="fs-4 fw-bold text-primary" name="nombreMaterial" id="nombreMaterial"></p>
+                            </div>
+
+                            <div class="mb-4 text-center">
+                                <p class="fw-light fs-5" id="descripcionMaterial"></p>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="cantidadMaterial" class="form-label text-center d-block mb-3 fw-semibold">
+                                    Ingrese la cantidad que necesita para su requisición
+                                </label>
+
+                                <div class="input-group input-group-lg mx-auto" style="max-width: 300px;">
+                                    <input type="number" class="form-control border-primary py-2" id="cantidadMaterial"
+                                        name="cantidadMaterial" placeholder="0" aria-describedby="unidadMaterial">
+                                    <span class="input-group-text bg-primary text-white border-primary"
+                                        id="unidadMaterial">Unidad</span>
+                                </div>
+                                <div class="form-text text-center mt-2">Ingrese solo valores numéricos</div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <button type="button" class="btn btn-outline-secondary px-4"
+                                data-bs-dismiss="modal"><h2>Cancelar</h2></button>
+                            <button type="submit" class="btn btn-primary px-4">
+                                <h2>Guardar</h2>
+                            </button>
                         </div>
                     </form>
                 </div>

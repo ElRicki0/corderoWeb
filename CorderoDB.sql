@@ -82,6 +82,25 @@ CREATE TABLE
     );
 
 CREATE TABLE
+    tb_requisiciones (
+        id_requisicion INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        fecha_requisicion DATETIME default CURRENT_TIMESTAMP(),
+        estado_requisicion ENUM ('Pendiente', 'Finalizada', 'Aprobada', 'Anulada') NOT NULL,
+        id_dupla INT,
+        FOREIGN KEY (id_dupla) REFERENCES tb_duplas (id_dupla) ON DELETE CASCADE
+    );
+
+CREATE TABLE
+    tb_detalle_requisiciones (
+        id_detalle_requisicion INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        cantidad_detalle_requisicion INT NOT NULL,
+        id_material INT,
+        FOREIGN KEY (id_material) REFERENCES tb_materiales (id_material) ON DELETE CASCADE,
+        id_requisicion INT,
+        FOREIGN KEY (id_requisicion) REFERENCES tb_requisiciones (id_requisicion) ON DELETE CASCADE
+    );
+
+CREATE TABLE
     tb_herramientas (
         id_herramienta INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
         nombre_herramienta VARCHAR(50) NOT NULL,

@@ -1,5 +1,6 @@
 // ? constantes para completar las rutas api
 const MATERIALES_API = 'services/public/materiales.php';
+const REQUISICION_API = 'services/public/requisicion.php';
 
 // ? Constante para establecer el formulario de buscar.
 const SEARCH_FORM = document.getElementById('searchForm'),
@@ -13,7 +14,7 @@ const SAVE_MODAL = new bootstrap.Modal('#saveModal'),
 const ID_MATERIAL = document.getElementById('idMaterial'),
     NOMBRE_MATERIAL = document.getElementById('nombreMaterial'),
     DESCRIPCION_MATERIAL = document.getElementById('descripcionMaterial'),
-    UNIDADES_MATERIAL = document.getElementById('unidadesMaterial'),
+    UNIDADES_MATERIAL = document.getElementById('unidadMaterial'),
     CANTIDAD_MATERIAL = document.getElementById('cantidadMaterial');
 
 // Constantes para establecer los elementos de la tabla.
@@ -71,6 +72,8 @@ SEARCH_FORM.addEventListener('submit', (event) => {
     fillTable(FORM);
 });
 
+
+
 // ? método para abrir modal de solicitar material
 const orderMaterial = async (id) => {
     // Se define un objeto con los datos del registro seleccionado.
@@ -83,18 +86,36 @@ const orderMaterial = async (id) => {
         // Se muestra la caja de diálogo con su título.
         SAVE_MODAL.show();
         // Se prepara el formulario.
-        // SAVE_FORM.reset();
+        SAVE_FORM.reset();
         // // Se inicializan los campos con los datos.
-        // const ROW = DATA.dataset;
-        // ID_MATERIAL.value = ROW.id_material;
-        // NOMBRE_MATERIAL.value = ROW.nombre_material;
-        // DESCRIPCION_MATERIAL.value = ROW.descripcion_material;
-        // CATEGORIA_MATERIAL.value = ROW.categoria_material;
-        // CODIGO_MATERIAL.value = ROW.codigo_material;
+        const ROW = DATA.dataset;
+        ID_MATERIAL.value = ROW.id_material;
+        NOMBRE_MATERIAL.textContent = ROW.nombre_material;
+        DESCRIPCION_MATERIAL.textContent = ROW.descripcion_material;
+        UNIDADES_MATERIAL.textContent = ROW.unidad_material;
     } else {
         sweetAlert(2, DATA.error, false);
     }
 }
+
+SAVE_FORM.addEventListener('submit', async (event) => {
+    // Se evita recargar la página web después de enviar el formulario.
+    event.preventDefault();
+    // Constante tipo objeto con los datos del formulario.
+    const FORM = new FormData(SAVE_FORM);
+    // Petición para guardar los datos del formulario.
+    const DATA = await fetchData(REQUISICION_API, 'createDetail', FORM);
+    // Se comprueba si la respuesta es satisfactoria, de lo contrario se constata si el cliente ha iniciado sesión.
+    if (DATA.status) {
+        sweetAlert(1, DATA.message, false);
+        // sweetAlert(1, DATA.message, false, 'cart.html');
+    } else if (DATA.session) {
+        sweetAlert(2, DATA.error, false);
+    } else {
+        sweetAlert(3, DATA.error, true);
+        // sweetAlert(3, DATA.error, true, 'login.html');
+    }
+})
 
 const fillTable = async (form = null, buscador) => {
     // Se inicializa el contenido de la tabla.
