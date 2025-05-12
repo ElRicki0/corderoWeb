@@ -45,23 +45,24 @@ function actualizarHora() {
 
     // Mostrar el valor en la consola
     console.log(HORA_INICIO.value + ' - ' + HORA_FINAL.value + ' = hora actual');
+    
 }
 
 function getLocation() {
     if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(
-            (position) => {
-                var lat = position.coords.latitude;
-                var lon = position.coords.longitude;
-                // var mapsUrl = `https://www.google.com/maps?q=${lat},${lon}`;
-                console.log(lat + ' - ' + lon + ' = ubicación actual');
-                LONGITUD.value = lon;
-                LATITUD.value = lat
-            },
-            (error) => {
-                console.error("Error al obtener la ubicación:", error.message);
-            }
-        );
+        (position) => {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+            // var mapsUrl = `https://www.google.com/maps?q=${lat},${lon}`;
+            console.log(lat + ' - ' + lon + ' = ubicación actual');
+            LONGITUD.value = lon;
+            LATITUD.value = lat
+        },
+        (error) => {
+            console.error("Error al obtener la ubicación:", error.message);
+        }
+    );
     } else {
         console.log("La geolocalización no es compatible con este navegador.");
     }
@@ -170,7 +171,7 @@ const fillOptions = async () => {
         if (DATA2.status) {
             sweetAlert(1, DATA2.message, true);
             // ? recarga el estado del empleado
-            fillOptions();       
+            fillOptions();
         } else {
             sweetAlert(2, DATA2.error, false);
         }
@@ -185,7 +186,7 @@ const fillInformation = async () => {
     if (DATA.status) {
         // Se inicializan los campos del formulario con los datos del usuario que ha iniciado sesión.
         const ROW = DATA.dataset;
-        USUARIO_DUPLA.textContent= ROW.usuario_dupla;
+        USUARIO_DUPLA.textContent = ROW.usuario_dupla;
         NOMBRE_EMPLEADO1.textContent = 'EMPLEADO 1: ' + ROW.nombre_empleado1 + ' ' + ROW.apellido_empleado1;
         NOMBRE_EMPLEADO2.textContent = 'EMPLEADO 2: ' + ROW.nombre_empleado2 + ' ' + ROW.apellido_empleado2;
         // CORREO_EMPLEADO.textContent = ROW.correo_empleado;

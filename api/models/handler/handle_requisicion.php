@@ -114,7 +114,7 @@ class requisicionHandler
     // método para finalizar la requisición actual
     public function finishOrder()
     {
-        $this->estado = 'Finalizada';
+        $this->estado = 'Procesando';
         $sql = 'UPDATE tb_requisiciones
                 SET estado_requisicion = ?
                 WHERE id_requisicion = ?';

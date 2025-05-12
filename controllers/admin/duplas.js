@@ -151,7 +151,7 @@ const readAllTable = async (form = null, buscador) => {
         DATA.dataset.forEach(row => {
             // Se establece un icono para el estado del empleado.
             (row.tipo_dupla) ? type = 'Temporal' : type = 'Permanente';
-            (row.estado_dupla) ? icon = 'text-warning">Estado: Jornada terminada' : icon = 'text-info">Estado: Jornada iniciada';
+            (row.estado_dupla) ?  icon = 'text-info">Estado: Jornada iniciada' : icon = 'text-warning">Estado: Jornada terminada';
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
             // console.log(row.estado_dupla);
             TABLE_BODY.innerHTML += `

@@ -14,7 +14,20 @@
     <!-- Contenido principal del documento -->
     <main>
         <h2 id="mainTitle"></h2>
-
+        <!-- Tabla para mostrar el detalle de los productos agregados al carrito de compras -->
+        <table class="table table-striped">
+            <!-- Cabeza de la tabla para mostrar los títulos de las columnas -->
+            <thead>
+                <tr>
+                    <th>CODIGO DUPLA</th>
+                    <th>ESTADO REQUISICION</th>
+                    <th>FECHA GENERADA</th>
+                    <th>VISUALIZAR MATERIALES</th>
+                </tr>
+            </thead>
+            <!-- Cuerpo de la tabla para mostrar un registro por fila -->
+            <tbody id="tableBody"></tbody>
+        </table>
     </main>
 
     <!-- IMPORTACIÓN DE ARCHIVOS JAVASCRIPT -->
@@ -28,7 +41,7 @@
     <!-- ? Llama al validador de textos -->
     <script src="../../controllers/utils/inputValidator.js"></script>
     <!-- Llamada al controlador de la página web -->
-     <script src="../../controllers/public/historial.js"></script>
+    <script src="../../controllers/public/historial.js"></script>
     <!-- ! cambiar el link js para el controntrolador -->
 
 </body>
