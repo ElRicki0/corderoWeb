@@ -54,12 +54,12 @@ const loadTemplate = async () => {
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link active" aria-current="page" href="#">
+                                        <a class="nav-link active" aria-current="page" href="../../views/public/requisicion.html">
                                             <button type="button" class="btn btn-outline-dark w-100">Requisición actual</button>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link active" aria-current="page" href="#">
+                                        <a class="nav-link active" aria-current="page" href="../../views/public/historial.html">
                                             <button type="button" class="btn btn-outline-dark w-100">Historial</button>
                                         </a>
                                     </li>

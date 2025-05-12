@@ -108,6 +108,7 @@ SAVE_FORM.addEventListener('submit', async (event) => {
     // Se comprueba si la respuesta es satisfactoria, de lo contrario se constata si el cliente ha iniciado sesión.
     if (DATA.status) {
         sweetAlert(1, DATA.message, false);
+        SAVE_MODAL.hide();  
         // sweetAlert(1, DATA.message, false, 'cart.html');
     } else if (DATA.session) {
         sweetAlert(2, DATA.error, false);

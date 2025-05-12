@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Requisición</title>
+    <link rel="stylesheet" href="../../resources/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../resources/css/general.css">
+    <link rel="stylesheet" href="../../resources/css/bootstrap-icons.min.css">
+</head>
+
+<body>
+    <!-- Contenido principal del documento -->
+    <main>
+        <h2 id="mainTitle"></h2>
+        <!-- Tabla para mostrar el detalle de los productos agregados al carrito de compras -->
+        <table class="table table-striped">
+            <!-- Cabeza de la tabla para mostrar los títulos de las columnas -->
+            <thead>
+                <tr>
+                    <th>MATERIAL</th>
+                    <th>CATEGORIA</th>
+                    <th>CANTIDAD SELECCIONADA</th>
+                    <th>ACCIONES</th>
+                </tr>
+            </thead>
+            <!-- Cuerpo de la tabla para mostrar un registro por fila -->
+            <tbody id="tableBody"></tbody>
+        </table>
+        <!-- Párrafo para mostrar un botón que finaliza el pedido -->
+        <p class="text-end">
+            <button type="button" class="btn btn-warning " onclick="finishOrder()">
+                <i class="bi bi-credit-card-fill"></i> Finalizar pedido
+            </button>
+        </p>
+        <!-- Párrafo para mostrar un enlace a la página web principal -->
+        <p class="text-end">
+            <a href="materiales.html" class="btn btn-success">
+                <i class="bi bi-cart-fill"></i> Solisitar mas materiales
+            </a>
+        </p>
+
+        <!-- Componente Modal para mostrar una caja de diálogo -->
+        <div class="modal fade" id="itemModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="modalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <!-- Contenido del componente Modal -->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-4" id="modalTitle">Cambiar cantidad de material</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <!-- Formulario para actualizar cantidad -->
+                    <form id="itemForm">
+                        <div class="modal-body row">
+                            <input type="number" class="d-none" id="idDetalle" name="idDetalle">
+                            <div class="col-sm-12">
+                                <label for="cantidadMaterial" class="form-label fs-5">Cantidad</label>
+
+                                <div class="input-group input-group-lg mx-auto" style="max-width: 300px;">
+                                    <input type="number" class="form-control border-primary py-2" id="cantidadMaterial"
+                                        name="cantidadMaterial" placeholder="0" aria-describedby="unidadMaterial">
+                                    <span class="input-group-text bg-primary text-white border-primary"
+                                        id="unidadMaterial"></span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary btn-lg py-2 fs-5"
+                                data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary btn-lg py-2 fs-5">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- IMPORTACIÓN DE ARCHIVOS JAVASCRIPT -->
+    <!-- Llamada al framework y librería de mensajes -->
+    <script src="../../resources/js/bootstrap.bundle.min.js"></script>
+    <script src="../../resources/js/sweetalert.min.js"></script>
+    <!-- Llamada al controlador general de la aplicación -->
+    <script type="text/javascript" src="../../controllers/utils/components.js"></script>
+    <!-- Llamada al controlador del sitio privado -->
+    <script type="text/javascript" src="../../controllers/utils/public.js"></script>
+    <!-- ? Llama al validador de textos -->
+    <script src="../../controllers/utils/inputValidator.js"></script>
+    <!-- Llamada al controlador de la página web -->
+    <script src="../../controllers/public/requisicion.js"></script>
+    <!-- ! cambiar el link js para el controntrolador -->
+
+</body>
+
+</html>

@@ -29,7 +29,7 @@ class requisicionHandler
     public function getRequisicion()
     {
         $this->estado = 'Pendiente';
-        $sql = "SELECT id_requisicion FROM requisiciones WHERE estado = ? AND id_dupla = ?";
+        $sql = "SELECT id_requisicion FROM tb_requisiciones WHERE estado_requisicion = ? AND id_dupla = ?";
         $params = array($this->estado, $_SESSION['idDupla']);
         if ($data = Database::getRow($sql, $params)) {
             $_SESSION['idRequisicion'] = $data['id_requisicion'];
@@ -74,20 +74,51 @@ class requisicionHandler
     }
 
     // método para leer los detalles de la requisición actual
-    public function readDetail()
+    public function  readDetail()
     {
         $sql = 'SELECT
-                    dr.id_detalle_requisicion,
+                    `id_detalle_requisicion`,
+                    `cantidad_detalle_requisicion`,
                     m.nombre_material,
-                    dr.cantidad_detalle_requisicion,
-                    r.estado
+                    m.categoria_material,
+                    m.unidad_material,
+                    `id_requisicion`
                 FROM
-                    tb_detalle_requisiciones dr
-                INNER JOIN tb_materiales m ON m.id_material = dr.id_material
-                INNER JOIN tb_requisiciones r ON r.id_requisicion = dr.id_requisicion
-                WHERE
-                    dr.id_requisicion = ?';
+                    `tb_detalle_requisiciones` dr
+                INNER JOIN tb_materiales m ON
+                    m.id_material = dr.id_material
+                    WHERE dr.id_requisicion = ?';
         $params = array($_SESSION['idRequisicion']);
         return Database::getRows($sql, $params);
+    }
+
+    // método para actualizar la cantidad de un material en la requisición actual
+    public function updateDetail()
+    {
+        $sql = 'UPDATE tb_detalle_requisiciones
+                SET cantidad_detalle_requisicion = ?
+                WHERE id_requisicion = ? AND id_detalle_requisicion = ?';
+        $params = array($this->cantidad, $_SESSION['idRequisicion'], $this->id_detalle);
+        return Database::executeRow($sql, $params);
+    }
+
+    // metodo para eliminar un material de la requisición actual
+    public function deleteDetail()
+    {
+        $sql = 'DELETE FROM tb_detalle_requisiciones
+                WHERE id_detalle_requisicion = ? AND id_requisicion = ?';
+        $params = array($this->id_detalle, $_SESSION['idRequisicion']);
+        return Database::executeRow($sql, $params);
+    }
+
+    // método para finalizar la requisición actual
+    public function finishOrder()
+    {
+        $this->estado = 'Finalizada';
+        $sql = 'UPDATE tb_requisiciones
+                SET estado_requisicion = ?
+                WHERE id_requisicion = ?';
+        $params = array($this->estado, $_SESSION['idRequisicion']);
+        return Database::executeRow($sql, $params);
     }
 }
