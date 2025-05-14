@@ -91,6 +91,22 @@ class requisicionHandler
         $params = array($_SESSION['idRequisicion']);
         return Database::getRows($sql, $params);
     }
+    // metodo para leer los detalles de la requisición de una dupla
+    public function readAll()
+    {
+        $sql = 'SELECT
+                    `id_requisicion`,
+                    `fecha_requisicion`,
+                    `estado_requisicion`,
+                    dp.usuario_dupla
+                FROM
+                    `tb_requisiciones` rq
+                    INNER JOIN tb_duplas dp on rq.id_dupla = dp.id_dupla
+                WHERE
+                    rq.`id_dupla` = ?';
+        $params = array($_SESSION['idDupla']);
+        return Database::getRows($sql, $params);
+    }
 
     // método para actualizar la cantidad de un material en la requisición actual
     public function updateDetail()

@@ -404,9 +404,9 @@ const enableModal = () => {
     IMAGEN_MATERIAL.readOnly = false;
     // Cambia el contenido del botón (icono de spinner + texto)
     ICONO_BOTON.innerHTML = `
-        <i class="bi bi-person-fill-add me-1"></i> Aceptar
+        <i class="bi bi-file-earmark-plus-fill"></i> Aceptar
     `;
-    ICONO_BOTON.true = false; // Deshabilita el botón
+    ICONO_BOTON.disabled = false; // Deshabilita el botón
 }
 
 // ? función asíncrona para ordenar los registros de diferentes formas que el  usuario  requiera

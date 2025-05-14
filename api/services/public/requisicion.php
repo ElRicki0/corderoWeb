@@ -39,6 +39,14 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'No existen materiales en la requisición';
                 }
                 break;
+            // Accion para obtener todas las requisiciones de la dupla.
+            case 'readAll':
+                if ($result['dataset'] = $requisicion->readAll()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'No existen requisiciones registradas';
+                }
+                break;
             case 'startRequisicion':
                 if ($requisicion->startRequisicion()) {
                     $result['status'] = 1;
