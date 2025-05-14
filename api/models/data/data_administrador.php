@@ -114,7 +114,7 @@ class AdministradorData extends AdministradorHandler
             $this->filename = $data['imagen_administrador'];
             return true;
         } else {
-            $this->data_error = 'Administrador inexistente';
+            $this->data_error = 'Imagen administrador no encontrada';
             return false;
         }
     }

@@ -135,17 +135,21 @@ if (isset($_GET['action'])) {
                 $_POST = Validator::validateForm($_POST);
                 if (
                     !$material->setId($_POST['idMaterial']) or
+                    !$material->setFilename() or
                     !$material->setNombre($_POST['nombreMaterial']) or
                     !$material->setDescripcion($_POST['descripcionMaterial']) or
                     !$material->setCategoria($_POST['categoriaMaterial']) or
                     !$material->setCodigo($_POST['codigoMaterial']) or
                     !$material->setCantidad($_POST['cantidadMaterial']) or
-                    !$material->setMinimo($_POST['cantidadMinimaMaterial'])
+                    !$material->setMinimo($_POST['cantidadMinimaMaterial']) or
+                    !$material->setImagen($_FILES['imagenMaterial'], $material->getFilename())
                 ) {
                     $result['error'] = $material->getDataError();
                 } elseif ($material->UpdateRow()) {
                     $result['status'] = 1;
                     $result['message'] = 'Material editado correctamente';
+                    // Se asigna el estado del archivo después de actualizar.
+                    $result['fileStatus'] = Validator::changeFile($_FILES['imagenMaterial'], $material::RUTA_IMAGEN, $material->getFilename());
                 } else {
                     $result['error'] = 'Error al editar el material';
                 }

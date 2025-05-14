@@ -175,10 +175,10 @@ class AdministradorHandler
 
     public function readFilename()
     {
-        $sql = 'SELECT tb_administradores
-                FROM CorderoDB
+        $sql = 'SELECT imagen_administrador
+                FROM tb_administradores
                 WHERE id_administrador = ?';
-        $params = array($this->id);
+        $params = array($_SESSION['idAdministrador']);
         return Database::getRow($sql, $params);
     }
 }

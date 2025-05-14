@@ -237,7 +237,6 @@ const openCreate = () => {
 const openUpdate = async (id) => {
     // Mostrar el mensaje de confirmación
     const isConfirmed = await confirmAction('¿Estás seguro de que deseas actualizar este registro de material?');
-
     // Si el usuario cancela, no se realiza ninguna acción
     if (!isConfirmed) {
         sweetAlert(3, 'Acción cancelada', false);
@@ -247,20 +246,16 @@ const openUpdate = async (id) => {
     // Se define un objeto con los datos del registro seleccionado.
     const FORM = new FormData();
     FORM.append('idMaterial', id);
-
     // Petición para obtener los datos del registro solicitado.
     const DATA = await fetchData(MATERIALES_API, 'readOne', FORM);
-
     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
     if (DATA.status) {
         // Se muestra la caja de diálogo con su título.
         SAVE_MODAL.show();
         enableModal(); // habilita el modal
         MODAL_TITLE.textContent = 'Actualizar información';
-
         // Se prepara el formulario.
         SAVE_FORM.reset();
-
         // Se inicializan los campos con los datos.
         const ROW = DATA.dataset;
         ID_MATERIAL.value = ROW.id_material;

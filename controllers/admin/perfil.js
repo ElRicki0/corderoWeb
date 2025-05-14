@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadTemplate();
 
     // ? llama las funciones para cargar el historial
-    fillCables();
+    // fillCables();
 
     // ? llama la función para mostrar los datos del perfil
     showProfile();
@@ -125,7 +125,7 @@ const openUpdate = async (id) => {
         TELEFONO_ADMINISTRADOR.value = ROW.telefono_administrador;
         CORREO_ADMINISTRADOR.value = ROW.correo_administrador;
         // IMAGEN_ADMINISTRADOR.src = SERVER_URL.concat('images/admin/', ROW.imagen_administrador);
-        console.log(IMAGEN_ADMINISTRADOR.value);
+        // console.log(IMAGEN_ADMINISTRADOR.value);
         // ? llama la función para mostrar los datos del perfil
         showProfile();
     } else {
@@ -138,88 +138,6 @@ const openPassword = async (id) => {
     PASSWORD_MODAL.show();
     // Se restauran los elementos del formulario.
     PASSWORD_FORM.reset();
-}
-
-const fillCables = async (form = null) => {
-    // ? se inicia el contenido de la tabla 
-    CABLE_BODY.innerHTML = `
-    <div class="carousel-item active">
-        <div class="row">
-            <div class="mx-2">
-                <div class="row">
-                    <div class="col-lg-4 col-md-12 col-sm-12">
-                        <div class="d-flex justify-content-center align-items-center rounded-circle border overflow-hidden"
-                            style="width: 200px; height: 200px;">
-                            <img src="../../resources/images/other/cables.png"
-                                alt="Imagen de Historial"
-                                class="img-fluid">
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-10 col-sm-10 ms-4">
-                        En este apartado pod ras visualizar todo las
-                        actividades recientes relacionadas con el administrador y
-                        cuales
-                        fueron sus ultimas interacciones con el apartado de cables
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    `;
-    // ? petición para obtener los datos de la base de datos
-    const DATA = await fetchData(CABLE_API, 'readAllOne');
-    // ? se comprueba si es satisfactoria la respuesta
-
-    if (DATA.status) {
-        // Se recorre el conjunto de registros (dataset) fila por fila a través del objeto row.
-        DATA.dataset.forEach(row => {
-            // Se establece un icono para el estado del producto.
-            let icon;
-
-            switch (parseInt(row.estado_cable)) {
-                case 0:
-                    icon = 'bi bi-bookmark-star'; // Estado 0
-                    break;
-                case 1:
-                    icon = 'bi bi-bookmark-star-fill'; // Estado 1
-                    break;
-                case 2:
-                    icon = 'bi bi-truck'; // Estado 2
-                    break;
-                default:
-                    icon = 'bi bi-question-circle-fill'; // Para estados no contemplados
-            }
-            // Se crean y concatenan las filas de la tabla con los datos de cada registro.
-            CABLE_BODY.innerHTML += `
-                <div class="carousel-item">
-                    <div class="row">
-                        <div class="col-lg-4 col-md-12 col-sm-12">
-                            <div class="d-flex justify-content-center align-items-center rounded-circle border overflow-hidden"
-                                style="width: 200px; height: 200px;">
-                                <img src="../../api/images/cables/${row.imagen_categoria_cable}"
-                                    alt="Imagen de Historial" id="cablesImage"
-                                    class="img-fluid">
-                            </div>
-                        </div>
-                        <div class="col-lg-8 col-md-12 col-sm-12">
-                            <h5 class="">Nombre del cable</h5>
-                            <p class="card-title ">${row.nombre_cable}</p>
-                            <h5 class="">Descripción del cable</h5>
-                            <p class="card-text ">${row.descripcion_cable}</p>
-                            <h5 class="">Longitud cable</h5>
-                            <p class="card-text ">${row.longitud_cable} Metros MT.</p>
-                            <h5 class="">Estado del cable</h5>
-                            <p class="card-text "><i class="${icon}"></i></p>
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-
-
-    } else {
-        sweetAlert(4, DATA.error, true);
-    }
 }
 
 const showProfile = async () => {

@@ -398,6 +398,7 @@ class MaterialHandler
         $sql = 'UPDATE
                     `tb_materiales`
                 SET
+                    `imagen_material` = ?,
                     `nombre_material` = ?,
                     `descripcion_material` = ?,
                     `categoria_material` = ?,
@@ -408,7 +409,7 @@ class MaterialHandler
                     `id_administrador` = ?
                 WHERE
                     `id_material` =?';
-        $params = array($this->nombre, $this->descripcion, $this->categoria, $this->codigo, $this->minima, $this->cantidad, $this->fecha,  $_SESSION['idAdministrador'], $this->id);
+        $params = array($this->imagen, $this->nombre, $this->descripcion, $this->categoria, $this->codigo, $this->minima, $this->cantidad, $this->fecha,  $_SESSION['idAdministrador'], $this->id);
         return Database::executeRow($sql, $params);
     }
 
