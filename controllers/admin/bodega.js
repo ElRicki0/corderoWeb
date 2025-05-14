@@ -136,11 +136,13 @@ SAVE_FORM.addEventListener('submit', async (event) => {
     // Validación en el cliente
     if (isNaN(cantidad) || cantidad <= 0) {
         sweetAlert(2, 'La cantidad debe ser un número entero positivo', false);
+        enableModal();
         return;
     }
 
     if (cantidad <= cantidadMinima) {
         sweetAlert(2, `La cantidad debe ser mayor a la cantidad minima: (${cantidadMinima})`, false);
+        enableModal();
         return;
     }
 
@@ -163,6 +165,7 @@ SAVE_FORM.addEventListener('submit', async (event) => {
             sweetAlert(2, DATA.error || 'Error desconocido', false);
         }
     } catch (error) {
+        enableModal();
         console.error('Error en la solicitud:', error);
         sweetAlert(2, 'Error al procesar la solicitud', false);
     }
@@ -488,7 +491,7 @@ const readAllTable = async (form = null, buscador) => {
             }
             if (row.necesita_reposicion == 1) {
                 cantidad = `<div class="round alert alert-danger rounded-3 mb-2" role="alert">
-                                <i class="bi bi-exclamation-triangle-fill"></i> <strong class=''>¡Atención! material es menor a la cantidad minima</strong>
+                                <i class="bi bi-exclamation-triangle-fill"></i> <strong class=''>¡Atención! Hay poca cantidad de material</strong>
                             </div>`;
 
                 sweetAlert(3, 'materiales con poco stock');
