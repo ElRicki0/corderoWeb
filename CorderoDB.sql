@@ -86,7 +86,7 @@ CREATE TABLE
         id_requisicion INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
         fecha_requisicion DATETIME default CURRENT_TIMESTAMP(),
         -- estado_requisicion ENUM ('Pendiente', 'Finalizada', 'Aprobada', 'Anulada') NOT NULL,
-        estado_requisicion ENUM ('Pendiente', 'Procesando', 'Aprobada', 'Anulada') NOT NULL,
+        estado_requisicion ENUM ('Pendiente', 'Procesando', 'Aprobada', 'Entregada') NOT NULL,
         id_dupla INT,
         FOREIGN KEY (id_dupla) REFERENCES tb_duplas (id_dupla) ON DELETE CASCADE
     );

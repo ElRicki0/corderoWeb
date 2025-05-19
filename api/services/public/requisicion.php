@@ -39,12 +39,22 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'No existen materiales en la requisición';
                 }
                 break;
-            // Accion para obtener todas las requisiciones de la dupla.
+            // Acción para obtener todas las requisiciones de la dupla.
             case 'readAll':
                 if ($result['dataset'] = $requisicion->readAll()) {
                     $result['status'] = 1;
                 } else {
                     $result['error'] = 'No existen requisiciones registradas';
+                }
+                break;
+            // acción para leer todo el historial de las  requisiciones realizadas
+            case 'readByOrder':
+                if (!$requisicion->setIdRequisicion($_POST['idRequisicion'])) {
+                    $result['error'] = $requisicion->getDataError();
+                } elseif ($result['dataset'] = $requisicion->readByOrder()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'Requisición inexistente';
                 }
                 break;
             case 'startRequisicion':

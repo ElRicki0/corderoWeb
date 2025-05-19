@@ -31,12 +31,28 @@
 
         <!-- modal para mostrar el contenido de cada requisicion -->
         <div class="modal fade" id="showModal" data-bs-keyboard="false">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header flex-column align-items-start">
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">Materiales solicitados</h1>
-                        <h3 id="dateMaterials"></h3>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h3 id="dateMaterials" class="mt-2">fecha muestra</h3>
+                        <button type="button" class="btn-close position-absolute end-0 top-0 m-3"
+                            data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="modalBody">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>MATERIAL</th>
+                                    <th>CANTIDAD</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modalTableBody"></tbody>
+                        </table>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </div>
             </div>

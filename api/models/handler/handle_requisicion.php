@@ -108,6 +108,23 @@ class requisicionHandler
         return Database::getRows($sql, $params);
     }
 
+    public function readByOrder()
+    {
+        $sql = 'SELECT
+                    m.nombre_material,
+                    SUM(dr.cantidad_detalle_requisicion) AS cantidad_total,
+                    MAX(r.fecha_requisicion) AS ultima_fecha_requisicion  -- Opcional: muestra la fecha más reciente
+                FROM
+                    `tb_detalle_requisiciones` dr
+                    INNER JOIN tb_materiales m ON dr.id_material = m.id_material
+                    INNER JOIN tb_requisiciones r ON dr.id_requisicion = r.id_requisicion
+                    WHERE r.id_requisicion = ?
+                GROUP BY
+                    m.nombre_material -- Agrupa por nombre de material;';
+        $params = array($this->id_requisicion);
+        return Database::getRows($sql, $params);
+    }
+
     // método para actualizar la cantidad de un material en la requisición actual
     public function updateDetail()
     {
