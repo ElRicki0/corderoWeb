@@ -72,6 +72,11 @@ const loadTemplate = async () => {
                                             </a>
                                         </li>
                                         <li class="nav-item">
+                                            <a class="nav-link active" aria-current="page" href="requisiciones.html">
+                                                <button type="button" class="btn btn-outline-dark w-100">Requisiciones</button>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
                                             <a class="nav-link active" aria-current="page">
                                                 <button type="button" class="btn btn-danger w-100" onclick="logOut()">
                                                     Cerrar sesión

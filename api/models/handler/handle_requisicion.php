@@ -73,6 +73,29 @@ class requisicionHandler
         return Database::executeRow($sql, $params);
     }
 
+    // método para leer todas las requisiciones en proceso de todas las duplas
+    public function readAll()
+    {
+        $sql = 'SELECT
+                    rq.`id_requisicion`,
+                    rq.`fecha_requisicion`,
+                    rq.`estado_requisicion`,
+                    dp.usuario_dupla
+                FROM
+                    `tb_requisiciones` rq
+                INNER JOIN tb_duplas dp ON
+                    rq.id_dupla = dp.id_dupla
+                INNER JOIN tb_detalle_requisiciones dr ON
+                    rq.id_requisicion = dr.id_requisicion
+                WHERE
+                    rq.`estado_requisicion` = "Procesando"
+                GROUP BY
+                    rq.id_requisicion
+                ORDER BY
+                    rq.fecha_requisicion ASC  -- ASC (ascendente) = de más antiguo a más nuevo';
+        return Database::getRows($sql);
+    }
+
     // método para leer los detalles de la requisición actual
     public function  readDetail()
     {
@@ -92,7 +115,7 @@ class requisicionHandler
         return Database::getRows($sql, $params);
     }
     // metodo para leer los detalles de la requisición de una dupla
-    public function readAll()
+    public function readAllDupla()
     {
         $sql = 'SELECT
                     `id_requisicion`,
@@ -111,9 +134,11 @@ class requisicionHandler
     public function readByOrder()
     {
         $sql = 'SELECT
+                    dr.id_detalle_requisicion,
                     m.nombre_material,
                     SUM(dr.cantidad_detalle_requisicion) AS cantidad_total,
-                    MAX(r.fecha_requisicion) AS ultima_fecha_requisicion  -- Opcional: muestra la fecha más reciente
+                    MAX(r.fecha_requisicion) AS ultima_fecha_requisicion,  -- Opcional: muestra la fecha más reciente
+                    dr.id_requisicion
                 FROM
                     `tb_detalle_requisiciones` dr
                     INNER JOIN tb_materiales m ON dr.id_material = m.id_material
@@ -135,12 +160,31 @@ class requisicionHandler
         return Database::executeRow($sql, $params);
     }
 
+    // método para actualizar la cantidad de un material en la requisición actual
+    public function updateQuantity()
+    {
+        $sql = 'UPDATE tb_detalle_requisiciones
+                SET cantidad_detalle_requisicion = ?
+                WHERE id_detalle_requisicion = ?';
+        $params = array($this->cantidad, $this->id_detalle);
+        return Database::executeRow($sql, $params);
+    }
+
     // metodo para eliminar un material de la requisición actual
     public function deleteDetail()
     {
         $sql = 'DELETE FROM tb_detalle_requisiciones
                 WHERE id_detalle_requisicion = ? AND id_requisicion = ?';
         $params = array($this->id_detalle, $_SESSION['idRequisicion']);
+        return Database::executeRow($sql, $params);
+    }
+
+    // metodo para eliminar un material de la requisición actual
+    public function deleteMaterial()
+    {
+        $sql = 'DELETE FROM tb_detalle_requisiciones
+                WHERE id_detalle_requisicion = ?';
+        $params = array($this->id_detalle);
         return Database::executeRow($sql, $params);
     }
 

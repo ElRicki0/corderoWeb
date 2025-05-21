@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 const ShowDetails = async () => {
     // peticion para obtener los datos de todos los pedidos
-    const DATA = await fetchData(REQUISICION_API, 'readAll');
+    const DATA = await fetchData(REQUISICION_API, 'readAllDupla');
     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
     if (DATA.status) {
         // Se inicializa el cuerpo de la tabla.
@@ -77,6 +77,7 @@ const showMaterials = async (id) => {
     // Petición para obtener los registros disponibles.
     const DATA = await fetchData(REQUISICION_API, 'readByOrder', FORM);
     if (DATA.status) {
+        SHOWMODAL.show();
         // Se recorre el conjunto de registros (dataset) fila por fila a través del objeto row.
         DATA.dataset.forEach(row => {
             MODAL_BODY.innerHTML += `
@@ -90,6 +91,4 @@ const showMaterials = async (id) => {
         sweetAlert(4, DATA.error, true);
         SHOWMODAL.hide();
     }
-
-    SHOWMODAL.show();
 }

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Requisiciones</title>
+    <link rel="stylesheet" href="../../resources/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../resources/css/general.css">
+    <link rel="stylesheet" href="../../resources/css/bootstrap-icons.min.css">
+</head>
+
+<body>
+    <!-- Contenido principal del documento -->
+    <main>
+        <h2 id="mainTitle"></h2>
+        <div class="row">
+            <!-- formulario de búsqueda -->
+            <form class="col-12" id="searchForm">
+                <div class="row">
+                    <div class="col-8">
+                        <input type="search" class="form-control fs-3" name="search" placeholder="Buscar..." required>
+                    </div>
+                    <div class="col-4">
+                        <button type="submit" class="btn btn-success">
+                            <h3>
+                                <i class="bi bi-search"></i>
+                            </h3>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- tabla para mostrar la tabla de contenido -->
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <td colspan="6" id="rowsFound"></td>
+                </tr>
+                <tr>
+                    <th>Código dupla</th>
+                    <th>Fecha Generada</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <!-- cuerpo de la tabla de contenido -->
+            <tbody id="tableBody"></tbody>
+        </table>
+
+        <!-- modal para mostrar los materiales de cada requisición -->
+        <div class="modal fade" id="saveModal" data-bs-keyboard="false">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header flex-column align-items-start">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Materiales solicitados</h1>
+                        <h3 id="dateMaterials" class="mt-2">fecha muestra</h3>
+                        <button type="button" class="btn-close position-absolute end-0 top-0 m-3"
+                            data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="modalBody">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr id="tableColumns">
+                                    <th>MATERIAL</th>
+                                    <th>CANTIDAD</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modalTableBody"></tbody>
+                        </table>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- modal para editar la cantidad de materiales -->
+        <div class="modal fade" id="itemModal" data-bs-keyboard="false">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header flex-column align-items-start">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h1>Cambiar cantidad de material</h1>
+                        <h3 id="materialName">nombre</h3>
+                    </div>
+                    <form id="itemForm">
+                        <div class="modal-body row">
+                            <input type="number" class="d-none" id="idDetalle" name="idDetalle">
+                            <div class="col-sm-12">
+                                <label for="cantidadMaterial" class="form-label">Cantidad</label>
+                                <input id="cantidadMaterial" type="number" name="cantidadMaterial" min="1"
+                                    class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- IMPORTACIÓN DE ARCHIVOS JAVASCRIPT -->
+    <!-- Llamada al framework y librería de mensajes -->
+    <script src="../../resources/js/bootstrap.bundle.min.js"></script>
+    <script src="../../resources/js/sweetalert.min.js"></script>
+    <!-- Llamada al controlador general de la aplicación -->
+    <script type="text/javascript" src="../../controllers/utils/components.js"></script>
+    <!-- Llamada al controlador del sitio privado -->
+    <script type="text/javascript" src="../../controllers/utils/admin.js"></script>
+    <!-- ? Llama al validador de textos -->
+    <script src="../../controllers/utils/inputValidator.js"></script>
+    <!-- Llamada al controlador de la página web -->
+    <script src="../../controllers/admin/requisiciones.js"></script>
+    <!-- ! cambiar el link js para el controntrolador -->
+
+</body>
+
+</html>

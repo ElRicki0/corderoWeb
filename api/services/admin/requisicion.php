@@ -10,40 +10,15 @@ if (isset($_GET['action'])) {
     // Se declara e inicializa un arreglo para guardar el resultado que retorna la API.
     $result = array('status' => 0, 'session' => 0, 'message' => null, 'error' => null, 'exception' => null, 'dataset' => null);
     // Se verifica si existe una sesión iniciada como cliente para realizar las acciones correspondientes.
-    if (isset($_SESSION['idDupla'])) {
+    if (isset($_SESSION['idAdministrador'])) {
+        $result['session'] = 1;
         switch ($_GET['action']) {
-            case 'createDetail':
-                $_POST = Validator::validateForm($_POST);
-                if (!$requisicion->startRequisicion()) {
-                    $result['error'] = 'Ocurrió un problema al iniciar la requisición';
-                } elseif (
-                    !$requisicion->setMaterial($_POST['idMaterial']) or
-                    !$requisicion->setCantidad($_POST['cantidadMaterial'])
-                ) {
-                    $result['error'] = $requisicion->getDataError();
-                } elseif ($requisicion->createDetail()) {
+            case 'readAll':
+                if ($result['dataset'] = $requisicion->readAll()) {
                     $result['status'] = 1;
-                    $result['message'] = 'Material agregado correctamente';
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
                 } else {
-                    $result['error'] = 'Ocurrió un problema al agregar el material';
-                }
-                break;
-            // Acción para obtener los productos agregados en el carrito de compras.
-            case 'readDetail':
-                if (!$requisicion->getRequisicion()) {
-                    $result['error'] = 'No ha agregado materiales a la requisición';
-                } elseif ($result['dataset'] = $requisicion->readDetail()) {
-                    $result['status'] = 1;
-                } else {
-                    $result['error'] = 'No existen materiales en la requisición';
-                }
-                break;
-            // Acción para obtener todas las requisiciones de la dupla.
-            case 'readAllDupla':
-                if ($result['dataset'] = $requisicion->readAllDupla()) {
-                    $result['status'] = 1;
-                } else {
-                    $result['error'] = 'No existen requisiciones registradas';
+                    $result['error'] = 'No existen requisiciones pendientes...';
                 }
                 break;
             // acción para leer todo el historial de las  requisiciones realizadas
@@ -56,15 +31,7 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'Requisición inexistente';
                 }
                 break;
-            case 'startRequisicion':
-                if ($requisicion->startRequisicion()) {
-                    $result['status'] = 1;
-                    $result['message'] = 'Requisición iniciada';
-                } else {
-                    $result['error'] = 'No se pudo iniciar la requisición';
-                }
-                break;
-            // Acción para actualizar la cantidad de un material en el carrito de compras.
+            // acción para actualizar la cantidad de la solicitud del material
             case 'updateDetail':
                 $_POST = Validator::validateForm($_POST);
                 if (
@@ -72,31 +39,22 @@ if (isset($_GET['action'])) {
                     !$requisicion->setCantidad($_POST['cantidadMaterial'])
                 ) {
                     $result['error'] = $requisicion->getDataError();
-                } elseif ($requisicion->updateDetail()) {
+                } elseif ($requisicion->updateQuantity()) {
                     $result['status'] = 1;
                     $result['message'] = 'Cantidad modificada correctamente';
                 } else {
                     $result['error'] = 'Ocurrió un problema al modificar la cantidad';
                 }
+
                 break;
-            // Acción para remover un material del carrito de compras.
-            case 'deleteDetail':
+            case 'deleteMaterial':
                 if (!$requisicion->setIdDetalle($_POST['idDetalle'])) {
                     $result['error'] = $requisicion->getDataError();
-                } elseif ($requisicion->deleteDetail()) {
+                } elseif ($requisicion->deleteMaterial()) {
                     $result['status'] = 1;
                     $result['message'] = 'Material removido correctamente';
                 } else {
                     $result['error'] = 'Ocurrió un problema al remover el material';
-                }
-                break;
-            // Acción para finalizar el carrito de compras.
-            case 'finishOrder':
-                if ($requisicion->finishOrder()) {
-                    $result['status'] = 1;
-                    $result['message'] = 'requisicion solicitada correctamente';
-                } else {
-                    $result['error'] = 'Ocurrió un problema al solicitar la requisición';
                 }
                 break;
             default:
